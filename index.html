@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>Onça Prosa - ERP Financeiro</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+
+    <style>
+        /* PALETA ONÇA PROSA */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fcf8f2; color: #333; padding: 0; margin: 0; }
+        
+        #telaLogin { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fcf8f2; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; padding: 20px; box-sizing: border-box; }
+        .titulo-empresa { color: #4a3022; text-align: center; margin-bottom: 30px; line-height: 1.3; }
+        .titulo-empresa .menor { font-size: 20px; font-weight: normal; color: #c8827a; letter-spacing: 2px; text-transform: uppercase; }
+        .titulo-empresa .maior { font-size: 45px; font-family: 'Georgia', serif; font-weight: bold; color: #4a3022; }
+        .titulo-empresa .slogan { font-size: 14px; color: #98947c; letter-spacing: 3px; margin-top: 5px;}
+        .login-box { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 10px 30px rgba(74, 48, 34, 0.1); width: 100%; max-width: 380px; text-align: center; box-sizing: border-box; border-top: 5px solid #c8827a; }
+        .login-box h2 { color: #4a3022; margin-top: 0; font-size: 22px; }
+        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e1e5eb; border-radius: 6px; box-sizing: border-box; font-size: 15px; background: #faf9f7; }
+        .login-box button { width: 100%; padding: 14px; background: #c8827a; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 10px; font-size: 16px; transition: 0.3s; }
+        .login-box button:hover { background: #b26e67; }
+        .btn-secundario { background: #4a3022 !important; }
+        .btn-secundario:hover { background: #352218 !important; }
+        #loginMsg { color: #e74c3c; font-size: 14px; margin-bottom: 10px; height: 15px; font-weight: bold; }
+
+        .header-top { background: #352218; color: #fcf8f2; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-wrap: wrap; gap: 10px; }
+        .navbar { background-color: #4a3022; padding: 15px 20px; display: flex; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; }
+        .aba-btn { background: none; border: none; color: #e8dcc4; font-size: 14px; font-weight: bold; cursor: pointer; padding: 8px 12px; border-radius: 6px; transition: 0.3s; flex: 1; min-width: 120px; text-align: center; }
+        .aba-btn:hover { color: white; background-color: #634331; }
+        .aba-ativa { color: white; background-color: #c8827a; }
+        .aba-ativa:hover { background-color: #b26e67; }
+
+        .container-principal { padding: 20px; max-width: 1650px; margin: 0 auto; box-sizing: border-box; }
+        .layout-flex { display: flex; gap: 20px; align-items: flex-start; }
+        .painel-cadastro { width: 22%; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 20px; box-sizing: border-box; }
+        .painel-conteudo { width: 78%; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; min-width: 0; }
+        .painel-branco { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); box-sizing: border-box; overflow: hidden; }
+        
+        h2, h3 { color: #4a3022; margin: 0 0 20px 0; }
+        .form-group { margin-bottom: 12px; width: 100%; }
+        .form-row { display: flex; gap: 10px; width: 100%; }
+        label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; color: #666; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ccd1d9; border-radius: 4px; box-sizing: border-box; font-size: 14px; background: #faf9f7; }
+        
+        .btn { display: block; width: 100%; background-color: #c8827a; color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
+        .btn:hover { background-color: #b26e67; }
+        .btn-editando { background-color: #f39c12; }
+        .btn-limpar { background-color: #98947c; }
+        .btn-transferencia { background-color: #4a3022; }
+
+        .btn-acao-topo { background: #98947c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 5px; flex: 1; white-space: nowrap; transition: 0.3s; }
+        .btn-acao-topo:hover { background: #7c7965; }
+        
+        .resumo-container { display: flex; gap: 20px; flex-wrap: wrap; width: 100%; align-self: flex-start; position: sticky; top: 0px; z-index: 100; background-color: #fcf8f2; padding: 15px 0 10px 0; }
+        .card { flex: 1; min-width: 200px; background: white; padding: 15px; border-radius: 8px; text-align: center; border-bottom: 4px solid #ddd; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .card h4 { margin: 0; font-size: 14px; color: #7f8c8d; }
+        .card p { margin: 8px 0 0 0; font-size: 22px; font-weight: bold; }
+        
+        .filtros-area { background: #faf9f7; padding: 15px; border-radius: 8px; border: 1px solid #e8e3dc; margin-bottom: 15px; box-sizing: border-box; }
+        .filtros-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; align-items: end; }
+        .acoes-tabela { display: flex; gap: 10px; margin-top: 15px; justify-content: flex-end; border-top: 1px solid #e8e3dc; padding-top: 15px; flex-wrap: wrap; }
+
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 20px; }
+        table { width: 100%; min-width: 800px; border-collapse: collapse; }
+        th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #eee; font-size: 13px; }
+        th { background-color: #faf9f7; border-bottom: 2px solid #e8e3dc; color: #4a3022; }
+        tfoot tr { background-color: #fcf8f2; font-weight: bold; color: #4a3022; }
+        
+        .vencido { background-color: #ffdddd; }
+        .vence-hoje { background-color: #fff3cd; }
+        .btn-acao { border: none; background: none; cursor: pointer; font-size: 16px; padding: 4px; border-radius: 4px; }
+        .btn-acao:hover { background: #eee; }
+
+        .sub-navbar { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e8e3dc; padding-bottom: 10px; flex-wrap: wrap; }
+        .sub-aba-btn { background: none; border: none; font-size: 15px; font-weight: bold; color: #98947c; cursor: pointer; padding: 8px 15px; border-radius: 6px; flex: 1; min-width: 120px; text-align: center; }
+        .sub-aba-ativa { color: #c8827a; background: #fdf5f4; border-bottom: 3px solid #c8827a; border-radius: 6px 6px 0 0; }
+
+        .dre-container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .dre-box { flex: 1; min-width: 300px; background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc; }
+        .dre-linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ccc; font-size: 14px; }
+        .dre-linha.destaque { font-weight: bold; color: #4a3022; font-size: 16px; border-bottom: 2px solid #c8827a; margin-top: 10px; padding-top: 10px; }
+        .dre-linha.negativo { color: #e74c3c; }
+        .dre-linha.positivo { color: #27ae60; }
+        
+        .config-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
+        .lista-itens { list-style: none; padding: 0; margin: 0 0 15px 0; max-height: 250px; overflow-y: auto; }
+        .lista-itens li { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: white; border: 1px solid #eee; margin-bottom: 5px; border-radius: 4px; font-size: 13px; }
+        .lista-itens li button { background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+
+        .admin-area { grid-column: 1 / -1; background: #fff3cd; padding: 20px; border-radius: 8px; border: 1px solid #ffeeba; margin-top: 10px; box-sizing: border-box; overflow: hidden; }
+        .tabela-simples th, .tabela-simples td { padding: 8px 5px; border-bottom: 1px solid #ccc; font-size: 13px; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(74,48,34,0.8); display: none; justify-content: center; align-items: center; z-index: 10000; }
+        .modal-box { background: white; padding: 25px; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); max-height: 80vh; display: flex; flex-direction: column; }
+        .modal-box h3 { color: #e74c3c; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .lista-vencidos { overflow-y: auto; margin-bottom: 15px; flex: 1; }
+        .item-vencido { background: #fff3cd; border-left: 4px solid #e74c3c; padding: 10px; margin-bottom: 8px; border-radius: 4px; font-size: 13px; }
+
+        @media (max-width: 900px) {
+            .layout-flex { flex-direction: column; }
+            .painel-cadastro, .painel-conteudo { width: 100%; position: static; }
+            .filtros-grid { grid-template-columns: 1fr 1fr; }
+            .config-grid { grid-template-columns: 1fr; }
+            .dre-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="telaLogin">
+    <div class="titulo-empresa">
+        <div class="menor">ERP Gerencial</div>
+        <div class="maior">Onça Prosa</div>
+        <div class="slogan">• FEITO COM CARINHO •</div>
+    </div>
+    <div class="login-box">
+        <h2>🔒 Acesso Restrito</h2>
+        <div id="loginMsg"></div>
+        <input type="text" id="cpfAuth" placeholder="CPF (Apenas números)">
+        <input type="password" id="senhaAuth" placeholder="Senha">
+        <button onclick="entrar()">Entrar no Sistema</button>
+        <button id="btnRegistrarPrimeiro" class="btn-secundario" style="display:none;" onclick="registrarPrimeiroAdmin()">⚠️ Criar Primeiro Administrador</button>
+    </div>
+</div>
+
+<div id="appLogado" style="display: none;">
+    <div class="header-top">
+        <span>👤 Usuário: <b id="lblUsuario"></b> (<span id="lblPerfil"></span>)</span>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <span style="background: #4a3022; color: #e8dcc4; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">ERP Cloud</span>
+            <button onclick="sair()" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold; text-decoration:underline;">Sair</button>
+        </div>
+    </div>
+
+    <div class="navbar">
+        <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard Fluxo</button>
+        <button id="btnAbaDre" class="aba-btn" onclick="mudarAba('dre')">📈 DRE & Distribuição</button>
+        <button id="btnAbaPrecificacao" class="aba-btn" onclick="mudarAba('precificacao')">💰 Precificação (Markup)</button>
+        <button id="btnAbaPerspectiva" class="aba-btn" onclick="mudarAba('perspectiva')">⏳ Visão de Tempo</button>
+        <button id="btnAbaConfig" class="aba-btn config-req" onclick="mudarAba('config')">⚙️ Config & Admin</button>
+    </div>
+
+    <div class="container-principal">
+        
+        <!-- MÓDULO 1: FLUXO DE CAIXA -->
+        <div id="abaDashboard" class="layout-flex aba-conteudo">
+            <div class="painel-cadastro fin-req" id="painelCadastro">
+                <h2 id="tituloCadastro">💸 Registrar Movimento</h2>
+                <input type="hidden" id="editId">
+                <div class="form-group"><label>Descrição:</label><input type="text" id="cadDesc"></div>
+                
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;"><label>Categoria:</label><select id="cadCat"></select></div>
+                    <div class="form-group" style="flex: 1;"><label>Conta:</label><select id="cadConta"></select></div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;"><label>Valor (R$):</label><input type="number" id="cadValor" step="0.01"></div>
+                    <div class="form-group" style="flex: 1;"><label>Data Início:</label><input type="date" id="cadData"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipo:</label>
+                    <select id="cadTipo">
+                        <option value="Débito">Débito (Saída)</option>
+                        <option value="Crédito">Crédito (Entrada)</option>
+                    </select>
+                </div>
+
+                <div class="form-group"><label>Pagamento:</label><select id="cadPagamento" onchange="toggleOpcoesPagamento()"><option value="À Vista">À Vista</option><option value="Parcelado">Parcelado</option><option value="Recorrente">Recorrente</option></select></div>
+                
+                <div id="caixaOpcoesPagamento" style="display: none; background: #fdf5f4; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+                    <label id="labelOpcoesPagamento">Nº de Parcelas:</label><input type="number" id="numRepeticoes" value="2" min="2">
+                </div>
+                
+                <div class="form-group"><label>Status Inicial:</label><select id="cadStatus"></select></div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" style="flex: 2; margin-top: 10px;" onclick="adicionarLancamento()">Registrar</button>
+                    <button class="btn btn-limpar" style="flex: 1; margin-top: 10px;" onclick="limparFormulario()">Limpar</button>
+                </div>
+                <button class="btn btn-transferencia" style="margin-top: 10px;" onclick="abrirModalTransferencia()">🔀 Transferir entre Contas</button>
+            </div>
+
+            <div class="painel-conteudo">
+                <div class="resumo-container">
+                    <div class="card" style="border-color: #27ae60;"><h4>Entradas</h4><p style="color: #27ae60;" id="resEntradas">R$ 0,00</p></div>
+                    <div class="card" style="border-color: #e74c3c;"><h4>Saídas</h4><p style="color: #e74c3c;" id="resSaidas">R$ 0,00</p></div>
+                    <div class="card" style="border-color: #c8827a;"><h4>Saldo do Período</h4><p id="resSaldo" style="color:#4a3022;">R$ 0,00</p></div>
+                </div>
+
+                <div class="painel-branco">
+                    <div class="filtros-area">
+                        <div class="filtros-grid">
+                            <div><label>Busca:</label><input type="text" id="fBusca" oninput="atualizarTela()"></div>
+                            <div><label>Conta:</label><select id="fConta" onchange="atualizarTela()"></select></div>
+                            <div>
+                                <label>Categoria:</label>
+                                <div style="position: relative;">
+                                    <button type="button" onclick="toggleDropdownCat()" id="btnFiltroCat" style="width:100%; padding:8px; text-align:left; border:1px solid #ccd1d9; border-radius:4px; background:white; font-size:14px; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; box-sizing:border-box; height:37px;">Todas</button>
+                                    <div id="dropdownCatOptions" style="display:none; position:absolute; top:100%; left:0; min-width:240px; width:max-content; max-height:220px; overflow-y:auto; background:white; border:1px solid #ccc; border-radius:4px; z-index:1000; padding:5px; box-sizing:border-box; box-shadow:0 4px 10px rgba(0,0,0,0.15);"></div>
+                                </div>
+                            </div>
+                            <div><label>Tipo:</label><select id="fTipo" onchange="atualizarTela()"><option value="Todos">Todos</option><option value="Débito">Débito</option><option value="Crédito">Crédito</option></select></div>
+                            <div><label>Status:</label><select id="fStatus" onchange="atualizarTela()"></select></div>
+                            <div><label>De:</label><input type="date" id="fDataInicio" onchange="atualizarTela()"></div>
+                            <div><label>Até:</label><input type="date" id="fDataFim" onchange="atualizarTela()"></div>
+                            <div><label>Ordem:</label><select id="fOrdem" onchange="atualizarTela()"><option value="asc">Antigos 1º</option><option value="desc">Recentes 1º</option></select></div>
+                        </div>
+                        <div class="acoes-tabela">
+                            <button class="btn-acao-topo" style="background:#207245;" onclick="exportarExcel()">📊 Excel</button>
+                            <button class="btn-acao-topo" onclick="exportarCSV()">📥 CSV</button>
+                            <button class="btn-acao-topo" onclick="window.print()">🖨️ Imprimir</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 14%;">Vencimento</th><th style="width: 48%;">Descrição</th><th style="width: 12%;">Valor</th><th style="width: 10%;">Tipo</th><th style="width: 10%;">Status</th><th style="width: 6%; text-align: center;" class="fin-req">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="corpoTabela"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" style="text-align: right; font-weight: bold;">TOTAIS DA LISTA ABAIXO:</td>
+                                    <td colspan="2" id="rodapeTabelaDashboard" style="font-weight: bold; font-size: 14px;"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO 2: DRE E DISTRIBUIÇÃO DE LUCRO -->
+        <div id="abaDre" class="painel-branco aba-conteudo" style="display: none;">
+            <h2>📈 DRE & Distribuição de Lucros</h2>
+            <div class="filtros-area" style="display: flex; gap: 15px; max-width: 400px;">
+                <div style="flex: 1;"><label>Mês Referência:</label><input type="month" id="dreMes" onchange="gerarDRE()"></div>
+            </div>
+
+            <div class="dre-container">
+                <div class="dre-box">
+                    <h3 style="color: #c8827a; margin-top:0;">Demonstração de Resultados (DRE)</h3>
+                    <div class="dre-linha positivo"><span>(+) Receita Bruta de Vendas</span><span id="dreReceita">R$ 0,00</span></div>
+                    <div class="dre-linha negativo"><span>(-) Devoluções / Cancelamentos</span><span id="dreDevolucao">R$ 0,00</span></div>
+                    <div class="dre-linha destaque"><span>(=) Receita Líquida</span><span id="dreReceitaLiq">R$ 0,00</span></div>
+                    
+                    <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Custos Variáveis (Impostos, Tx, CMV)</span><span id="dreCustosVar">R$ 0,00</span></div>
+                    <div class="dre-linha destaque" style="color: #2980b9;"><span>(=) Margem de Contribuição</span><span id="dreMargemCont">R$ 0,00</span></div>
+                    
+                    <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Despesas Fixas (Aluguel, Salário...)</span><span id="dreDespFixa">R$ 0,00</span></div>
+                    <div class="dre-linha destaque" style="border-bottom-color: #4a3022;"><span>(=) Lucro Líquido Operacional</span><span id="dreLucro">R$ 0,00</span></div>
+                    
+                    <div class="dre-linha" style="margin-top: 20px; font-weight: bold; background: #e8dcc4; padding: 10px; border-radius: 4px;">
+                        <span>Ponto de Equilíbrio Financeiro:</span><span id="drePontoEq">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <div class="dre-box">
+                    <h3 style="color: #4a3022; margin-top:0;">Rateio e Distribuição (Regra da Onça)</h3>
+                    <p style="font-size: 12px; color: #777; margin-top: -10px;">Aplicado automaticamente sobre o Lucro Líquido.</p>
+                    
+                    <div class="dre-linha"><span>Capital de Giro (30%)</span><span id="dstGiro">R$ 0,00</span></div>
+                    <div class="dre-linha"><span>Reserva de Emergência (20%)</span><span id="dstReserva">R$ 0,00</span></div>
+                    <div class="dre-linha"><span>Manutenção (10%)</span><span id="dstManu">R$ 0,00</span></div>
+                    <div class="dre-linha"><span>Reinvestimento (10%)</span><span id="dstReinv">R$ 0,00</span></div>
+                    <div class="dre-linha"><span>Crescimento e Expansão (10%)</span><span id="dstCresc">R$ 0,00</span></div>
+                    <div class="dre-linha destaque negativo" style="border-bottom: 1px solid #ccc;"><span>Total de Dedução (80%)</span><span id="dstDeducao">R$ 0,00</span></div>
+                    
+                    <div class="dre-linha destaque positivo" style="margin-top: 15px;"><span>(=) Saldo Remanescente (20%)</span><span id="dstSaldo">R$ 0,00</span></div>
+                    
+                    <div class="dre-linha" style="margin-top: 15px; font-weight: bold; font-size: 16px; color: #c8827a;">
+                        <span>➡️ Retirada dos Sócios (50% do Saldo)</span><span id="dstSocios">R$ 0,00</span>
+                    </div>
+                    <div class="dre-linha" style="font-weight: bold; font-size: 16px; color: #27ae60;">
+                        <span>➡️ Caixa da Empresa (50% do Saldo)</span><span id="dstCaixa">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO 3: PRECIFICAÇÃO -->
+        <div id="abaPrecificacao" class="painel-branco aba-conteudo" style="display: none;">
+            <h2>💰 Simulador de Precificação (Markup)</h2>
+            <p style="font-size: 14px; color: #666;">Preencha os custos e os percentuais para encontrar o preço ideal de venda do seu produto.</p>
+
+            <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px; background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
+                    <h4 style="margin-top: 0;">1. Custos Diretos (R$)</h4>
+                    <div class="form-group"><label>Custo do Produto / Insumos:</label><input type="number" id="precCustoProd" value="0" oninput="calcularPreco()"></div>
+                    <div class="form-group"><label>Embalagem:</label><input type="number" id="precEmbalagem" value="0" oninput="calcularPreco()"></div>
+                    <div class="form-group"><label>Frete Pago:</label><input type="number" id="precFrete" value="0" oninput="calcularPreco()"></div>
+                    <div class="form-group"><label>Brindes / Outros:</label><input type="number" id="precBrinde" value="0" oninput="calcularPreco()"></div>
+                </div>
+
+                <div style="flex: 1; min-width: 300px; background: #fdf5f4; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
+                    <h4 style="margin-top: 0; color: #c8827a;">2. Despesas sobre a Venda (%)</h4>
+                    <div class="form-group"><label>Taxa de Cartão (%):</label><input type="number" id="precTaxa" value="5" oninput="calcularPreco()"></div>
+                    <div class="form-group"><label>Imposto (%):</label><input type="number" id="precImposto" value="6" oninput="calcularPreco()"></div>
+                    <div class="form-group"><label>Comissão / Marketplace (%):</label><input type="number" id="precMkp" value="10" oninput="calcularPreco()"></div>
+                    <div class="form-group"><label>Rateio de Despesa Fixa (%):</label><input type="number" id="precDespFixa" value="15" oninput="calcularPreco()"></div>
+                    <div class="form-group"><label>Margem de Lucro Desejada (%):</label><input type="number" id="precLucro" value="20" oninput="calcularPreco()"></div>
+                </div>
+
+                <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #4a3022; color: white; padding: 30px; border-radius: 8px;">
+                    <h3 style="color: #e8dcc4; margin: 0 0 10px 0;">PREÇO DE VENDA SUGERIDO</h3>
+                    <div id="resultadoPreco" style="font-size: 40px; font-weight: bold; color: #27ae60;">R$ 0,00</div>
+                    
+                    <div style="width: 100%; border-top: 1px solid #634331; margin-top: 20px; padding-top: 15px; font-size: 14px;">
+                        <div style="display: flex; justify-content: space-between;"><span>Total Custos R$:</span> <span id="resPrecCustos">R$ 0,00</span></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;"><span>Total Taxas %:</span> <span id="resPrecTaxas">0%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="abaPerspectiva" class="painel-branco aba-conteudo" style="display: none;">
+            <h2>⏳ Perspectiva de Lançamentos</h2>
+            <div class="sub-navbar">
+                <button id="btnSubMes" class="sub-aba-btn sub-aba-ativa" onclick="mudarSubAbaPerspectiva('Mes')">📅 Mês</button>
+                <button id="btnSubQuinzena" class="sub-aba-btn" onclick="mudarSubAbaPerspectiva('Quinzena')">🌗 Quinzena</button>
+                <button id="btnSubSemana" class="sub-aba-btn" onclick="mudarSubAbaPerspectiva('Semana')">🗓️ Semana</button>
+            </div>
+            <div id="subPerspectivaMes"><div id="blocoMesAtual"></div><div id="blocoMesProximo"></div></div>
+            <div id="subPerspectivaQuinzena" style="display: none;"><div id="blocoQuinzenaAtual"></div><div id="blocoQuinzenaProxima"></div></div>
+            <div id="subPerspectivaSemana" style="display: none;"><div id="blocoSemanaAtual"></div><div id="blocoSemanaProxima"></div></div>
+        </div>
+
+        <div id="abaConfig" class="painel-branco aba-conteudo" style="display: none;">
+            <h2>⚙️ Configurações & Administração</h2>
+            <div class="config-grid config-req">
+                <div><h3>🏦 Contas</h3><ul class="lista-itens" id="listaContasConfig"></ul><div style="display:flex; gap:10px;"><input type="text" id="novaContaInput" placeholder="Nova conta..."><button class="btn-acao-topo" onclick="addConfig('conta')">Adicionar</button></div></div>
+                <div><h3>📁 Categorias Financ.</h3><ul class="lista-itens" id="listaCatConfig"></ul><div style="display:flex; gap:10px;"><input type="text" id="novaCatInput" placeholder="Nova categoria..."><button class="btn-acao-topo" onclick="addConfig('cat')">Adicionar</button></div></div>
+                <div><h3>📌 Status</h3><ul class="lista-itens" id="listaStatusConfig"></ul><div style="display:flex; gap:10px;"><input type="text" id="novoStatusInput" placeholder="Novo status..."><button class="btn-acao-topo" onclick="addConfig('status')">Adicionar</button></div></div>
+                
+                <div class="admin-area admin-req">
+                    <h3 style="color: #d35400; margin-top: 0;">🛡️ Gestão de Usuários (Apenas Administrador)</h3>
+                    <div style="background: white; padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+                        <p style="margin-top:0; font-size:13px; font-weight:bold;">➕ Criar Nova Conta de Acesso:</p>
+                        <div style="display:flex; gap:10px; align-items: center; flex-wrap: wrap;">
+                            <input type="text" id="novoUserNome" placeholder="Nome Completo" style="margin:0; font-size:13px; flex: 3; min-width: 150px;">
+                            <input type="text" id="novoUserCpf" placeholder="CPF" style="margin:0; font-size:13px; flex: 2; min-width: 110px;">
+                            <input type="password" id="novoUserSenha" placeholder="Senha" style="margin:0; font-size:13px; flex: 2; min-width: 110px;">
+                            <select id="novoUserPerfil" style="margin:0; font-size:13px; flex: 2; min-width: 120px;">
+                                <option value="Observador">Observador</option>
+                                <option value="Financeiro">Financeiro</option>
+                                <option value="Administrador">Administrador</option>
+                            </select>
+                            <button class="btn-acao-topo" style="background:#27ae60; padding:10px 15px;" onclick="criarNovoUsuarioPeloAdmin()">Criar Conta</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive" style="margin-bottom:0;">
+                        <table class="tabela-simples" style="width: 100%; background: white;">
+                            <thead><tr><th style="text-align:left;">Nome</th><th style="text-align:left;">CPF</th><th style="text-align:left;">Perfil de Acesso</th><th style="text-align:left;">Status da Conta</th></tr></thead>
+                            <tbody id="tabelaUsuariosAdmin"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="admin-area admin-req" style="background: #e8ebef; border-color: #d1d8e0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="color: #2c3e50; margin: 0;">📋 Registros de Atividade do Sistema</h3>
+                        <button class="btn-acao-topo" style="background: #34495e; padding: 6px 12px; font-size: 12px;" onclick="baixarLogsCSV()">📥 Baixar Todos os Logs</button>
+                    </div>
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="tabela-simples" style="width: 100%; background: white;">
+                            <thead><tr><th style="text-align:left;">Data/Hora</th><th style="text-align:left;">Usuário</th><th style="text-align:left;">Ação</th><th style="text-align:left;">Detalhes</th></tr></thead>
+                            <tbody id="tabelaLogsAdmin"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalVencidos" class="modal-overlay">
+    <div class="modal-box">
+        <h3 style="color: #e74c3c;">⚠️ Atenção: Lançamentos Atrasados <button onclick="fecharModalVencidos()" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
+        <p style="font-size:13px; color:#555; margin-top:0;">Estes itens haviam passado da data original de vencimento. Eles foram realocados para a data de HOJE para não serem esquecidos.</p>
+        <div id="conteudoVencidos" class="lista-vencidos"></div>
+        <button class="btn" style="background:#4a3022; margin-top:0;" onclick="fecharModalVencidos()">Ciente, fechar aviso</button>
+    </div>
+</div>    
+
+<div id="modalParcial" class="modal-overlay">
+    <div class="modal-box" style="max-width: 400px;">
+        <h3 style="color: #c8827a;">✂️ Pagamento Parcial</h3>
+        <input type="hidden" id="parcialId">
+        <p style="font-size: 13px; color: #555;">Informe quanto foi pago agora. O sistema criará um novo lançamento a vencer para a diferença.</p>
+        <div class="form-group"><label>Valor Pago Agora (R$):</label><input type="number" id="parcialValorPago" step="0.01"></div>
+        <div class="form-group"><label>Data de Vencimento do Restante:</label><input type="date" id="parcialDataRestante"></div>
+        <div style="display:flex; gap:10px; margin-top: 15px;">
+            <button class="btn" style="background:#27ae60; margin:0;" onclick="confirmarParcial()">Confirmar Parcial</button>
+            <button class="btn" style="background:#7f8c8d; margin:0;" onclick="document.getElementById('modalParcial').style.display='none'">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalRenovacao" class="modal-overlay">
+    <div class="modal-box" style="max-width: 400px;">
+        <h3 style="color: #f39c12;">🔄 Renovar Lançamento</h3>
+        <p style="font-size: 14px; color: #333;">Você concluiu a última parcela de <strong id="renovaNome" style="color: #f39c12;"></strong>. Deseja iniciar um novo ciclo?</p>
+        <input type="hidden" id="renovaCategoria"><input type="hidden" id="renovaConta"><input type="hidden" id="renovaTipo">
+        <div class="form-group"><label>Valor de CADA NOVA Parcela (R$):</label><input type="number" id="renovaValor" step="0.01"></div>
+        <div class="form-row">
+            <div class="form-group" style="flex: 1;"><label>Qtd. de Meses:</label><input type="number" id="renovaParcelas" value="12" min="2"></div>
+            <div class="form-group" style="flex: 1;"><label>Data do 1º Vencimento:</label><input type="date" id="renovaData"></div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top: 15px;">
+            <button class="btn" style="background:#27ae60; margin:0;" onclick="confirmarRenovacao()">Renovar Agora</button>
+            <button class="btn" style="background:#7f8c8d; margin:0;" onclick="document.getElementById('modalRenovacao').style.display='none'">Não, Obrigado</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalTransferencia" class="modal-overlay">
+    <div class="modal-box" style="max-width: 450px;">
+        <h3 style="color: #4a3022;">🔀 Transferência entre Contas</h3>
+        <p style="font-size: 13px; color: #555;">Isso gerará automaticamente um débito na origem e um crédito no destino.</p>
+        <div class="form-row">
+            <div class="form-group" style="flex: 1;"><label>Conta de Origem (Sai dinheiro):</label><select id="transfOrigem"></select></div>
+            <div class="form-group" style="flex: 1;"><label>Conta de Destino (Entra dinheiro):</label><select id="transfDestino"></select></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group" style="flex: 1;"><label>Valor (R$):</label><input type="number" id="transfValor" step="0.01"></div>
+            <div class="form-group" style="flex: 1;"><label>Data:</label><input type="date" id="transfData"></div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top: 15px;">
+            <button class="btn" style="background:#4a3022; margin:0;" onclick="confirmarTransferencia()">Confirmar Transferência</button>
+            <button class="btn" style="background:#7f8c8d; margin:0;" onclick="document.getElementById('modalTransferencia').style.display='none'">Cancelar</button>
+        </div>
+    </div>
+</div>
+    
+<script>
+    // --- FIREBASE CONFIG (NUVEM) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI",
+      authDomain: "onca-prosa-erp.firebaseapp.com",
+      projectId: "onca-prosa-erp",
+      storageBucket: "onca-prosa-erp.firebasestorage.app",
+      messagingSenderId: "1096171294924",
+      appId: "1:1096171294924:web:9362f03a99a6d31139b269"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // VARIÁVEIS GLOBAIS COM NOVO PLANO DE CONTAS DA ONÇA PROSA
+    let lancamentos = [];
+    let contasLista = ["Geral", "CEAP", "A"];
+    let statusLista = ["A Vencer", "Efetuada"];
+    let categorias = [
+        "Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", 
+        "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", 
+        "Aluguel", "Salários", "Internet", "Sistema", "Contador", "Monitoramento", "Marketing", "Outras Despesas Fixas", "Transferência"
+    ];
+
+    let userAutenticado = null;
+    let perfilUsuario = 'Observador'; 
+    window.nomeUsuarioLogado = ""; 
+    window.alertaVencidosMostrado = false;
+    let verificacaoAtrasadosFeita = false;
+
+    function formatarDataISO(d) {
+        let ano = d.getFullYear();
+        let mes = String(d.getMonth() + 1).padStart(2, '0');
+        let dia = String(d.getDate()).padStart(2, '0');
+        return `${ano}-${mes}-${dia}`;
+    }
+    function formata(v) { return Number(v || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}); }
+    function formataData(d) { if(!d) return ""; return d.split('-').reverse().join('/'); }
+    function fecharModalVencidos() { document.getElementById('modalVencidos').style.display = 'none'; }
+
+    // AUTH
+    function formatarCPFText(cpfStr) {
+        if(!cpfStr) return "";
+        let limpo = cpfStr.replace(/\D/g, '');
+        if(limpo.length === 11) return limpo.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+        return cpfStr;
+    }
+
+    db.collection("usuarios").limit(1).get().then(snap => {
+        if(snap.empty) {
+            document.getElementById('btnRegistrarPrimeiro').style.display = 'block';
+            document.getElementById('btnEntrar').style.display = 'none';
+        }
+    });
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            document.getElementById('telaLogin').style.display = 'none';
+            document.getElementById('appLogado').style.display = 'block';
+            userAutenticado = user;
+            carregarPerfilUsuario(user);
+        } else {
+            document.getElementById('telaLogin').style.display = 'flex';
+            document.getElementById('appLogado').style.display = 'none';
+            userAutenticado = null;
+        }
+    });
+
+    function entrar() {
+        let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, '');
+        const s = document.getElementById('senhaAuth').value;
+        const emailFake = cpf + "@oncaprosa.local";
+        auth.signInWithEmailAndPassword(emailFake, s).catch(err => document.getElementById('loginMsg').innerText = "Erro: CPF ou senha incorretos.");
+    }
+
+    function registrarPrimeiroAdmin() {
+        let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, '');
+        const s = document.getElementById('senhaAuth').value;
+        if(cpf.length !== 11) return document.getElementById('loginMsg').innerText = "Erro: CPF deve conter exatos 11 números.";
+        if(s.length < 6) return document.getElementById('loginMsg').innerText = "A senha deve ter no mínimo 6 caracteres.";
+        
+        const emailFake = cpf + "@oncaprosa.local";
+        auth.createUserWithEmailAndPassword(emailFake, s).then(cred => {
+            db.collection("usuarios").doc(cred.user.uid).set({ cpf: cpf, perfil: "Administrador", status: "Ativo" });
+            alert("Administrador Mestre criado com sucesso!");
+        }).catch(err => document.getElementById('loginMsg').innerText = "Erro: " + err.message);
+    }
+
+    function sair() { auth.signOut(); location.reload(); }
+
+    function carregarPerfilUsuario(user) {
+        db.collection("usuarios").doc(user.uid).onSnapshot(doc => {
+            if (doc.exists) {
+                let dadosUsuario = doc.data();
+                if(dadosUsuario.status === 'Suspenso') {
+                    alert("⚠️ SUA CONTA FOI SUSPENSA PELO ADMINISTRADOR.\nO acesso ao sistema foi revogado.");
+                    auth.signOut(); return;
+                }
+
+                perfilUsuario = dadosUsuario.perfil;
+                let cpfAtual = user.email.split('@')[0];
+                window.nomeUsuarioLogado = dadosUsuario.nome || formatarCPFText(cpfAtual);
+                
+                document.getElementById('lblUsuario').innerText = window.nomeUsuarioLogado;
+                document.getElementById('lblPerfil').innerText = perfilUsuario; 
+                
+                aplicarRestricoesUI();
+                
+                if(!window.ouvintesIniciados) {
+                    document.getElementById("fDataInicio").value = formatarDataISO(new Date());
+                    document.getElementById("dreMes").value = formatarDataISO(new Date()).substring(0,7);
+                    iniciarOuvintesDeDados();
+                    window.ouvintesIniciados = true;
+                }
+            }
+        });
+    }
+
+    function aplicarRestricoesUI() {
+        document.querySelectorAll('.admin-req, .fin-req, .config-req').forEach(el => el.style.display = 'none');
+        document.getElementById('painelCadastro').style.display = 'none';
+        document.getElementById('areaRelatorioPDF').style.width = '100%';
+
+        if (perfilUsuario === 'Administrador') {
+            document.querySelectorAll('.admin-req, .fin-req, .config-req').forEach(el => el.style.display = '');
+            document.getElementById('painelCadastro').style.display = 'block';
+            document.getElementById('areaRelatorioPDF').style.width = '78%';
+        } else if (perfilUsuario === 'Financeiro') {
+            document.querySelectorAll('.fin-req, .config-req').forEach(el => el.style.display = '');
+            document.getElementById('painelCadastro').style.display = 'block';
+            document.getElementById('areaRelatorioPDF').style.width = '78%';
+        }
+        
+        if (window.innerWidth <= 900 && (perfilUsuario === 'Administrador' || perfilUsuario === 'Financeiro')) {
+            document.getElementById('areaRelatorioPDF').style.width = '100%';
+        }
+        atualizarTela(); 
+    }
+
+    function criarNovoUsuarioPeloAdmin() {
+        const nome = document.getElementById('novoUserNome').value.trim();
+        let cpf = document.getElementById('novoUserCpf').value.replace(/\D/g, '');
+        const s = document.getElementById('novoUserSenha').value;
+        const p = document.getElementById('novoUserPerfil').value;
+
+        if(!nome || cpf.length !== 11 || s.length < 6) return alert("Preencha o Nome, um CPF válido e senha.");
+
+        const emailFake = cpf + "@oncaprosa.local";
+        let appSecundario;
+        if (firebase.apps.length === 1) { appSecundario = firebase.initializeApp(firebaseConfig, "AppSecundario"); } else { appSecundario = firebase.app("AppSecundario"); }
+
+        appSecundario.auth().createUserWithEmailAndPassword(emailFake, s).then(cred => {
+            db.collection("usuarios").doc(cred.user.uid).set({ nome: nome, cpf: cpf, perfil: p, status: "Ativo" });
+            appSecundario.auth().signOut(); 
+            registrarLog("CRIOU_USUARIO", `Criou acesso para: ${nome}`);
+            alert(`Conta criada com sucesso!`);
+            document.getElementById('novoUserNome').value = ""; document.getElementById('novoUserCpf').value = ""; document.getElementById('novoUserSenha').value = "";
+        }).catch(err => {
+            alert("Erro ao criar usuário: " + err.message);
+        });
+    }
+
+    function alterarPerfilUser(uid, campo, novoValor) {
+        if(confirm(`Tem certeza que deseja alterar o ${campo} deste usuário?`)) {
+            let updateObj = {}; updateObj[campo] = novoValor;
+            db.collection("usuarios").doc(uid).update(updateObj);
+            registrarLog("ALT_USUARIO", `Alterou ${campo} do usuário para ${novoValor}`);
+        }
+    }
+
+    function registrarLog(acao, detalhes) {
+        if(!userAutenticado) return;
+        let identificadorUser = window.nomeUsuarioLogado || "Usuário Desconhecido";
+        db.collection("registros_atividades").add({ 
+            dataHora: new Date().toISOString(), usuario: identificadorUser, acao: String(acao), detalhes: String(detalhes) 
+        }).catch(e => console.error("Falha no LOG:", e));
+    }
+
+    // CARGA DE DADOS FIREBASE
+    function iniciarOuvintesDeDados() {
+        db.collection("config").doc("listas").onSnapshot(doc => {
+            if (doc.exists) { 
+                let d = doc.data(); 
+                if(d.categorias) categorias = d.categorias; 
+                if(d.statusLista) statusLista = d.statusLista; 
+                if(d.contasLista) contasLista = d.contasLista; 
+            }
+            carregarListas(); 
+            atualizarTela();
+        });
+
+        db.collection("lancamentos").onSnapshot(snap => {
+            lancamentos = []; snap.forEach(doc => lancamentos.push(doc.data()));
+            
+            if (!verificacaoAtrasadosFeita && perfilUsuario !== 'Observador') {
+                verificacaoAtrasadosFeita = true;
+                realocarAtrasados();
+            }
+
+            atualizarTela();
+            if(document.getElementById('abaDre').style.display === 'block') gerarDRE();
+            if(document.getElementById('abaPerspectiva').style.display === 'block') gerarVisaoPerspectivas();
+        });
+
+        if(perfilUsuario === 'Administrador') {
+            db.collection("usuarios").onSnapshot(snap => {
+                let h = "";
+                snap.forEach(doc => {
+                    let u = doc.data(); let statusAtual = u.status || 'Ativo'; let nomeUsuario = u.nome || "Não informado"; 
+                    h += `<tr><td><strong>${nomeUsuario}</strong></td><td>${formatarCPFText(u.cpf)}</td>
+                    <td><select onchange="alterarPerfilUser('${doc.id}', 'perfil', this.value)" style="padding:4px; font-size:13px; width:100%;"><option value="Observador" ${u.perfil==='Observador'?'selected':''}>Observador</option><option value="Financeiro" ${u.perfil==='Financeiro'?'selected':''}>Financeiro</option><option value="Administrador" ${u.perfil==='Administrador'?'selected':''}>Administrador</option></select></td>
+                    <td><select onchange="alterarPerfilUser('${doc.id}', 'status', this.value)" style="padding:4px; font-size:13px; width:100%; background: ${statusAtual==='Suspenso'?'#ffdddd':'#e8f8f5'}"><option value="Ativo" ${statusAtual==='Ativo'?'selected':''}>🟢 Ativo</option><option value="Suspenso" ${statusAtual==='Suspenso'?'selected':''}>🔴 Suspenso</option></select></td></tr>`;
+                });
+                document.getElementById('tabelaUsuariosAdmin').innerHTML = h;
+            });
+            db.collection("registros_atividades").orderBy("dataHora", "desc").limit(50).onSnapshot(snap => {
+                let h = "";
+                snap.forEach(doc => {
+                    let l = doc.data(); let dataFormat = new Date(l.dataHora).toLocaleString('pt-BR');
+                    h += `<tr><td style="white-space:nowrap;">${dataFormat}</td><td style="white-space:nowrap;">${l.usuario}</td><td><span style="background:#e8f8f5; color:#16a085; padding:3px 6px; border-radius:4px; font-weight:bold; font-size:11px;">${l.acao}</span></td><td>${l.detalhes}</td></tr>`;
+                });
+                document.getElementById('tabelaLogsAdmin').innerHTML = h || '<tr><td colspan="4" style="text-align:center; padding:15px; color:#999;">Sem registros.</td></tr>';
+            });
+        }
+    }
+
+    function realocarAtrasados() {
+        const hojeLocal = formatarDataISO(new Date());
+        let mudou = false;
+        let itensAlterados = [];
+        let batch = db.batch();
+
+        lancamentos.forEach(l => {
+            let isEfetuada = (l.status || "").toLowerCase().includes("efetuada") || (l.status || "").toLowerCase().includes("pago");
+            if (!isEfetuada && l.data && l.data < hojeLocal) {
+                batch.update(db.collection("lancamentos").doc(l.id.toString()), { data: hojeLocal });
+                mudou = true;
+                l.data = hojeLocal; 
+                itensAlterados.push(l);
+            }
+        });
+
+        if (mudou) {
+            batch.commit().then(() => {
+                let htmlVencidos = "";
+                itensAlterados.forEach(v => {
+                    let corV = v.tipo === "Crédito" ? "#27ae60" : "#c0392b";
+                    htmlVencidos += `<div class="item-vencido"><strong>${v.desc}</strong> <br><span style="color:${corV}">Valor: ${formata(v.valor)} | Realocado para: HOJE</span></div>`;
+                });
+                document.getElementById('conteudoVencidos').innerHTML = htmlVencidos;
+                document.getElementById('modalVencidos').style.display = 'flex';
+                registrarLog("REALOCAÇÃO", `Realocou ${itensAlterados.length} lançamentos atrasados para hoje.`);
+            });
+        }
+    }
+
+    function carregarListas() {
+        document.getElementById("cadCat").innerHTML = categorias.map(c => `<option value="${c}">${c}</option>`).join('');
+        let htmlCatFilter = `
+            <label style="display:flex; align-items:center; justify-content:flex-start; gap:8px; padding:4px; cursor:pointer; font-size:13px; border-bottom:1px solid #eee; margin-bottom:4px; white-space:nowrap;">
+                <input type="checkbox" id="chkCatAll" value="Todos" checked onchange="selecionarTodasCategorias(this)" style="width:auto; margin:0;"> <strong>[ Selecionar Todas ]</strong>
+            </label>
+        `;
+        htmlCatFilter += categorias.map(c => `
+            <label style="display:flex; align-items:center; justify-content:flex-start; gap:8px; padding:4px; cursor:pointer; font-size:13px; white-space:nowrap;">
+                <input type="checkbox" class="chk-cat-item" value="${c}" onchange="atualizarFiltroCategoria()" style="width:auto; margin:0;"> ${c}
+            </label>
+        `).join('');
+        document.getElementById("dropdownCatOptions").innerHTML = htmlCatFilter;
+        document.getElementById("cadStatus").innerHTML = statusLista.map(s => `<option value="${s}">${s}</option>`).join('');
+        document.getElementById("fStatus").innerHTML = '<option value="Todos">Todos</option>' + statusLista.map(s => `<option value="${s}">${s}</option>`).join('');
+        document.getElementById("cadConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
+        document.getElementById("fConta").innerHTML = '<option value="Todas">Todas</option>' + contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
+        
+        document.getElementById("listaCatConfig").innerHTML = categorias.map((c, i) => `<li>${c} <button onclick="remConfig('cat', ${i})">Excluir</button></li>`).join('');
+        document.getElementById("listaStatusConfig").innerHTML = statusLista.map((s, i) => `<li>${s} <button onclick="remConfig('status', ${i})">Excluir</button></li>`).join('');
+        document.getElementById("listaContasConfig").innerHTML = contasLista.map((c, i) => `<li>${c} <button onclick="remConfig('conta', ${i})">Excluir</button></li>`).join('');
+    }
+
+    function salvarConfigNaNuvem() {
+        if(perfilUsuario === 'Observador') return;
+        db.collection("config").doc("listas").set({ categorias: categorias, statusLista: statusLista, contasLista: contasLista });
+    }
+
+    function addConfig(t) {
+        if(perfilUsuario === 'Observador') return alert("Sem permissão");
+        let idInp = t==='cat'?"novaCatInput":(t==='status'?"novoStatusInput":"novaContaInput");
+        let inp = document.getElementById(idInp); let v = inp.value.trim();
+        if(v) {
+            if(t==='cat' && !categorias.includes(v)) categorias.push(v);
+            if(t==='status' && !statusLista.includes(v)) statusLista.push(v);
+            if(t==='conta' && !contasLista.includes(v)) contasLista.push(v);
+            inp.value = ""; salvarConfigNaNuvem();
+            registrarLog("ADC_CONFIG", `Adicionou ${t}: ${v}`);
+        }
+    }
+    function remConfig(t, i) {
+        if(perfilUsuario === 'Observador') return alert("Sem permissão");
+        let itemRemovido = "";
+        if(t==='cat') { itemRemovido = categorias[i]; categorias.splice(i,1); }
+        if(t==='status') { itemRemovido = statusLista[i]; statusLista.splice(i,1); }
+        if(t==='conta') { itemRemovido = contasLista[i]; contasLista.splice(i,1); }
+        salvarConfigNaNuvem();
+        registrarLog("REM_CONFIG", `Removeu ${t}: ${itemRemovido}`);
+    }
+
+    function mudarAba(abaId) {
+        document.querySelectorAll('.aba-conteudo').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.aba-btn').forEach(el => el.classList.remove('aba-ativa'));
+        document.getElementById('aba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).style.display = (abaId === 'dashboard' && window.innerWidth > 900) ? 'flex' : 'block';
+        document.getElementById('btnAba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).classList.add('aba-ativa');
+        
+        if(abaId === 'dre') gerarDRE();
+        if(abaId === 'perspectiva') { mudarSubAbaPerspectiva('Mes'); gerarVisaoPerspectivas(); }
+    }
+
+    function mudarSubAbaPerspectiva(s) { 
+        document.querySelectorAll('#subPerspectivaMes, #subPerspectivaQuinzena, #subPerspectivaSemana').forEach(el=>el.style.display='none'); 
+        document.querySelectorAll('.sub-aba-btn').forEach(el=>el.classList.remove('sub-aba-ativa')); 
+        document.getElementById("subPerspectiva"+s).style.display="block"; 
+        document.getElementById("btnSub"+s).classList.add('sub-aba-ativa'); 
+    }
+    
+    function toggleOpcoesPagamento() {
+        let t = document.getElementById("cadPagamento").value; let c = document.getElementById("caixaOpcoesPagamento"); let l = document.getElementById("labelOpcoesPagamento");
+        if (t === "Parcelado") { c.style.display = "block"; l.innerText = "Nº de Parcelas:"; } else if (t === "Recorrente") { c.style.display = "block"; l.innerText = "Meses projetados:"; } else { c.style.display = "none"; }
+    }
+
+    // CRUD DE LANÇAMENTOS
+    function adicionarLancamento() {
+        if(perfilUsuario === 'Observador') return alert("Sem permissão");
+        const id = document.getElementById("editId").value;
+        const d = document.getElementById("cadDesc").value, c = document.getElementById("cadCat").value;
+        const contaRef = document.getElementById("cadConta").value || "Geral";
+        const v = parseFloat(document.getElementById("cadValor").value), dt = document.getElementById("cadData").value;
+        const t = document.getElementById("cadTipo").value, st = document.getElementById("cadStatus").value;
+        const pag = document.getElementById("cadPagamento").value;
+
+        if (!d || isNaN(v) || !dt) return alert("Preencha todos os campos obrigatórios!");
+
+        if (id) {
+            db.collection("lancamentos").doc(id).update({ desc: d, categoria: c, conta: contaRef, valor: v, data: dt, tipo: t, status: st });
+            registrarLog("EDITOU", `Editou lançamento: ${d} | R$${v}`);
+        } else if (pag === "Parcelado" || pag === "Recorrente") {
+            const n = parseInt(document.getElementById("numRepeticoes").value);
+            const valorCalculado = (pag === "Parcelado") ? (v / n) : v;
+            let batch = db.batch();
+            for (let i = 0; i < n; i++) {
+                let dataVenc = new Date(dt + "T12:00:00Z"); 
+                dataVenc.setUTCMonth(dataVenc.getUTCMonth() + i);
+                let descFinal = (pag === "Parcelado") ? `${d} (${i+1}/${n})` : d;
+                let novoId = (Date.now() + i).toString();
+                batch.set(db.collection("lancamentos").doc(novoId), { id: novoId, desc: descFinal, categoria: c, conta: contaRef, valor: valorCalculado, data: dataVenc.toISOString().split('T')[0], tipo: t, status: st });
+            }
+            batch.commit();
+            registrarLog("ADC_LOTE", `Adicionou lote (${pag}): ${d} | R$${v} total`);
+        } else {
+            let novoId = Date.now().toString();
+            db.collection("lancamentos").doc(novoId).set({ id: novoId, desc: d, categoria: c, conta: contaRef, valor: v, data: dt, tipo: t, status: st });
+            registrarLog("ADICIONOU", `Novo lançamento: ${d} | R$${v}`);
+        }
+        limparFormulario(); 
+    }
+
+    function editar(id) {
+        if(perfilUsuario === 'Observador') return;
+        const l = lancamentos.find(x => x.id == id);
+        document.getElementById("editId").value = l.id; document.getElementById("cadDesc").value = l.desc;
+        document.getElementById("cadCat").value = l.categoria; document.getElementById("cadConta").value = l.conta || contasLista[0];
+        document.getElementById("cadValor").value = l.valor; document.getElementById("cadData").value = l.data; 
+        document.getElementById("cadTipo").value = l.tipo; document.getElementById("cadStatus").value = l.status; 
+        document.getElementById("cadPagamento").value = "À Vista"; toggleOpcoesPagamento();
+        document.getElementById("tituloCadastro").innerText = "✏️ Editando"; 
+        document.getElementById("btnSalvar").innerText = "Salvar Alterações"; 
+        document.getElementById("btnSalvar").classList.add("btn-editando");
+    }
+
+    function limparFormulario() {
+        document.getElementById("editId").value = ""; document.getElementById("cadDesc").value = ""; document.getElementById("cadValor").value = ""; document.getElementById("cadData").value = "";
+        document.getElementById("cadPagamento").value = "À Vista"; toggleOpcoesPagamento(); document.getElementById("cadTipo").value = "Débito";
+        document.getElementById("tituloCadastro").innerText = "💸 Registro"; document.getElementById("btnSalvar").innerText = "Registrar"; document.getElementById("btnSalvar").classList.remove("btn-editando"); 
+    }
+
+    function atualizarTela() {
+        const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = "";
+        const fBusca = document.getElementById("fBusca").value.toLowerCase(), fTipo = document.getElementById("fTipo").value;
+        const fStatus = document.getElementById("fStatus").value, fConta = document.getElementById("fConta").value;
+        const fIni = document.getElementById("fDataInicio").value, fFim = document.getElementById("fDataFim").value;
+        const fOrdem = document.getElementById("fOrdem").value;
+        
+        let chkAll = document.getElementById("chkCatAll");
+        let masterCatAtivo = chkAll ? chkAll.checked : true;
+        let listaCategoriasMarcadas = Array.from(document.querySelectorAll(".chk-cat-item")).filter(c => c.checked).map(c => c.value);
+        
+        let tEnt = 0, tSai = 0; const hojeLocal = formatarDataISO(new Date());
+
+        let dadosFiltrados = lancamentos.filter(l => {
+            if(!l.data || !l.status || !l.desc) return false;
+            let passaFiltro = false;
+            if (masterCatAtivo) passaFiltro = true;
+            else if (listaCategoriasMarcadas.includes(l.categoria)) passaFiltro = true;
+            
+            return l.desc.toLowerCase().includes(fBusca) && (fTipo === "Todos" || l.tipo === fTipo) && passaFiltro && (fConta === "Todas" || l.conta === fConta) && (fStatus === "Todos" || l.status === fStatus) && (!fIni || l.data >= fIni) && (!fFim || l.data <= fFim);
+        }).sort((a,b) => fOrdem === 'asc' ? new Date(a.data) - new Date(b.data) : new Date(b.data) - new Date(a.data));
+
+        dadosFiltrados.forEach(l => {
+            if (l.tipo === "Crédito") tEnt += l.valor; else tSai += l.valor;
+            let isEfetuada = l.status.toLowerCase().includes("efetuada") || l.status.toLowerCase().includes("pago");
+            let isAtrasado = l.data < hojeLocal && !isEfetuada; let isHoje = l.data === hojeLocal && !isEfetuada;
+            
+            const tr = document.createElement("tr"); 
+            let iconeData = isEfetuada ? "✅" : (isAtrasado ? "🔴" : (isHoje ? "⚠️" : "⏳"));
+            if (isAtrasado) tr.className = "vencido"; else if (isHoje) tr.className = "vence-hoje";
+
+            let selectStatus = perfilUsuario === 'Observador' ? l.status : `<select onchange="alterarStatus('${l.id}', this.value)" style="width: 100%; min-width: 100px; padding: 6px 4px; font-size: 13px; border-radius: 4px; background:white;"><option value="${l.status}" selected>${l.status}</option>${statusLista.filter(s=>s!=l.status).map(s=>`<option value="${s}">${s}</option>`).join('')}</select>`;
+            let acoesHtml = perfilUsuario === 'Observador' ? '' : `<td style="text-align:center; white-space:nowrap;" data-html2canvas-ignore class="fin-req">
+                <button class="btn-acao" title="Pagamento Parcial" onclick="abrirPagamentoParcial('${l.id}')">✂️</button>
+                <button class="btn-acao" title="Editar" onclick="editar('${l.id}')">✏️</button>
+                <button class="btn-acao" title="Excluir" onclick="remover('${l.id}')">🗑️</button>
+            </td>`;
+            
+            tr.innerHTML = `
+                <td style="white-space:nowrap;"><strong>${iconeData} ${formataData(l.data)}</strong></td>
+                <td><strong>${l.desc}</strong><br><small style="color:#98947c">📁 ${l.categoria} | 🏦 ${l.conta || "Geral"}</small></td>
+                <td style="color:${l.tipo==='Débito'?'#e74c3c':'#27ae60'};font-weight:bold">${formata(l.valor)}</td>
+                <td>${l.tipo}</td>
+                <td data-html2canvas-ignore>${selectStatus}</td>
+                <td style="display:none;" data-pdf-status>${l.status}</td>
+                ${acoesHtml}`;
+            tbody.appendChild(tr);
+        });
+        
+        document.getElementById("resEntradas").innerText = formata(tEnt); document.getElementById("resSaidas").innerText = formata(tSai);
+        document.getElementById("resSaldo").innerText = formata(tEnt - tSai); document.getElementById("resSaldo").style.color = (tEnt - tSai) >= 0 ? "#c8827a" : "#e74c3c";
+
+        let saldoRodape = tEnt - tSai;
+        document.getElementById("rodapeTabelaDashboard").innerHTML = `<span style="color: #27ae60; margin-right: 10px;">Entradas: ${formata(tEnt)}</span> | <span style="color: #e74c3c; margin: 0 10px;">Saídas: ${formata(tSai)}</span> | <span style="color: ${saldoRodape >= 0 ? '#4a3022' : '#e74c3c'}; margin-left: 10px;">Saldo: ${formata(saldoRodape)}</span>`;
+        if(perfilUsuario === 'Observador') document.querySelectorAll('.fin-req').forEach(el => el.style.display = 'none');
+    }
+
+    function alterarStatus(id, st) { 
+        if(perfilUsuario === 'Observador') return;
+        db.collection("lancamentos").doc(id.toString()).update({ status: st });
+        registrarLog("ALT_STATUS", `Mudou status doc ${id} para ${st}`);
+        if(st.toLowerCase().includes("efetuada") || st.toLowerCase().includes("pago")) {
+            let l = lancamentos.find(x => x.id == id);
+            if (l && l.desc) { let match = l.desc.match(/\((\d+)\/(\d+)\)$/); if (match && match[1] === match[2]) abrirRenovacao(l); }
+        }
+    }
+    
+    function remover(id) { 
+        if(perfilUsuario === 'Observador') return;
+        if(confirm("Excluir definitivamente?")) { db.collection("lancamentos").doc(id.toString()).delete(); registrarLog("EXCLUIU", `Excluiu ID: ${id}`); } 
+    }
+
+    // TRANSFERÊNCIA ENTRE CONTAS
+    function abrirModalTransferencia() {
+        let opts = contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
+        document.getElementById('transfOrigem').innerHTML = opts;
+        document.getElementById('transfDestino').innerHTML = opts;
+        document.getElementById('transfValor').value = '';
+        document.getElementById('transfData').value = formatarDataISO(new Date());
+        document.getElementById('modalTransferencia').style.display = 'flex';
+    }
+
+    function confirmarTransferencia() {
+        let origem = document.getElementById('transfOrigem').value;
+        let destino = document.getElementById('transfDestino').value;
+        let valor = parseFloat(document.getElementById('transfValor').value);
+        let data = document.getElementById('transfData').value;
+
+        if(origem === destino) return alert("As contas devem ser diferentes!");
+        if(isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+        if(!data) return alert("Informe a data.");
+
+        let batch = db.batch();
+        let id1 = Date.now().toString() + "_1"; let id2 = Date.now().toString() + "_2";
+
+        batch.set(db.collection("lancamentos").doc(id1), { id: id1, desc: `Transf. para ${destino}`, categoria: "Transferência", conta: origem, valor: valor, data: data, tipo: "Débito", status: "Efetuada" });
+        batch.set(db.collection("lancamentos").doc(id2), { id: id2, desc: `Transf. de ${origem}`, categoria: "Transferência", conta: destino, valor: valor, data: data, tipo: "Crédito", status: "Efetuada" });
+
+        batch.commit().then(() => {
+            document.getElementById('modalTransferencia').style.display = 'none';
+            registrarLog("TRANSFERENCIA", `R$${valor} da ${origem} para ${destino}`);
+            alert("Transferência realizada!");
+        });
+    }
+
+    // EXPORTAÇÕES E DRE/PERSPECTIVA
+    function exportarCSV() {
+        let csv = "Vencimento;Descrição;Conta;Categoria;Valor;Tipo;Status\n";
+        lancamentos.forEach(l => { csv += `${formataData(l.data)};${l.desc};${l.conta || 'Geral'};${l.categoria};${Number(l.valor || 0).toFixed(2).replace('.',',')};${l.tipo};${l.status}\n`; });
+        let link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+        link.download = `financeiro_${formatarDataISO(new Date())}.csv`; link.click();
+    }
+
+    function exportarExcel() {
+        let tableHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body><table>`;
+        tableHtml += "<tr><th>Vencimento</th><th>Descrição</th><th>Conta</th><th>Categoria</th><th>Valor</th><th>Tipo</th><th>Status</th></tr>";
+        lancamentos.forEach(l => {
+            tableHtml += `<tr><td>${formataData(l.data)}</td><td>${l.desc}</td><td>${l.conta || 'Geral'}</td><td>${l.categoria}</td><td>${Number(l.valor || 0).toFixed(2).replace('.',',')}</td><td>${l.tipo}</td><td>${l.status}</td></tr>`;
+        });
+        tableHtml += "</table></body></html>";
+        let blob = new Blob([tableHtml], {type: 'application/vnd.ms-excel'});
+        let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `financeiro_${formatarDataISO(new Date())}.xls`; a.click();
+    }
+
+    function exportarPDF() {
+        const elemento = document.getElementById('areaRelatorioPDF');
+        document.getElementById('tituloPDF').style.display = 'block';
+        document.querySelectorAll('td[data-pdf-status]').forEach(el => el.style.display = 'table-cell');
+        document.querySelectorAll('td:has(select)').forEach(el => el.style.display = 'none');
+        html2pdf().set({ margin: 10, filename: `financeiro_${formatarDataISO(new Date())}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } }).from(elemento).save().then(() => {
+            document.getElementById('tituloPDF').style.display = 'none'; document.querySelectorAll('td[data-pdf-status]').forEach(el => el.style.display = 'none'); document.querySelectorAll('td:has(select)').forEach(el => el.style.display = 'table-cell');
+        });
+    }
+
+    // DRE E DISTRIBUIÇÃO
+    function gerarDRE() {
+        let mesSelecionado = document.getElementById("dreMes").value; 
+        let recBruta = 0, devolucoes = 0, custoVar = 0, custoFix = 0;
+
+        let dadosDRE = lancamentos.filter(l => l.data.startsWith(mesSelecionado) && (l.status.toLowerCase().includes("efetuada") || l.status.toLowerCase().includes("pago")));
+
+        dadosDRE.forEach(l => {
+            let cat = l.categoria;
+            if (cat === "Vendas de Produtos" || cat === "Receita de Serviços") recBruta += l.valor;
+            else if (cat === "Devoluções/Cancelamentos") devolucoes += l.valor;
+            else if (["Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção"].includes(cat)) custoVar += l.valor;
+            else if (["Aluguel", "Salários", "Internet", "Sistema", "Contador", "Monitoramento", "Marketing", "Outras Despesas Fixas"].includes(cat)) custoFix += l.valor;
+        });
+
+        let recLiquida = recBruta - devolucoes;
+        let margemCont = recLiquida - custoVar;
+        let lucroLiq = margemCont - custoFix;
+        let margemPerc = recLiquida > 0 ? (margemCont / recLiquida) : 0;
+        let pontoEq = margemPerc > 0 ? (custoFix / margemPerc) : 0;
+
+        document.getElementById("dreReceita").innerText = formata(recBruta); document.getElementById("dreDevolucao").innerText = formata(devolucoes);
+        document.getElementById("dreReceitaLiq").innerText = formata(recLiquida); document.getElementById("dreCustosVar").innerText = formata(custoVar);
+        document.getElementById("dreMargemCont").innerText = formata(margemCont); document.getElementById("dreDespFixa").innerText = formata(custoFix);
+        document.getElementById("dreLucro").innerText = formata(lucroLiq); document.getElementById("drePontoEq").innerText = formata(pontoEq);
+
+        if (lucroLiq > 0) {
+            let capGiro = lucroLiq * 0.30; let reserva = lucroLiq * 0.20; let manu = lucroLiq * 0.10; let reinv = lucroLiq * 0.10; let cresc = lucroLiq * 0.10;
+            let totDed = capGiro + reserva + manu + reinv + cresc; 
+            let saldo = lucroLiq - totDed; 
+            let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50;
+
+            document.getElementById("dstGiro").innerText = formata(capGiro); document.getElementById("dstReserva").innerText = formata(reserva);
+            document.getElementById("dstManu").innerText = formata(manu); document.getElementById("dstReinv").innerText = formata(reinv);
+            document.getElementById("dstCresc").innerText = formata(cresc); document.getElementById("dstDeducao").innerText = formata(totDed);
+            document.getElementById("dstSaldo").innerText = formata(saldo); document.getElementById("dstSocios").innerText = formata(valSocios);
+            document.getElementById("dstCaixa").innerText = formata(valCaixa);
+        } else {
+            ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = formata(0));
+        }
+    }
+
+    function calcularPreco() {
+        let vCusto = parseFloat(document.getElementById("precCustoProd").value) || 0; let vEmb = parseFloat(document.getElementById("precEmbalagem").value) || 0;
+        let vFrete = parseFloat(document.getElementById("precFrete").value) || 0; let vBrinde = parseFloat(document.getElementById("precBrinde").value) || 0;
+        let pTaxa = parseFloat(document.getElementById("precTaxa").value) || 0; let pImp = parseFloat(document.getElementById("precImposto").value) || 0;
+        let pMkp = parseFloat(document.getElementById("precMkp").value) || 0; let pFixa = parseFloat(document.getElementById("precDespFixa").value) || 0;
+        let pLucro = parseFloat(document.getElementById("precLucro").value) || 0;
+
+        let totalCustos = vCusto + vEmb + vFrete + vBrinde; let totalPerc = pTaxa + pImp + pMkp + pFixa + pLucro;
+
+        document.getElementById("resPrecCustos").innerText = formata(totalCustos); document.getElementById("resPrecTaxas").innerText = totalPerc + "%";
+
+        if (totalPerc >= 100) {
+            document.getElementById("resultadoPreco").innerText = "ERRO"; document.getElementById("resultadoPreco").style.color = "#e74c3c";
+        } else {
+            let precoVenda = totalCustos / (1 - (totalPerc / 100));
+            document.getElementById("resultadoPreco").innerText = formata(precoVenda); document.getElementById("resultadoPreco").style.color = "#27ae60";
+        }
+    }
+
+    function gerarVisaoPerspectivas() {
+        const hoje = new Date(); const ano = hoje.getFullYear(); const mes = hoje.getMonth(); const dia = hoje.getDate();
+
+        const inicioMesAtual = formatarDataISO(new Date(ano, mes, 1)); const fimMesAtual = formatarDataISO(new Date(ano, mes + 1, 0));
+        const inicioMesProximo = formatarDataISO(new Date(ano, mes + 1, 1)); const fimMesProximo = formatarDataISO(new Date(ano, mes + 2, 0));
+
+        renderTabelaPerspectiva("blocoMesAtual", "Mês Atual", inicioMesAtual, fimMesAtual); renderTabelaPerspectiva("blocoMesProximo", "Próximo Mês", inicioMesProximo, fimMesProximo);
+
+        let inicioQAtual, fimQAtual, inicioQProxima, fimQProxima;
+        if (dia <= 15) {
+            inicioQAtual = formatarDataISO(new Date(ano, mes, 1)); fimQAtual = formatarDataISO(new Date(ano, mes, 15));
+            inicioQProxima = formatarDataISO(new Date(ano, mes, 16)); fimQProxima = formatarDataISO(new Date(ano, mes + 1, 0));
+        } else {
+            inicioQAtual = formatarDataISO(new Date(ano, mes, 16)); fimQAtual = formatarDataISO(new Date(ano, mes + 1, 0));
+            inicioQProxima = formatarDataISO(new Date(ano, mes + 1, 1)); fimQProxima = formatarDataISO(new Date(ano, mes + 1, 15));
+        }
+
+        renderTabelaPerspectiva("blocoQuinzenaAtual", "Quinzena Atual", inicioQAtual, fimQAtual); renderTabelaPerspectiva("blocoQuinzenaProxima", "Próxima Quinzena", inicioQProxima, fimQProxima);
+
+        let domAtual = new Date(hoje); domAtual.setDate(hoje.getDate() - hoje.getDay()); 
+        let sabAtual = new Date(domAtual); sabAtual.setDate(domAtual.getDate() + 6); 
+        let domProximo = new Date(sabAtual); domProximo.setDate(sabAtual.getDate() + 1); 
+        let sabProximo = new Date(domProximo); sabProximo.setDate(domProximo.getDate() + 6); 
+
+        renderTabelaPerspectiva("blocoSemanaAtual", "Semana Atual", formatarDataISO(domAtual), formatarDataISO(sabAtual)); renderTabelaPerspectiva("blocoSemanaProxima", "Próxima Semana", formatarDataISO(domProximo), formatarDataISO(sabProximo));
+    }
+
+    function renderTabelaPerspectiva(idContainer, titulo, dtInicio, dtFim) {
+        let filtrados = lancamentos.filter(l => l.data >= dtInicio && l.data <= dtFim).sort((a,b) => new Date(a.data) - new Date(b.data));
+        let totEnt = 0; let totSai = 0;
+
+        let linhasHtml = filtrados.map(l => {
+            if(l.tipo === "Crédito") totEnt += l.valor; if(l.tipo === "Débito") totSai += l.valor;
+            let isEfetuada = (l.status || '').toLowerCase().includes('efetuada') || (l.status || '').toLowerCase().includes('pago');
+            return `<tr style="color: ${isEfetuada ? '#7f8c8d' : '#333'};">
+                <td style="white-space:nowrap;"><strong>${isEfetuada ? '✅' : '⏳'} ${formataData(l.data)}</strong></td>
+                <td><strong>${l.desc}</strong><br><small>🏦 ${l.conta || 'Geral'}</small></td>
+                <td>${l.categoria}</td><td>${l.tipo}</td>
+                <td style="color:${l.tipo === 'Débito' ? '#e74c3c' : '#27ae60'}; font-weight:bold;">${formata(l.valor)}</td>
+                <td>${l.status}</td>
+            </tr>`;
+        }).join('');
+
+        if(filtrados.length === 0) linhasHtml = '<tr><td colspan="6" style="text-align:center; padding: 20px; color:#999;">Sem lançamentos neste período.</td></tr>';
+
+        let saldo = totEnt - totSai;
+        document.getElementById(idContainer).innerHTML = `
+            <h3 style="color: #4a3022; border-bottom: 2px solid #e8e3dc; padding-bottom: 5px; margin-top: 25px;">${titulo} <span style="font-size:12px; color:#98947c; font-weight:normal;">(${formataData(dtInicio)} até ${formataData(dtFim)})</span></h3>
+            <div class="table-responsive"><table><thead><tr><th style="width:12%;">Data</th><th style="width:48%;">Descrição / Conta</th><th style="width:12%;">Categoria</th><th style="width:10%;">Tipo</th><th style="width:10%;">Valor</th><th style="width:8%;">Status</th></tr></thead><tbody>${linhasHtml}</tbody></table></div>
+            <div style="background: #faf9f7; padding: 10px 15px; border-radius: 4px; display: flex; justify-content: flex-end; gap: 20px; font-size: 14px; margin-bottom: 20px; flex-wrap: wrap;">
+                <span>Total Entradas: <strong style="color: #27ae60;">${formata(totEnt)}</strong></span><span>Total Saídas: <strong style="color: #e74c3c;">${formata(totSai)}</strong></span><span style="border-left: 2px solid #e8e3dc; padding-left: 20px; color: #4a3022;">Resultado Final: <strong style="color: ${saldo >= 0 ? '#2980b9' : '#e74c3c'}; font-size: 16px;">${formata(saldo)}</strong></span>
+            </div>`;
+    }
+
+    function abrirPagamentoParcial(id) {
+        let l = lancamentos.find(x => x.id == id); if(!l) return;
+        document.getElementById('parcialId').value = l.id; document.getElementById('parcialValorPago').value = l.valor; document.getElementById('parcialDataRestante').value = ""; document.getElementById('modalParcial').style.display = 'flex';
+    }
+    function confirmarParcial() {
+        let id = document.getElementById('parcialId').value; let valorPago = parseFloat(document.getElementById('parcialValorPago').value); let dataRestante = document.getElementById('parcialDataRestante').value; let l = lancamentos.find(x => x.id == id);
+        if (!l || isNaN(valorPago) || valorPago <= 0 || valorPago >= l.valor) return alert("Valor inválido."); if (!dataRestante) return alert("Informe a data.");
+        let valorRestante = l.valor - valorPago; let novoId = Date.now().toString(); let batch = db.batch();
+        batch.update(db.collection("lancamentos").doc(id.toString()), { valor: valorPago, status: "Efetuada (Parcial)" });
+        batch.set(db.collection("lancamentos").doc(novoId), { id: novoId, desc: l.desc + " (Restante)", categoria: l.categoria, conta: l.conta || "Geral", valor: valorRestante, data: dataRestante, tipo: l.tipo, status: "A Vencer" });
+        batch.commit().then(() => { document.getElementById('modalParcial').style.display = 'none'; registrarLog("PARCIAL", `Baixa de R$${valorPago}`); });
+    }
+
+    function abrirRenovacao(l) {
+        let nomeBase = l.desc.replace(/\s*\(\d+\/\d+\)$/, ""); 
+        document.getElementById('renovaNome').innerText = nomeBase; document.getElementById('renovaCategoria').value = l.categoria; document.getElementById('renovaConta').value = l.conta || "Geral"; document.getElementById('renovaTipo').value = l.tipo; document.getElementById('renovaValor').value = l.valor; document.getElementById('renovaData').value = ""; document.getElementById('modalRenovacao').style.display = 'flex';
+    }
+    function confirmarRenovacao() {
+        let nomeBase = document.getElementById('renovaNome').innerText; let v = parseFloat(document.getElementById('renovaValor').value); let n = parseInt(document.getElementById('renovaParcelas').value); let dt = document.getElementById('renovaData').value; let c = document.getElementById('renovaCategoria').value; let contaRef = document.getElementById('renovaConta').value; let t = document.getElementById('renovaTipo').value;
+        if (isNaN(v) || isNaN(n) || !dt) return alert("Preencha todos os campos.");
+        let batch = db.batch();
+        for (let i = 0; i < n; i++) {
+            let dataVenc = new Date(dt + "T12:00:00Z"); dataVenc.setUTCMonth(dataVenc.getUTCMonth() + i); let novoId = (Date.now() + i).toString();
+            batch.set(db.collection("lancamentos").doc(novoId), { id: novoId, desc: `${nomeBase} (${i+1}/${n})`, categoria: c, conta: contaRef, valor: v, data: dataVenc.toISOString().split('T')[0], tipo: t, status: "A Vencer" });
+        }
+        batch.commit().then(() => { document.getElementById('modalRenovacao').style.display = 'none'; registrarLog("RENOVOU", `Renovou ${nomeBase}`); });
+    }
+
+    function toggleDropdownCat() { document.getElementById("dropdownCatOptions").style.display = document.getElementById("dropdownCatOptions").style.display === "none" ? "block" : "none"; }
+    document.addEventListener("click", function(e) { let drop = document.getElementById("dropdownCatOptions"); let btn = document.getElementById("btnFiltroCat"); if (drop && btn && !btn.contains(e.target) && !drop.contains(e.target)) drop.style.display = "none"; });
+    function selecionarTodasCategorias(master) { document.querySelectorAll(".chk-cat-item").forEach(c => c.checked = false); if(!master.checked) master.checked = true; atualizarTela(); atualizarTextoBotaoCat(); }
+    function atualizarFiltroCategoria() { let chks = Array.from(document.querySelectorAll(".chk-cat-item")).filter(c => c.checked); document.getElementById("chkCatAll").checked = chks.length === 0; atualizarTela(); atualizarTextoBotaoCat(); }
+    function atualizarTextoBotaoCat() {
+        let master = document.getElementById("chkCatAll"); if (master.checked) return document.getElementById("btnFiltroCat").innerText = "Todas";
+        let selecionadas = Array.from(document.querySelectorAll(".chk-cat-item")).filter(c => c.checked).map(c => c.value);
+        if (selecionadas.length === 0) document.getElementById("btnFiltroCat").innerText = "Nenhuma"; else if (selecionadas.length <= 2) document.getElementById("btnFiltroCat").innerText = selecionadas.join(", "); else document.getElementById("btnFiltroCat").innerText = selecionadas.length + " Selecionadas";
+    }
+</script>
+
+</body>
+</html>
