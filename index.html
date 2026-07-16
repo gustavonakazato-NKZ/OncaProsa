@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Onça Prosa - ERP Financeiro</title>
+    <title>Onça Prosa - ERP Gerencial</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
@@ -14,7 +14,6 @@
         .titulo-empresa { color: #4a3022; text-align: center; margin-bottom: 30px; line-height: 1.3; }
         .titulo-empresa .menor { font-size: 20px; font-weight: normal; color: #c8827a; letter-spacing: 2px; text-transform: uppercase; }
         .titulo-empresa .maior { font-size: 45px; font-family: 'Georgia', serif; font-weight: bold; color: #4a3022; }
-        .titulo-empresa .slogan { font-size: 14px; color: #98947c; letter-spacing: 3px; margin-top: 5px;}
         .login-box { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 10px 30px rgba(74, 48, 34, 0.1); width: 100%; max-width: 380px; text-align: center; box-sizing: border-box; border-top: 5px solid #c8827a; }
         .login-box h2 { color: #4a3022; margin-top: 0; font-size: 22px; }
         .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e1e5eb; border-radius: 6px; box-sizing: border-box; font-size: 15px; background: #faf9f7; }
@@ -31,9 +30,9 @@
         .aba-ativa:hover { background-color: #b26e67; }
         .container-principal { padding: 20px; max-width: 1650px; margin: 0 auto; box-sizing: border-box; }
         .layout-flex { display: flex; gap: 20px; align-items: flex-start; }
-        .painel-cadastro { width: 22%; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 20px; box-sizing: border-box; }
-        .painel-conteudo { width: 78%; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; min-width: 0; }
-        .painel-branco { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); box-sizing: border-box; overflow: hidden; }
+        .painel-cadastro { width: 25%; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 20px; box-sizing: border-box; }
+        .painel-conteudo { width: 75%; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; min-width: 0; }
+        .painel-branco { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); box-sizing: border-box; overflow: hidden; width: 100%; }
         h2, h3 { color: #4a3022; margin: 0 0 20px 0; }
         .form-group { margin-bottom: 12px; width: 100%; }
         .form-row { display: flex; gap: 10px; width: 100%; }
@@ -43,23 +42,37 @@
         .btn:hover { background-color: #b26e67; }
         .btn-editando { background-color: #f39c12; }
         .btn-limpar { background-color: #98947c; }
-        .resumo-container { display: flex; gap: 20px; flex-wrap: wrap; width: 100%; background-color: #fcf8f2; padding: 15px 0 10px 0; }
-        .card { flex: 1; min-width: 200px; background: white; padding: 15px; border-radius: 8px; text-align: center; border-bottom: 4px solid #ddd; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .btn-acao-topo { background: #98947c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.3s; }
+        .btn-acao-topo:hover { background: #7c7965; }
+        .resumo-container { display: flex; gap: 20px; flex-wrap: wrap; width: 100%; margin-bottom: 20px; }
+        .card { flex: 1; min-width: 200px; background: white; padding: 15px; border-radius: 8px; text-align: center; border-bottom: 4px solid #ddd; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .card h4 { margin: 0; font-size: 14px; color: #7f8c8d; }
-        .card p { margin: 8px 0 0 0; font-size: 22px; font-weight: bold; }
+        .card p { margin: 8px 0 0 0; font-size: 24px; font-weight: bold; }
         .filtros-area { background: #faf9f7; padding: 15px; border-radius: 8px; border: 1px solid #e8e3dc; margin-bottom: 15px; box-sizing: border-box; }
-        .filtros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; align-items: end; }
+        .filtros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; align-items: end; }
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 20px; }
         table { width: 100%; min-width: 800px; border-collapse: collapse; }
         th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #eee; font-size: 13px; }
         th { background-color: #faf9f7; border-bottom: 2px solid #e8e3dc; color: #4a3022; }
         .btn-acao { border: none; background: none; cursor: pointer; font-size: 16px; padding: 4px; border-radius: 4px; }
         .btn-acao:hover { background: #eee; }
+        
+        /* DRE Styles */
         .dre-container { display: flex; gap: 20px; flex-wrap: wrap; }
         .dre-box { flex: 1; min-width: 300px; background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc; }
         .dre-linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ccc; font-size: 14px; }
         .dre-linha.destaque { font-weight: bold; color: #4a3022; font-size: 16px; border-bottom: 2px solid #c8827a; margin-top: 10px; padding-top: 10px; }
-        @media (max-width: 900px) { .layout-flex { flex-direction: column; } .painel-cadastro, .painel-conteudo { width: 100%; position: static; } }
+        .dre-linha.negativo { color: #e74c3c; }
+        .dre-linha.positivo { color: #27ae60; }
+        
+        /* Gestão Styles */
+        .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .lista-itens { list-style: none; padding: 0; margin: 0 0 15px 0; max-height: 200px; overflow-y: auto; }
+        .lista-itens li { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: white; border: 1px solid #eee; margin-bottom: 5px; border-radius: 4px; font-size: 13px; }
+        .lista-itens li button { background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+        .admin-area { background: #fff3cd; padding: 20px; border-radius: 8px; border: 1px solid #ffeeba; box-sizing: border-box; }
+
+        @media (max-width: 900px) { .layout-flex { flex-direction: column; } .painel-cadastro, .painel-conteudo { width: 100%; position: static; } .config-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -76,7 +89,6 @@
         <input type="text" id="cpfAuth" placeholder="CPF (Apenas números)">
         <input type="password" id="senhaAuth" placeholder="Senha">
         <button id="btnEntrar" onclick="entrar()">Entrar no Sistema</button>
-        <!-- BOTÃO AGORA FORÇADO A APARECER SE NÃO HOUVER USUÁRIO -->
         <button id="btnRegistrarPrimeiro" class="btn-secundario" style="display:none; margin-top:10px;" onclick="registrarPrimeiroAdmin()">⚠️ Criar Primeiro Administrador</button>
     </div>
 </div>
@@ -90,31 +102,79 @@
         </div>
     </div>
 
+    <!-- NAVBAR ESTRUTURADA -->
     <div class="navbar">
-        <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard Fluxo</button>
+        <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard</button>
+        <button id="btnAbaFinanceiro" class="aba-btn" onclick="mudarAba('financeiro')">💸 Financeiro</button>
         <button id="btnAbaEstoque" class="aba-btn" onclick="mudarAba('estoque')">📦 Estoque</button>
-        <button id="btnAbaDre" class="aba-btn" onclick="mudarAba('dre')">📈 DRE & Distribuição</button>
-        <button id="btnAbaPrecificacao" class="aba-btn" onclick="mudarAba('precificacao')">💰 Precificação</button>
+        <!-- Aba Gestão é exclusiva para Administradores -->
+        <button id="btnAbaGestao" class="aba-btn admin-req" style="display:none;" onclick="mudarAba('gestao')">⚙️ Gestão</button>
     </div>
 
     <div class="container-principal">
         
-        <!-- MÓDULO 1: FLUXO DE CAIXA -->
-        <div id="abaDashboard" class="layout-flex aba-conteudo">
+        <!-- ========================================== -->
+        <!-- MÓDULO 1: DASHBOARD (Apenas Visualização)  -->
+        <!-- ========================================== -->
+        <div id="abaDashboard" class="aba-conteudo">
+            <h2 style="color: #4a3022; border-bottom: 2px solid #e8e3dc; padding-bottom: 10px;">📊 Visão Geral e Indicadores</h2>
+            
+            <div class="filtros-area" style="display: flex; gap: 15px; max-width: 300px; margin-bottom: 20px;">
+                <div style="flex: 1;"><label>Mês de Referência:</label><input type="month" id="dreMes" onchange="gerarDRE()"></div>
+            </div>
+
+            <!-- Resumo Financeiro Rápido -->
+            <div class="resumo-container">
+                <div class="card" style="border-color: #27ae60;"><h4>Entradas (Mês)</h4><p style="color: #27ae60;" id="resDashEntradas">R$ 0,00</p></div>
+                <div class="card" style="border-color: #e74c3c;"><h4>Saídas (Mês)</h4><p style="color: #e74c3c;" id="resDashSaidas">R$ 0,00</p></div>
+                <div class="card" style="border-color: #c8827a;"><h4>Saldo (Mês)</h4><p id="resDashSaldo" style="color:#4a3022;">R$ 0,00</p></div>
+            </div>
+
+            <!-- DRE e Rateio -->
+            <div class="dre-container">
+                <div class="dre-box">
+                    <h3 style="color: #c8827a; margin-top:0;">Demonstração de Resultados (DRE)</h3>
+                    <div class="dre-linha positivo"><span>(+) Receita Bruta de Vendas</span><span id="dreReceita">R$ 0,00</span></div>
+                    <div class="dre-linha negativo"><span>(-) Devoluções / Cancelamentos</span><span id="dreDevolucao">R$ 0,00</span></div>
+                    <div class="dre-linha destaque"><span>(=) Receita Líquida</span><span id="dreReceitaLiq">R$ 0,00</span></div>
+                    <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Custos Variáveis (Impostos, Tx, CMV)</span><span id="dreCustosVar">R$ 0,00</span></div>
+                    <div class="dre-linha destaque" style="color: #2980b9;"><span>(=) Margem de Contribuição</span><span id="dreMargemCont">R$ 0,00</span></div>
+                    <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Despesas Fixas (Aluguel, Salário...)</span><span id="dreDespFixa">R$ 0,00</span></div>
+                    <div class="dre-linha destaque" style="border-bottom-color: #4a3022;"><span>(=) Lucro Líquido Operacional</span><span id="dreLucro">R$ 0,00</span></div>
+                </div>
+                <div class="dre-box">
+                    <h3 style="color: #4a3022; margin-top:0;">Distribuição Inteligente (Regra Onça Prosa)</h3>
+                    <div class="dre-linha"><span>Capital de Giro (30%)</span><span id="dstGiro">R$ 0,00</span></div>
+                    <div class="dre-linha"><span>Reserva de Emergência (20%)</span><span id="dstReserva">R$ 0,00</span></div>
+                    <div class="dre-linha"><span>Manutenção (10%)</span><span id="dstManu">R$ 0,00</span></div>
+                    <div class="dre-linha"><span>Reinvestimento (10%)</span><span id="dstReinv">R$ 0,00</span></div>
+                    <div class="dre-linha"><span>Crescimento e Expansão (10%)</span><span id="dstCresc">R$ 0,00</span></div>
+                    <div class="dre-linha destaque negativo" style="border-bottom: 1px solid #ccc;"><span>Total de Dedução (80%)</span><span id="dstDeducao">R$ 0,00</span></div>
+                    <div class="dre-linha destaque positivo" style="margin-top: 15px;"><span>(=) Saldo Remanescente (20%)</span><span id="dstSaldo">R$ 0,00</span></div>
+                    <div class="dre-linha" style="margin-top: 15px; font-weight: bold; font-size: 16px; color: #c8827a;"><span>➡️ Retirada dos Sócios (50%)</span><span id="dstSocios">R$ 0,00</span></div>
+                    <div class="dre-linha" style="font-weight: bold; font-size: 16px; color: #27ae60;"><span>➡️ Caixa da Empresa (50%)</span><span id="dstCaixa">R$ 0,00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MÓDULO 2: FINANCEIRO (Operação Diária)     -->
+        <!-- ========================================== -->
+        <div id="abaFinanceiro" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro fin-req" id="painelCadastro">
-                <h2 id="tituloCadastro">💸 Registrar Movimento</h2>
+                <h2 id="tituloCadastro">💸 Novo Lançamento</h2>
                 <input type="hidden" id="editId">
                 <div class="form-group"><label>Descrição:</label><input type="text" id="cadDesc"></div>
-                <div class="form-row">
-                    <div class="form-group" style="flex: 1;"><label>Categoria:</label><select id="cadCat"></select></div>
-                    <div class="form-group" style="flex: 1;"><label>Conta:</label><select id="cadConta"></select></div>
-                </div>
+                <div class="form-group"><label>Categoria:</label><select id="cadCat"></select></div>
+                <div class="form-group"><label>Conta:</label><select id="cadConta"></select></div>
                 <div class="form-row">
                     <div class="form-group" style="flex: 1;"><label>Valor (R$):</label><input type="number" id="cadValor" step="0.01"></div>
                     <div class="form-group" style="flex: 1;"><label>Data:</label><input type="date" id="cadData"></div>
                 </div>
-                <div class="form-group"><label>Tipo:</label><select id="cadTipo"><option value="Débito">Débito (Saída)</option><option value="Crédito">Crédito (Entrada)</option></select></div>
-                <div class="form-group"><label>Status:</label><select id="cadStatus"></select></div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;"><label>Tipo:</label><select id="cadTipo"><option value="Débito">Débito</option><option value="Crédito">Crédito</option></select></div>
+                    <div class="form-group" style="flex: 1;"><label>Status:</label><select id="cadStatus"></select></div>
+                </div>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn" style="flex: 2; margin-top: 10px;" onclick="adicionarLancamento()">Registrar</button>
                     <button class="btn btn-limpar" style="flex: 1; margin-top: 10px;" onclick="limparFormulario()">Limpar</button>
@@ -122,22 +182,19 @@
             </div>
 
             <div class="painel-conteudo">
-                <div class="resumo-container">
-                    <div class="card" style="border-color: #27ae60;"><h4>Entradas</h4><p style="color: #27ae60;" id="resEntradas">R$ 0,00</p></div>
-                    <div class="card" style="border-color: #e74c3c;"><h4>Saídas</h4><p style="color: #e74c3c;" id="resSaidas">R$ 0,00</p></div>
-                    <div class="card" style="border-color: #c8827a;"><h4>Saldo</h4><p id="resSaldo" style="color:#4a3022;">R$ 0,00</p></div>
-                </div>
                 <div class="painel-branco">
+                    <h2 style="margin-top:0;">📋 Histórico Financeiro</h2>
                     <div class="filtros-area">
                         <div class="filtros-grid">
-                            <div><label>Busca:</label><input type="text" id="fBusca" oninput="atualizarTela()"></div>
-                            <div><label>Mês:</label><input type="month" id="fMes" onchange="atualizarTela()"></div>
-                            <div><label>Tipo:</label><select id="fTipo" onchange="atualizarTela()"><option value="Todos">Todos</option><option value="Débito">Débito</option><option value="Crédito">Crédito</option></select></div>
+                            <div><label>Busca:</label><input type="text" id="fBusca" oninput="atualizarTelaFinanceiro()"></div>
+                            <div><label>Mês:</label><input type="month" id="fMes" onchange="atualizarTelaFinanceiro()"></div>
+                            <div><label>Tipo:</label><select id="fTipo" onchange="atualizarTelaFinanceiro()"><option value="Todos">Todos</option><option value="Débito">Débito</option><option value="Crédito">Crédito</option></select></div>
+                            <div><label>Conta:</label><select id="fConta" onchange="atualizarTelaFinanceiro()"></select></div>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Tipo</th><th>Status</th><th style="text-align: center;">Ações</th></tr></thead>
+                            <thead><tr><th>Data</th><th>Descrição / Conta</th><th>Categoria</th><th>Valor</th><th>Tipo</th><th>Status</th><th class="fin-req" style="text-align: center;">Ações</th></tr></thead>
                             <tbody id="corpoTabela"></tbody>
                         </table>
                     </div>
@@ -145,7 +202,9 @@
             </div>
         </div>
 
-        <!-- MÓDULO 1.5: ESTOQUE (NOVO) -->
+        <!-- ========================================== -->
+        <!-- MÓDULO 3: ESTOQUE                          -->
+        <!-- ========================================== -->
         <div id="abaEstoque" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro fin-req">
                 <h2 id="tituloCadProduto">📦 Novo Produto</h2>
@@ -169,12 +228,12 @@
                     <div class="filtros-area">
                         <div class="filtros-grid" style="grid-template-columns: 1fr 1fr;">
                             <div><label>Buscar Produto:</label><input type="text" id="fBuscaProd" oninput="renderizarEstoque()"></div>
-                            <div><label>Filtro:</label><select id="fStatusProd" onchange="renderizarEstoque()"><option value="Todos">Mostrar Todos</option><option value="Baixo">⚠️ Mostrar Apenas Estoque Baixo</option></select></div>
+                            <div><label>Filtro:</label><select id="fStatusProd" onchange="renderizarEstoque()"><option value="Todos">Mostrar Todos</option><option value="Baixo">⚠️ Apenas Estoque Baixo</option></select></div>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>Produto</th><th>Categoria</th><th>Custo (R$)</th><th>Preço (R$)</th><th style="text-align: center;">Qtd Atual</th><th style="text-align: center;">Ações</th></tr></thead>
+                            <thead><tr><th>Produto</th><th>Categoria</th><th>Custo (R$)</th><th>Preço (R$)</th><th style="text-align: center;">Qtd Atual</th><th class="fin-req" style="text-align: center;">Ações</th></tr></thead>
                             <tbody id="tbEstoque"></tbody>
                         </table>
                     </div>
@@ -182,56 +241,60 @@
             </div>
         </div>
 
-        <!-- MÓDULO 2: DRE E DISTRIBUIÇÃO DE LUCRO -->
-        <div id="abaDre" class="painel-branco aba-conteudo" style="display: none;">
-            <h2>📈 DRE & Distribuição de Lucros</h2>
-            <div class="filtros-area" style="display: flex; gap: 15px; max-width: 400px;"><div style="flex: 1;"><label>Mês Referência:</label><input type="month" id="dreMes" onchange="gerarDRE()"></div></div>
-            <div class="dre-container">
-                <div class="dre-box">
-                    <h3 style="color: #c8827a; margin-top:0;">Demonstração de Resultados (DRE)</h3>
-                    <div class="dre-linha positivo"><span>(+) Receita Bruta de Vendas</span><span id="dreReceita">R$ 0,00</span></div>
-                    <div class="dre-linha negativo"><span>(-) Devoluções / Cancelamentos</span><span id="dreDevolucao">R$ 0,00</span></div>
-                    <div class="dre-linha destaque"><span>(=) Receita Líquida</span><span id="dreReceitaLiq">R$ 0,00</span></div>
-                    <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Custos Variáveis (Impostos, Tx, CMV)</span><span id="dreCustosVar">R$ 0,00</span></div>
-                    <div class="dre-linha destaque" style="color: #2980b9;"><span>(=) Margem de Contribuição</span><span id="dreMargemCont">R$ 0,00</span></div>
-                    <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Despesas Fixas (Aluguel, Salário...)</span><span id="dreDespFixa">R$ 0,00</span></div>
-                    <div class="dre-linha destaque" style="border-bottom-color: #4a3022;"><span>(=) Lucro Líquido Operacional</span><span id="dreLucro">R$ 0,00</span></div>
+        <!-- ========================================== -->
+        <!-- MÓDULO 4: GESTÃO (Apenas Admin)            -->
+        <!-- ========================================== -->
+        <div id="abaGestao" class="painel-branco aba-conteudo admin-req" style="display: none;">
+            <h2>⚙️ Gestão de Equipe e Configurações</h2>
+            
+            <!-- Gestão de Usuários -->
+            <div class="admin-area" style="margin-bottom: 30px;">
+                <h3 style="color: #d35400; margin-top: 0;">👥 Cadastro de Pessoas e Acessos</h3>
+                <p style="font-size: 14px; margin-top: -10px; margin-bottom: 20px;">Adicione novos membros da equipe e defina o nível de permissão de cada um.</p>
+                
+                <div style="background: white; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+                    <div style="display:flex; gap:10px; align-items: flex-end; flex-wrap: wrap;">
+                        <div style="flex: 2; min-width: 150px;"><label>Nome Completo:</label><input type="text" id="novoUserNome" placeholder="Ex: João Silva"></div>
+                        <div style="flex: 2; min-width: 120px;"><label>CPF (Login):</label><input type="text" id="novoUserCpf" placeholder="Apenas números"></div>
+                        <div style="flex: 2; min-width: 120px;"><label>Senha Inicial:</label><input type="password" id="novoUserSenha" placeholder="Min. 6 caracteres"></div>
+                        <div style="flex: 2; min-width: 120px;">
+                            <label>Categoria de Acesso:</label>
+                            <select id="novoUserPerfil">
+                                <option value="Observador">Observador (Apenas Leitura)</option>
+                                <option value="Financeiro">Financeiro (Lança Dados)</option>
+                                <option value="Administrador">Administrador (Total)</option>
+                            </select>
+                        </div>
+                        <button class="btn-acao-topo" style="background:#27ae60; padding:10px 15px; height: 38px;" onclick="criarUsuarioEquipe()">➕ Cadastrar</button>
+                    </div>
                 </div>
-                <div class="dre-box">
-                    <h3 style="color: #4a3022; margin-top:0;">Rateio e Distribuição (Regra da Onça)</h3>
-                    <div class="dre-linha"><span>Capital de Giro (30%)</span><span id="dstGiro">R$ 0,00</span></div>
-                    <div class="dre-linha"><span>Reserva de Emergência (20%)</span><span id="dstReserva">R$ 0,00</span></div>
-                    <div class="dre-linha"><span>Manutenção (10%)</span><span id="dstManu">R$ 0,00</span></div>
-                    <div class="dre-linha"><span>Reinvestimento (10%)</span><span id="dstReinv">R$ 0,00</span></div>
-                    <div class="dre-linha"><span>Crescimento e Expansão (10%)</span><span id="dstCresc">R$ 0,00</span></div>
-                    <div class="dre-linha destaque negativo" style="border-bottom: 1px solid #ccc;"><span>Total de Dedução (80%)</span><span id="dstDeducao">R$ 0,00</span></div>
-                    <div class="dre-linha destaque positivo" style="margin-top: 15px;"><span>(=) Saldo Remanescente (20%)</span><span id="dstSaldo">R$ 0,00</span></div>
-                    <div class="dre-linha" style="margin-top: 15px; font-weight: bold; font-size: 16px; color: #c8827a;"><span>➡️ Retirada dos Sócios (50%)</span><span id="dstSocios">R$ 0,00</span></div>
-                    <div class="dre-linha" style="font-weight: bold; font-size: 16px; color: #27ae60;"><span>➡️ Caixa da Empresa (50%)</span><span id="dstCaixa">R$ 0,00</span></div>
+
+                <div class="table-responsive">
+                    <table style="background: white;">
+                        <thead><tr><th>Nome</th><th>CPF</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody id="tabelaUsuarios"></tbody>
+                    </table>
                 </div>
             </div>
-        </div>
 
-        <!-- MÓDULO 3: PRECIFICAÇÃO -->
-        <div id="abaPrecificacao" class="painel-branco aba-conteudo" style="display: none;">
-            <h2>💰 Simulador de Precificação (Markup)</h2>
-            <div style="display: flex; gap: 30px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 300px; background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
-                    <h4 style="margin-top: 0;">1. Custos Diretos (R$)</h4>
-                    <div class="form-group"><label>Custo do Produto / Insumos:</label><input type="number" id="precCustoProd" value="0" oninput="calcularPreco()"></div>
-                    <div class="form-group"><label>Embalagem:</label><input type="number" id="precEmbalagem" value="0" oninput="calcularPreco()"></div>
-                    <div class="form-group"><label>Frete Pago:</label><input type="number" id="precFrete" value="0" oninput="calcularPreco()"></div>
+            <!-- Gestão de Categorias e Contas -->
+            <div class="config-grid">
+                <div style="background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
+                    <h3 style="margin-top: 0;">📁 Categorias Financeiras</h3>
+                    <div style="display:flex; gap:10px; margin-bottom: 15px;">
+                        <input type="text" id="novaCatInput" placeholder="Nova categoria...">
+                        <button class="btn-acao-topo" style="background:#4a3022;" onclick="addConfig('cat')">Adicionar</button>
+                    </div>
+                    <ul class="lista-itens" id="listaCatConfig"></ul>
                 </div>
-                <div style="flex: 1; min-width: 300px; background: #fdf5f4; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
-                    <h4 style="margin-top: 0; color: #c8827a;">2. Despesas sobre a Venda (%)</h4>
-                    <div class="form-group"><label>Taxa de Cartão (%):</label><input type="number" id="precTaxa" value="5" oninput="calcularPreco()"></div>
-                    <div class="form-group"><label>Imposto (%):</label><input type="number" id="precImposto" value="6" oninput="calcularPreco()"></div>
-                    <div class="form-group"><label>Rateio de Despesa Fixa (%):</label><input type="number" id="precDespFixa" value="15" oninput="calcularPreco()"></div>
-                    <div class="form-group"><label>Margem de Lucro Desejada (%):</label><input type="number" id="precLucro" value="20" oninput="calcularPreco()"></div>
-                </div>
-                <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #4a3022; color: white; padding: 30px; border-radius: 8px;">
-                    <h3 style="color: #e8dcc4; margin: 0 0 10px 0;">PREÇO DE VENDA SUGERIDO</h3>
-                    <div id="resultadoPreco" style="font-size: 40px; font-weight: bold; color: #27ae60;">R$ 0,00</div>
+                
+                <div style="background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
+                    <h3 style="margin-top: 0;">🏦 Contas Bancárias / Caixas</h3>
+                    <div style="display:flex; gap:10px; margin-bottom: 15px;">
+                        <input type="text" id="novaContaInput" placeholder="Nova conta...">
+                        <button class="btn-acao-topo" style="background:#4a3022;" onclick="addConfig('conta')">Adicionar</button>
+                    </div>
+                    <ul class="lista-itens" id="listaContasConfig"></ul>
                 </div>
             </div>
         </div>
@@ -240,6 +303,7 @@
 </div>
 
 <script>
+    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
       apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI",
       authDomain: "onca-prosa-erp.firebaseapp.com",
@@ -248,25 +312,33 @@
       messagingSenderId: "1096171294924",
       appId: "1:1096171294924:web:9362f03a99a6d31139b269"
     };
+    
+    // App Principal
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const auth = firebase.auth();
+    
+    // App Secundário (Usado SOMENTE para o Admin criar usuários sem ser deslogado)
+    const appSecundario = firebase.initializeApp(firebaseConfig, "AppSecundario");
 
     let lancamentos = [];
     let produtos = []; 
+    let usuariosLista = [];
     let contasLista = ["Caixa Principal", "Banco Inter", "Mercado Pago"];
     let statusLista = ["A Vencer", "Efetuada"];
     let categorias = ["Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Aluguel", "Salários", "Internet", "Sistema", "Contador", "Outras Despesas Fixas"];
 
-    // --- CORREÇÃO: VERIFICA SE O BANCO ESTÁ VAZIO E MOSTRA O BOTÃO DE CRIAR ADMIN ---
+    let userAutenticado = null;
+    let perfilUsuario = 'Observador'; 
+
+    // VERIFICA SE O BANCO ESTÁ VAZIO PARA CRIAR O PRIMEIRO ADMIN
     db.collection("usuarios").limit(1).get().then(snap => {
         if(snap.empty) {
             document.getElementById('btnRegistrarPrimeiro').style.display = 'block';
             document.getElementById('loginMsg').innerText = "Banco de dados zerado. Crie o Administrador Mestre.";
             document.getElementById('loginMsg').style.color = "#27ae60";
         }
-    }).catch(err => console.log("Aguardando regras do Firestore ou banco offline."));
-    // ----------------------------------------------------------------------------------
+    }).catch(err => console.log("Aguardando regras do Firestore."));
 
     auth.onAuthStateChanged(user => {
         if (user) {
@@ -274,10 +346,20 @@
             document.getElementById('appLogado').style.display = 'block';
             db.collection("usuarios").doc(user.uid).onSnapshot(doc => {
                 if (doc.exists) {
-                    document.getElementById('lblUsuario').innerText = doc.data().nome || "Admin";
-                    document.getElementById('lblPerfil').innerText = doc.data().perfil;
+                    let d = doc.data();
+                    if(d.status === "Suspenso") {
+                        alert("Sua conta foi suspensa.");
+                        auth.signOut();
+                        return;
+                    }
+                    perfilUsuario = d.perfil;
+                    document.getElementById('lblUsuario').innerText = d.nome || "Usuário";
+                    document.getElementById('lblPerfil').innerText = perfilUsuario;
+                    
                     document.getElementById("fMes").value = new Date().toISOString().substring(0,7);
                     document.getElementById("dreMes").value = new Date().toISOString().substring(0,7);
+                    
+                    aplicarPermissoes();
                     carregarListas();
                     iniciarOuvintesDeDados();
                 }
@@ -287,6 +369,26 @@
             document.getElementById('appLogado').style.display = 'none';
         }
     });
+
+    function aplicarPermissoes() {
+        document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = 'none');
+        if (perfilUsuario === 'Administrador') {
+            document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = '');
+            // Se for mobile, o display default de blocos flex pode quebrar ao exibir, então reajustamos:
+            if(window.innerWidth > 900) {
+                document.getElementById('abaFinanceiro').style.display = document.getElementById('abaFinanceiro').classList.contains('aba-ativa') ? 'flex' : 'none';
+            }
+        } else if (perfilUsuario === 'Financeiro') {
+            document.querySelectorAll('.fin-req').forEach(el => el.style.display = '');
+        }
+        
+        // Esconde o botão de Gestão do Navbar se não for admin
+        if(perfilUsuario !== 'Administrador') {
+            document.getElementById('btnAbaGestao').style.display = 'none';
+        } else {
+            document.getElementById('btnAbaGestao').style.display = 'block';
+        }
+    }
 
     function entrar() {
         let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, '');
@@ -300,73 +402,288 @@
             });
     }
 
-    // --- CORREÇÃO: A FUNÇÃO QUE TINHA SUMIDO ESTÁ DE VOLTA ---
     function registrarPrimeiroAdmin() {
         let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, '');
         const s = document.getElementById('senhaAuth').value;
+        if(cpf.length !== 11) return alert("O CPF deve conter 11 números.");
+        if(s.length < 6) return alert("A senha deve ter no mínimo 6 caracteres.");
         
-        if(cpf.length !== 11) {
-            document.getElementById('loginMsg').innerText = "Erro: O CPF deve conter exatos 11 números.";
-            document.getElementById('loginMsg').style.color = "#e74c3c";
-            return;
-        }
-        if(s.length < 6) {
-            document.getElementById('loginMsg').innerText = "Erro: A senha deve ter no mínimo 6 caracteres.";
-            document.getElementById('loginMsg').style.color = "#e74c3c";
-            return;
-        }
-        
-        document.getElementById('loginMsg').innerText = "Criando seu usuário no banco de dados...";
-        document.getElementById('loginMsg').style.color = "#2980b9";
-        
-        const emailFake = cpf + "@oncaprosa.local";
-        auth.createUserWithEmailAndPassword(emailFake, s).then(cred => {
+        document.getElementById('loginMsg').innerText = "Criando seu usuário...";
+        auth.createUserWithEmailAndPassword(cpf + "@oncaprosa.local", s).then(cred => {
             db.collection("usuarios").doc(cred.user.uid).set({ 
-                cpf: cpf, 
-                perfil: "Administrador", 
-                status: "Ativo",
-                nome: "Administrador Mestre"
+                cpf: cpf, perfil: "Administrador", status: "Ativo", nome: "Administrador Mestre"
             });
-            alert("Parabéns! Administrador criado com sucesso. O sistema vai carregar agora.");
-        }).catch(err => {
-            document.getElementById('loginMsg').innerText = "Erro ao criar: " + err.message;
-            document.getElementById('loginMsg').style.color = "#e74c3c";
-        });
+            alert("Administrador criado!");
+        }).catch(err => alert("Erro: " + err.message));
     }
-    // ---------------------------------------------------------
 
     function sair() { auth.signOut(); location.reload(); }
-
-    function carregarListas() {
-        document.getElementById("cadCat").innerHTML = categorias.map(c => `<option value="${c}">${c}</option>`).join('');
-        document.getElementById("cadStatus").innerHTML = statusLista.map(s => `<option value="${s}">${s}</option>`).join('');
-        document.getElementById("cadConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
-    }
-
-    function iniciarOuvintesDeDados() {
-        db.collection("lancamentos").onSnapshot(snap => {
-            lancamentos = []; snap.forEach(doc => lancamentos.push(doc.data()));
-            atualizarTela(); seAba('dre', gerarDRE);
-        });
-        db.collection("produtos").onSnapshot(snap => {
-            produtos = []; snap.forEach(doc => produtos.push(doc.data()));
-            seAba('estoque', renderizarEstoque);
-        });
-    }
-
-    function seAba(abaId, func) { if(document.getElementById('aba'+abaId.charAt(0).toUpperCase()+abaId.slice(1)).style.display !== 'none') func(); }
 
     function mudarAba(abaId) {
         document.querySelectorAll('.aba-conteudo').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.aba-btn').forEach(el => el.classList.remove('aba-ativa'));
-        let isFlex = abaId === 'dashboard' || abaId === 'estoque';
+        
+        let isFlex = abaId === 'financeiro' || abaId === 'estoque';
         document.getElementById('aba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).style.display = (isFlex && window.innerWidth > 900) ? 'flex' : 'block';
+        
         document.getElementById('btnAba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).classList.add('aba-ativa');
-        if(abaId === 'dre') gerarDRE();
+        
+        if(abaId === 'dashboard') gerarDRE();
+        if(abaId === 'financeiro') atualizarTelaFinanceiro();
         if(abaId === 'estoque') renderizarEstoque();
     }
 
-    // --- FUNÇÕES DE ESTOQUE ---
+    // --- CARGA DE DADOS DO BANCO ---
+    function iniciarOuvintesDeDados() {
+        // Configurações (Categorias e Contas)
+        db.collection("config").doc("listas").onSnapshot(doc => {
+            if (doc.exists) {
+                let d = doc.data();
+                if(d.categorias) categorias = d.categorias;
+                if(d.contasLista) contasLista = d.contasLista;
+            }
+            carregarListas();
+        });
+
+        // Lançamentos
+        db.collection("lancamentos").onSnapshot(snap => {
+            lancamentos = []; snap.forEach(doc => lancamentos.push(doc.data()));
+            if(document.getElementById('abaFinanceiro').style.display !== 'none') atualizarTelaFinanceiro();
+            if(document.getElementById('abaDashboard').style.display !== 'none') gerarDRE();
+        });
+
+        // Produtos
+        db.collection("produtos").onSnapshot(snap => {
+            produtos = []; snap.forEach(doc => produtos.push(doc.data()));
+            if(document.getElementById('abaEstoque').style.display !== 'none') renderizarEstoque();
+        });
+
+        // Usuários (Apenas Admin vê a lista)
+        if(perfilUsuario === 'Administrador') {
+            db.collection("usuarios").onSnapshot(snap => {
+                usuariosLista = [];
+                let html = "";
+                snap.forEach(doc => {
+                    let u = doc.data();
+                    u.id = doc.id;
+                    usuariosLista.push(u);
+                    
+                    let selectPerfil = `<select onchange="alterarUser('${u.id}', 'perfil', this.value)"><option value="Observador" ${u.perfil==='Observador'?'selected':''}>Observador</option><option value="Financeiro" ${u.perfil==='Financeiro'?'selected':''}>Financeiro</option><option value="Administrador" ${u.perfil==='Administrador'?'selected':''}>Administrador</option></select>`;
+                    let selectStatus = `<select onchange="alterarUser('${u.id}', 'status', this.value)"><option value="Ativo" ${u.status==='Ativo'?'selected':''}>Ativo</option><option value="Suspenso" ${u.status==='Suspenso'?'selected':''}>Suspenso</option></select>`;
+                    
+                    html += `<tr><td><strong>${u.nome}</strong></td><td>${u.cpf}</td><td>${selectPerfil}</td><td>${selectStatus}</td><td><button class="btn-acao" style="color:red;" onclick="excluirUser('${u.id}')">🗑️</button></td></tr>`;
+                });
+                document.getElementById('tabelaUsuarios').innerHTML = html;
+            });
+        }
+    }
+
+    function carregarListas() {
+        // Dropdowns do Financeiro
+        document.getElementById("cadCat").innerHTML = categorias.map(c => `<option value="${c}">${c}</option>`).join('');
+        document.getElementById("cadStatus").innerHTML = statusLista.map(s => `<option value="${s}">${s}</option>`).join('');
+        document.getElementById("cadConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
+        document.getElementById("fConta").innerHTML = '<option value="Todas">Todas</option>' + contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
+        
+        // Listas da aba Gestão
+        document.getElementById("listaCatConfig").innerHTML = categorias.map((c, i) => `<li>${c} <button onclick="remConfig('cat', ${i})">X</button></li>`).join('');
+        document.getElementById("listaContasConfig").innerHTML = contasLista.map((c, i) => `<li>${c} <button onclick="remConfig('conta', ${i})">X</button></li>`).join('');
+    }
+
+    // --- ABA GESTÃO (USUÁRIOS E CONFIGURAÇÕES) ---
+    function criarUsuarioEquipe() {
+        const nome = document.getElementById('novoUserNome').value.trim();
+        let cpf = document.getElementById('novoUserCpf').value.replace(/\D/g, '');
+        const s = document.getElementById('novoUserSenha').value;
+        const p = document.getElementById('novoUserPerfil').value;
+
+        if(!nome || cpf.length !== 11 || s.length < 6) return alert("Preencha o Nome, CPF válido (11 números) e Senha (min 6 caracteres).");
+
+        const emailFake = cpf + "@oncaprosa.local";
+        
+        // Usa o app secundário para não deslogar o Admin atual!
+        appSecundario.auth().createUserWithEmailAndPassword(emailFake, s).then(cred => {
+            db.collection("usuarios").doc(cred.user.uid).set({ nome: nome, cpf: cpf, perfil: p, status: "Ativo" });
+            appSecundario.auth().signOut(); // Sai do app secundário
+            alert(`Usuário ${nome} criado com sucesso!`);
+            document.getElementById('novoUserNome').value = ""; document.getElementById('novoUserCpf').value = ""; document.getElementById('novoUserSenha').value = "";
+        }).catch(err => alert("Erro ao criar usuário: " + err.message));
+    }
+
+    function alterarUser(id, campo, valor) {
+        let obj = {}; obj[campo] = valor;
+        db.collection("usuarios").doc(id).update(obj);
+    }
+
+    function excluirUser(id) {
+        if(confirm("Tem certeza que deseja excluir este acesso?")) {
+            db.collection("usuarios").doc(id).delete();
+        }
+    }
+
+    function salvarConfigNaNuvem() {
+        db.collection("config").doc("listas").set({ categorias: categorias, contasLista: contasLista });
+    }
+
+    function addConfig(t) {
+        let idInp = t === 'cat' ? "novaCatInput" : "novaContaInput";
+        let inp = document.getElementById(idInp); let v = inp.value.trim();
+        if(v) {
+            if(t === 'cat' && !categorias.includes(v)) categorias.push(v);
+            if(t === 'conta' && !contasLista.includes(v)) contasLista.push(v);
+            inp.value = ""; salvarConfigNaNuvem();
+        }
+    }
+
+    function remConfig(t, i) {
+        if(t === 'cat') categorias.splice(i,1);
+        if(t === 'conta') contasLista.splice(i,1);
+        salvarConfigNaNuvem();
+    }
+
+    // --- ABA FINANCEIRO (ENTRADAS E SAÍDAS) ---
+    function formatarData(d) { return d ? d.split('-').reverse().join('/') : ""; }
+    
+    function atualizarTelaFinanceiro() {
+        const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = "";
+        let fBusca = document.getElementById("fBusca").value.toLowerCase();
+        let fMes = document.getElementById("fMes").value;
+        let fTipo = document.getElementById("fTipo").value;
+        let fConta = document.getElementById("fConta").value;
+
+        let filtrados = lancamentos.filter(l => 
+            l.desc.toLowerCase().includes(fBusca) && 
+            l.data.startsWith(fMes) && 
+            (fTipo==="Todos" || l.tipo===fTipo) &&
+            (fConta==="Todas" || l.conta===fConta)
+        ).sort((a,b)=>a.data.localeCompare(b.data));
+
+        filtrados.forEach(l => {
+            let tr = document.createElement("tr"); 
+            tr.innerHTML = `
+                <td>${formatarData(l.data)}</td>
+                <td><strong>${l.desc}</strong><br><small>🏦 ${l.conta || 'Geral'}</small></td>
+                <td>${l.categoria}</td>
+                <td style="color:${l.tipo==='Débito'?'#e74c3c':'#27ae60'}; font-weight:bold;">R$ ${l.valor.toFixed(2)}</td>
+                <td>${l.tipo}</td>
+                <td><select onchange="mudarStatusLanc('${l.id}', this.value)" style="padding:4px; font-size:12px; border-radius:4px;" ${perfilUsuario === 'Observador' ? 'disabled' : ''}><option value="A Vencer" ${l.status==='A Vencer'?'selected':''}>A Vencer</option><option value="Efetuada" ${l.status==='Efetuada'?'selected':''}>Efetuada</option></select></td>
+                <td class="fin-req" style="text-align:center;">
+                    <button class="btn-acao" title="Editar" onclick="editarLanc('${l.id}')">✏️</button>
+                    <button class="btn-acao" title="Excluir" style="color:red;" onclick="removerLanc('${l.id}')">🗑️</button>
+                </td>`; 
+            tbody.appendChild(tr);
+        });
+        if(perfilUsuario === 'Observador') document.querySelectorAll('.fin-req').forEach(el => el.style.display = 'none');
+    }
+
+    function mudarStatusLanc(id, novoStatus) {
+        db.collection("lancamentos").doc(id).update({status: novoStatus});
+    }
+
+    function adicionarLancamento() {
+        let idEdit = document.getElementById("editId").value;
+        let l = { 
+            desc: document.getElementById("cadDesc").value, 
+            categoria: document.getElementById("cadCat").value, 
+            conta: document.getElementById("cadConta").value, 
+            valor: parseFloat(document.getElementById("cadValor").value), 
+            data: document.getElementById("cadData").value, 
+            tipo: document.getElementById("cadTipo").value, 
+            status: document.getElementById("cadStatus").value 
+        };
+        if(!l.desc || !l.data || isNaN(l.valor)) return alert("Preencha Descrição, Valor e Data corretamente.");
+        
+        if(idEdit) {
+            l.id = idEdit;
+            db.collection("lancamentos").doc(idEdit).update(l);
+        } else {
+            l.id = Date.now().toString();
+            db.collection("lancamentos").doc(l.id).set(l); 
+        }
+        limparFormulario();
+    }
+
+    function editarLanc(id) {
+        let l = lancamentos.find(x => x.id === id); if(!l) return;
+        document.getElementById("editId").value = l.id;
+        document.getElementById("cadDesc").value = l.desc;
+        document.getElementById("cadCat").value = l.categoria;
+        document.getElementById("cadConta").value = l.conta || contasLista[0];
+        document.getElementById("cadValor").value = l.valor;
+        document.getElementById("cadData").value = l.data;
+        document.getElementById("cadTipo").value = l.tipo;
+        document.getElementById("cadStatus").value = l.status;
+        document.getElementById("tituloCadastro").innerText = "✏️ Editar Lançamento";
+        document.querySelector("#painelCadastro .btn").innerText = "Salvar Alterações";
+    }
+
+    function limparFormulario() { 
+        document.getElementById("editId").value = "";
+        document.getElementById("cadDesc").value = ""; 
+        document.getElementById("cadValor").value = ""; 
+        document.getElementById("cadData").value = ""; 
+        document.getElementById("tituloCadastro").innerText = "💸 Novo Lançamento";
+        document.querySelector("#painelCadastro .btn").innerText = "Registrar";
+    }
+
+    function removerLanc(id) { 
+        if(confirm("Tem certeza que deseja excluir este lançamento?")) db.collection("lancamentos").doc(id.toString()).delete(); 
+    }
+
+    // --- ABA DASHBOARD (DRE E RESUMOS) ---
+    function gerarDRE() {
+        let m = document.getElementById("dreMes").value; 
+        let rec = 0, dev = 0, cVar = 0, cFix = 0;
+        let tEnt = 0, tSai = 0;
+
+        // Filtra os lançamentos do mês selecionado
+        let lancMes = lancamentos.filter(l => l.data.startsWith(m));
+
+        lancMes.forEach(l => {
+            // Conta Entradas e Saídas para os Cards Superiores (independente de estar pago ou não)
+            if(l.tipo === "Crédito") tEnt += l.valor;
+            else if(l.tipo === "Débito") tSai += l.valor;
+
+            // Calcula o DRE (apenas o que foi efetivamente pago/recebido)
+            if(l.status.toLowerCase().includes("efetuada")) {
+                if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor;
+                else if(l.categoria.includes("Devolu")) dev += l.valor;
+                else if(["Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção"].includes(l.categoria)) cVar += l.valor;
+                else cFix += l.valor;
+            }
+        });
+
+        // Atualiza Cards do Topo
+        document.getElementById("resDashEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; 
+        document.getElementById("resDashSaidas").innerText = `R$ ${tSai.toFixed(2)}`; 
+        document.getElementById("resDashSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`;
+        document.getElementById("resDashSaldo").style.color = (tEnt-tSai) >= 0 ? "#4a3022" : "#e74c3c";
+
+        // Atualiza DRE
+        let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix;
+        document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; 
+        document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; 
+        document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; 
+        document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; 
+        document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`;
+
+        // Atualiza Rateio (Regra da Onça)
+        if (lucro > 0) {
+            let capGiro = lucro * 0.30; let reserva = lucro * 0.20; let manu = lucro * 0.10; let reinv = lucro * 0.10; let cresc = lucro * 0.10;
+            let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucro - totDed; 
+            let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50;
+
+            document.getElementById("dstGiro").innerText = `R$ ${capGiro.toFixed(2)}`; document.getElementById("dstReserva").innerText = `R$ ${reserva.toFixed(2)}`;
+            document.getElementById("dstManu").innerText = `R$ ${manu.toFixed(2)}`; document.getElementById("dstReinv").innerText = `R$ ${reinv.toFixed(2)}`;
+            document.getElementById("dstCresc").innerText = `R$ ${cresc.toFixed(2)}`; document.getElementById("dstDeducao").innerText = `R$ ${totDed.toFixed(2)}`;
+            document.getElementById("dstSaldo").innerText = `R$ ${saldo.toFixed(2)}`; document.getElementById("dstSocios").innerText = `R$ ${valSocios.toFixed(2)}`;
+            document.getElementById("dstCaixa").innerText = `R$ ${valCaixa.toFixed(2)}`;
+        } else {
+            ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = "R$ 0.00");
+        }
+    }
+
+    // --- ABA ESTOQUE ---
     function adicionarProduto() {
         let id = document.getElementById("prodId").value;
         let p = {
@@ -386,64 +703,25 @@
         document.querySelectorAll('#abaEstoque input').forEach(i => i.value = '');
         document.getElementById("tituloCadProduto").innerText = "📦 Novo Produto";
         document.getElementById("btnSalvarProd").innerText = "Salvar Produto";
-        document.getElementById("btnSalvarProd").classList.remove("btn-editando");
     }
-    function editarProduto(id) {
-        let p = produtos.find(x => x.id === id); if(!p) return;
-        document.getElementById("prodId").value = p.id; document.getElementById("prodNome").value = p.nome; document.getElementById("prodCat").value = p.cat; document.getElementById("prodCusto").value = p.custo; document.getElementById("prodVenda").value = p.venda; document.getElementById("prodQtd").value = p.qtd; document.getElementById("prodMin").value = p.min;
-        document.getElementById("tituloCadProduto").innerText = "✏️ Editando Produto"; document.getElementById("btnSalvarProd").innerText = "Salvar Alterações"; document.getElementById("btnSalvarProd").classList.add("btn-editando");
-    }
-    function removerProduto(id) { if(confirm("Excluir?")) db.collection("produtos").doc(id).delete(); }
-    
     function renderizarEstoque() {
         const tbody = document.getElementById("tbEstoque"); tbody.innerHTML = "";
         let busca = document.getElementById("fBuscaProd").value.toLowerCase(); let filtro = document.getElementById("fStatusProd").value;
         let filtrados = produtos.filter(p => p.nome.toLowerCase().includes(busca) && (filtro === "Todos" || p.qtd <= p.min));
         filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(p => {
             let isBaixo = p.qtd <= p.min; let tr = document.createElement("tr"); if(isBaixo) tr.style.backgroundColor = '#fff3cd';
-            tr.innerHTML = `<td><strong>${p.nome}</strong></td><td>${p.cat}</td><td>R$ ${p.custo.toFixed(2)}</td><td>R$ ${p.venda.toFixed(2)}</td><td style="color:${isBaixo?'#e74c3c':'#27ae60'}; font-weight:bold; text-align:center;">${isBaixo?'⚠️ ':''}${p.qtd}</td><td style="text-align:center;"><button class="btn-acao" onclick="editarProduto('${p.id}')">✏️</button><button class="btn-acao" onclick="removerProduto('${p.id}')">🗑️</button></td>`;
+            tr.innerHTML = `<td><strong>${p.nome}</strong></td><td>${p.cat}</td><td>R$ ${p.custo.toFixed(2)}</td><td>R$ ${p.venda.toFixed(2)}</td><td style="color:${isBaixo?'#e74c3c':'#27ae60'}; font-weight:bold; text-align:center;">${isBaixo?'⚠️ ':''}${p.qtd}</td><td class="fin-req" style="text-align:center;"><button class="btn-acao" onclick="editarProduto('${p.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerProduto('${p.id}')">🗑️</button></td>`;
             tbody.appendChild(tr);
         });
+        if(perfilUsuario === 'Observador') document.querySelectorAll('.fin-req').forEach(el => el.style.display = 'none');
     }
+    function editarProduto(id) {
+        let p = produtos.find(x => x.id === id); if(!p) return;
+        document.getElementById("prodId").value = p.id; document.getElementById("prodNome").value = p.nome; document.getElementById("prodCat").value = p.cat; document.getElementById("prodCusto").value = p.custo; document.getElementById("prodVenda").value = p.venda; document.getElementById("prodQtd").value = p.qtd; document.getElementById("prodMin").value = p.min;
+        document.getElementById("tituloCadProduto").innerText = "✏️ Editando Produto"; document.getElementById("btnSalvarProd").innerText = "Salvar Alterações";
+    }
+    function removerProduto(id) { if(confirm("Excluir produto?")) db.collection("produtos").doc(id).delete(); }
 
-    // --- FUNÇÕES FINANCEIRAS (RESUMIDAS) ---
-    function formatarData(d) { return d ? d.split('-').reverse().join('/') : ""; }
-    function atualizarTela() {
-        const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = "";
-        let fBusca = document.getElementById("fBusca").value.toLowerCase(), fMes = document.getElementById("fMes").value, fTipo = document.getElementById("fTipo").value;
-        let tEnt = 0, tSai = 0;
-        lancamentos.filter(l => l.desc.toLowerCase().includes(fBusca) && l.data.startsWith(fMes) && (fTipo==="Todos" || l.tipo===fTipo)).sort((a,b)=>a.data.localeCompare(b.data)).forEach(l => {
-            if(l.tipo==="Crédito") tEnt+=l.valor; else tSai+=l.valor;
-            let tr = document.createElement("tr"); tr.innerHTML = `<td>${formatarData(l.data)}</td><td><strong>${l.desc}</strong><br><small>${l.categoria}</small></td><td style="color:${l.tipo==='Débito'?'#e74c3c':'#27ae60'}">R$ ${l.valor.toFixed(2)}</td><td>${l.tipo}</td><td>${l.status}</td><td style="text-align:center;"><button class="btn-acao" onclick="remover('${l.id}')">🗑️</button></td>`; tbody.appendChild(tr);
-        });
-        document.getElementById("resEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; document.getElementById("resSaidas").innerText = `R$ ${tSai.toFixed(2)}`; document.getElementById("resSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`;
-    }
-    function adicionarLancamento() {
-        let l = { id: Date.now().toString(), desc: document.getElementById("cadDesc").value, categoria: document.getElementById("cadCat").value, conta: document.getElementById("cadConta").value, valor: parseFloat(document.getElementById("cadValor").value), data: document.getElementById("cadData").value, tipo: document.getElementById("cadTipo").value, status: document.getElementById("cadStatus").value };
-        if(!l.desc || !l.data || isNaN(l.valor)) return alert("Preencha corretamente.");
-        db.collection("lancamentos").doc(l.id).set(l); limparFormulario();
-    }
-    function limparFormulario() { document.getElementById("cadDesc").value = ""; document.getElementById("cadValor").value = ""; document.getElementById("cadData").value = ""; }
-    function remover(id) { if(confirm("Excluir?")) db.collection("lancamentos").doc(id.toString()).delete(); }
-
-    function gerarDRE() {
-        let m = document.getElementById("dreMes").value; let rec = 0, dev = 0, cVar = 0, cFix = 0;
-        lancamentos.filter(l => l.data.startsWith(m) && l.status.toLowerCase().includes("efetuada")).forEach(l => {
-            if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor;
-            else if(l.categoria.includes("Devolu")) dev += l.valor;
-            else if(["Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção"].includes(l.categoria)) cVar += l.valor;
-            else cFix += l.valor;
-        });
-        let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix;
-        document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`;
-    }
-
-    function calcularPreco() {
-        let tC = (parseFloat(document.getElementById("precCustoProd").value)||0) + (parseFloat(document.getElementById("precEmbalagem").value)||0) + (parseFloat(document.getElementById("precFrete").value)||0);
-        let tP = (parseFloat(document.getElementById("precTaxa").value)||0) + (parseFloat(document.getElementById("precImposto").value)||0) + (parseFloat(document.getElementById("precDespFixa").value)||0) + (parseFloat(document.getElementById("precLucro").value)||0);
-        let preco = tP >= 100 ? 0 : tC / (1 - (tP / 100));
-        document.getElementById("resultadoPreco").innerText = preco > 0 ? `R$ ${preco.toFixed(2)}` : "ERRO";
-    }
 </script>
 
 </body>
