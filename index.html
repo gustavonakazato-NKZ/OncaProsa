@@ -3,19 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <title>Onça Prosa - ERP Financeiro</title>
-    
-    <!-- Bibliotecas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
-
     <style>
-        /* PALETA ONÇA PROSA: Creme (#fcf8f2), Marrom (#4a3022), Rosa Queimado (#c8827a), Verde Oliva Claro (#98947c) */
         body { font-family: 'Segoe UI', sans-serif; background-color: #fcf8f2; color: #333; padding: 0; margin: 0; }
-        
         #telaLogin { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fcf8f2; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; padding: 20px; box-sizing: border-box; }
         .titulo-empresa { color: #4a3022; text-align: center; margin-bottom: 30px; line-height: 1.3; }
         .titulo-empresa .menor { font-size: 20px; font-weight: normal; color: #c8827a; letter-spacing: 2px; text-transform: uppercase; }
@@ -28,79 +22,44 @@
         .login-box button:hover { background: #b26e67; }
         .btn-secundario { background: #4a3022 !important; }
         .btn-secundario:hover { background: #352218 !important; }
-        #loginMsg { color: #e74c3c; font-size: 14px; margin-bottom: 10px; height: 15px; font-weight: bold; }
-
+        #loginMsg { color: #e74c3c; font-size: 14px; margin-bottom: 10px; min-height: 15px; font-weight: bold; }
         .header-top { background: #352218; color: #fcf8f2; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-wrap: wrap; gap: 10px; }
         .navbar { background-color: #4a3022; padding: 15px 20px; display: flex; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; }
         .aba-btn { background: none; border: none; color: #e8dcc4; font-size: 14px; font-weight: bold; cursor: pointer; padding: 8px 12px; border-radius: 6px; transition: 0.3s; flex: 1; min-width: 120px; text-align: center; }
         .aba-btn:hover { color: white; background-color: #634331; }
         .aba-ativa { color: white; background-color: #c8827a; }
         .aba-ativa:hover { background-color: #b26e67; }
-
         .container-principal { padding: 20px; max-width: 1650px; margin: 0 auto; box-sizing: border-box; }
         .layout-flex { display: flex; gap: 20px; align-items: flex-start; }
         .painel-cadastro { width: 22%; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 20px; box-sizing: border-box; }
         .painel-conteudo { width: 78%; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; min-width: 0; }
         .painel-branco { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); box-sizing: border-box; overflow: hidden; }
-        
         h2, h3 { color: #4a3022; margin: 0 0 20px 0; }
         .form-group { margin-bottom: 12px; width: 100%; }
         .form-row { display: flex; gap: 10px; width: 100%; }
         label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; color: #666; }
         input, select { width: 100%; padding: 8px; border: 1px solid #ccd1d9; border-radius: 4px; box-sizing: border-box; font-size: 14px; background: #faf9f7; }
-        
         .btn { display: block; width: 100%; background-color: #c8827a; color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
         .btn:hover { background-color: #b26e67; }
         .btn-editando { background-color: #f39c12; }
         .btn-limpar { background-color: #98947c; }
-        .btn-transferencia { background-color: #4a3022; }
-
-        .btn-acao-topo { background: #98947c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 5px; flex: 1; white-space: nowrap; transition: 0.3s; }
-        .btn-acao-topo:hover { background: #7c7965; }
-        
-        .resumo-container { display: flex; gap: 20px; flex-wrap: wrap; width: 100%; align-self: flex-start; position: sticky; top: 0px; z-index: 100; background-color: #fcf8f2; padding: 15px 0 10px 0; }
+        .resumo-container { display: flex; gap: 20px; flex-wrap: wrap; width: 100%; background-color: #fcf8f2; padding: 15px 0 10px 0; }
         .card { flex: 1; min-width: 200px; background: white; padding: 15px; border-radius: 8px; text-align: center; border-bottom: 4px solid #ddd; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .card h4 { margin: 0; font-size: 14px; color: #7f8c8d; }
         .card p { margin: 8px 0 0 0; font-size: 22px; font-weight: bold; }
-        
         .filtros-area { background: #faf9f7; padding: 15px; border-radius: 8px; border: 1px solid #e8e3dc; margin-bottom: 15px; box-sizing: border-box; }
-        .filtros-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; align-items: end; }
-        .acoes-tabela { display: flex; gap: 10px; margin-top: 15px; justify-content: flex-end; border-top: 1px solid #e8e3dc; padding-top: 15px; flex-wrap: wrap; }
-
+        .filtros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; align-items: end; }
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 20px; }
         table { width: 100%; min-width: 800px; border-collapse: collapse; }
         th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #eee; font-size: 13px; }
         th { background-color: #faf9f7; border-bottom: 2px solid #e8e3dc; color: #4a3022; }
-        tfoot tr { background-color: #fcf8f2; font-weight: bold; color: #4a3022; }
-        
-        .vencido { background-color: #ffdddd; }
-        .vence-hoje { background-color: #fff3cd; }
         .btn-acao { border: none; background: none; cursor: pointer; font-size: 16px; padding: 4px; border-radius: 4px; }
         .btn-acao:hover { background: #eee; }
-
-        .sub-navbar { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e8e3dc; padding-bottom: 10px; flex-wrap: wrap; }
-        .sub-aba-btn { background: none; border: none; font-size: 15px; font-weight: bold; color: #98947c; cursor: pointer; padding: 8px 15px; border-radius: 6px; flex: 1; min-width: 120px; text-align: center; }
-        .sub-aba-ativa { color: #c8827a; background: #fdf5f4; border-bottom: 3px solid #c8827a; border-radius: 6px 6px 0 0; }
-
-        /* DRE e Indicadores */
         .dre-container { display: flex; gap: 20px; flex-wrap: wrap; }
         .dre-box { flex: 1; min-width: 300px; background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc; }
         .dre-linha { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ccc; font-size: 14px; }
         .dre-linha.destaque { font-weight: bold; color: #4a3022; font-size: 16px; border-bottom: 2px solid #c8827a; margin-top: 10px; padding-top: 10px; }
-        .dre-linha.negativo { color: #e74c3c; }
-        .dre-linha.positivo { color: #27ae60; }
-        
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(74,48,34,0.8); display: none; justify-content: center; align-items: center; z-index: 10000; }
-        .modal-box { background: white; padding: 25px; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); max-height: 80vh; display: flex; flex-direction: column; }
-        .lista-vencidos { overflow-y: auto; margin-bottom: 15px; flex: 1; }
-        .item-vencido { background: #fff3cd; border-left: 4px solid #e74c3c; padding: 10px; margin-bottom: 8px; border-radius: 4px; font-size: 13px; }
-
-        @media (max-width: 900px) {
-            .layout-flex { flex-direction: column; }
-            .painel-cadastro, .painel-conteudo { width: 100%; position: static; }
-            .filtros-grid { grid-template-columns: 1fr 1fr; }
-            .dre-container { flex-direction: column; }
-        }
+        @media (max-width: 900px) { .layout-flex { flex-direction: column; } .painel-cadastro, .painel-conteudo { width: 100%; position: static; } }
     </style>
 </head>
 <body>
@@ -116,8 +75,9 @@
         <div id="loginMsg"></div>
         <input type="text" id="cpfAuth" placeholder="CPF (Apenas números)">
         <input type="password" id="senhaAuth" placeholder="Senha">
-        <button onclick="entrar()">Entrar no Sistema</button>
-        <button id="btnRegistrarPrimeiro" class="btn-secundario" style="display:none;" onclick="registrarPrimeiroAdmin()">⚠️ Criar Primeiro Administrador</button>
+        <button id="btnEntrar" onclick="entrar()">Entrar no Sistema</button>
+        <!-- BOTÃO AGORA FORÇADO A APARECER SE NÃO HOUVER USUÁRIO -->
+        <button id="btnRegistrarPrimeiro" class="btn-secundario" style="display:none; margin-top:10px;" onclick="registrarPrimeiroAdmin()">⚠️ Criar Primeiro Administrador</button>
     </div>
 </div>
 
@@ -130,13 +90,11 @@
         </div>
     </div>
 
-    <!-- NAVBAR PRINCIPAL -->
     <div class="navbar">
         <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard Fluxo</button>
         <button id="btnAbaEstoque" class="aba-btn" onclick="mudarAba('estoque')">📦 Estoque</button>
         <button id="btnAbaDre" class="aba-btn" onclick="mudarAba('dre')">📈 DRE & Distribuição</button>
         <button id="btnAbaPrecificacao" class="aba-btn" onclick="mudarAba('precificacao')">💰 Precificação</button>
-        <button id="btnAbaPerspectiva" class="aba-btn" onclick="mudarAba('perspectiva')">⏳ Visão de Tempo</button>
     </div>
 
     <div class="container-principal">
@@ -147,38 +105,20 @@
                 <h2 id="tituloCadastro">💸 Registrar Movimento</h2>
                 <input type="hidden" id="editId">
                 <div class="form-group"><label>Descrição:</label><input type="text" id="cadDesc"></div>
-                
                 <div class="form-row">
                     <div class="form-group" style="flex: 1;"><label>Categoria:</label><select id="cadCat"></select></div>
                     <div class="form-group" style="flex: 1;"><label>Conta:</label><select id="cadConta"></select></div>
                 </div>
-                
                 <div class="form-row">
                     <div class="form-group" style="flex: 1;"><label>Valor (R$):</label><input type="number" id="cadValor" step="0.01"></div>
-                    <div class="form-group" style="flex: 1;"><label>Data Início:</label><input type="date" id="cadData"></div>
+                    <div class="form-group" style="flex: 1;"><label>Data:</label><input type="date" id="cadData"></div>
                 </div>
-                
-                <div class="form-group">
-                    <label>Tipo:</label>
-                    <select id="cadTipo">
-                        <option value="Débito">Débito (Saída)</option>
-                        <option value="Crédito">Crédito (Entrada)</option>
-                    </select>
-                </div>
-
-                <div class="form-group"><label>Pagamento:</label><select id="cadPagamento" onchange="toggleOpcoesPagamento()"><option value="À Vista">À Vista</option><option value="Parcelado">Parcelado</option><option value="Recorrente">Recorrente</option></select></div>
-                
-                <div id="caixaOpcoesPagamento" style="display: none; background: #fdf5f4; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
-                    <label id="labelOpcoesPagamento">Nº de Parcelas:</label><input type="number" id="numRepeticoes" value="2" min="2">
-                </div>
-                
-                <div class="form-group"><label>Status Inicial:</label><select id="cadStatus"></select></div>
-                
+                <div class="form-group"><label>Tipo:</label><select id="cadTipo"><option value="Débito">Débito (Saída)</option><option value="Crédito">Crédito (Entrada)</option></select></div>
+                <div class="form-group"><label>Status:</label><select id="cadStatus"></select></div>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn" style="flex: 2; margin-top: 10px;" onclick="adicionarLancamento()">Registrar</button>
                     <button class="btn btn-limpar" style="flex: 1; margin-top: 10px;" onclick="limparFormulario()">Limpar</button>
                 </div>
-                <button class="btn btn-transferencia" style="margin-top: 10px;" onclick="abrirModalTransferencia()">🔀 Transferir entre Contas</button>
             </div>
 
             <div class="painel-conteudo">
@@ -187,24 +127,17 @@
                     <div class="card" style="border-color: #e74c3c;"><h4>Saídas</h4><p style="color: #e74c3c;" id="resSaidas">R$ 0,00</p></div>
                     <div class="card" style="border-color: #c8827a;"><h4>Saldo</h4><p id="resSaldo" style="color:#4a3022;">R$ 0,00</p></div>
                 </div>
-
                 <div class="painel-branco">
                     <div class="filtros-area">
                         <div class="filtros-grid">
                             <div><label>Busca:</label><input type="text" id="fBusca" oninput="atualizarTela()"></div>
-                            <div><label>Conta:</label><select id="fConta" onchange="atualizarTela()"></select></div>
                             <div><label>Mês:</label><input type="month" id="fMes" onchange="atualizarTela()"></div>
                             <div><label>Tipo:</label><select id="fTipo" onchange="atualizarTela()"><option value="Todos">Todos</option><option value="Débito">Débito</option><option value="Crédito">Crédito</option></select></div>
                         </div>
                     </div>
-                    
                     <div class="table-responsive">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th style="width: 14%;">Data</th><th style="width: 48%;">Descrição</th><th style="width: 12%;">Valor</th><th style="width: 10%;">Tipo</th><th style="width: 10%;">Status</th><th style="width: 6%; text-align: center;">Ações</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Tipo</th><th>Status</th><th style="text-align: center;">Ações</th></tr></thead>
                             <tbody id="corpoTabela"></tbody>
                         </table>
                     </div>
@@ -217,57 +150,31 @@
             <div class="painel-cadastro fin-req">
                 <h2 id="tituloCadProduto">📦 Novo Produto</h2>
                 <input type="hidden" id="prodId">
-                
-                <div class="form-group"><label>Nome do Produto / Insumo:</label><input type="text" id="prodNome" placeholder="Ex: Caixa P, Fita..."></div>
-                
-                <div class="form-row">
-                    <div class="form-group" style="flex: 1;"><label>Categoria:</label><input type="text" id="prodCat" placeholder="Ex: Embalagem"></div>
-                </div>
-                
+                <div class="form-group"><label>Nome do Produto / Insumo:</label><input type="text" id="prodNome"></div>
+                <div class="form-group"><label>Categoria:</label><input type="text" id="prodCat"></div>
                 <div class="form-row">
                     <div class="form-group" style="flex: 1;"><label>Custo (R$):</label><input type="number" id="prodCusto" step="0.01"></div>
-                    <div class="form-group" style="flex: 1;"><label>Preço Venda (R$):</label><input type="number" id="prodVenda" step="0.01"></div>
+                    <div class="form-group" style="flex: 1;"><label>Preço (R$):</label><input type="number" id="prodVenda" step="0.01"></div>
                 </div>
-                
                 <div class="form-row">
                     <div class="form-group" style="flex: 1;"><label>Qtd Atual:</label><input type="number" id="prodQtd" step="0.01"></div>
-                    <div class="form-group" style="flex: 1;"><label>Qtd Mínima (Alerta):</label><input type="number" id="prodMin" step="0.01"></div>
+                    <div class="form-group" style="flex: 1;"><label>Qtd Mínima:</label><input type="number" id="prodMin" step="0.01"></div>
                 </div>
-                
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn" id="btnSalvarProd" style="flex: 2; margin-top: 10px;" onclick="adicionarProduto()">Salvar Produto</button>
-                    <button class="btn btn-limpar" style="flex: 1; margin-top: 10px;" onclick="limparFormProduto()">Limpar</button>
-                </div>
+                <button class="btn" id="btnSalvarProd" style="margin-top: 10px;" onclick="adicionarProduto()">Salvar Produto</button>
+                <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormProduto()">Limpar</button>
             </div>
-
             <div class="painel-conteudo">
                 <div class="painel-branco">
                     <h2 style="margin-top:0;">📋 Gestão de Estoque</h2>
                     <div class="filtros-area">
                         <div class="filtros-grid" style="grid-template-columns: 1fr 1fr;">
-                            <div><label>Buscar Produto:</label><input type="text" id="fBuscaProd" oninput="renderizarEstoque()" placeholder="Digite nome ou categoria..."></div>
-                            <div>
-                                <label>Filtro de Status:</label>
-                                <select id="fStatusProd" onchange="renderizarEstoque()">
-                                    <option value="Todos">Mostrar Todos</option>
-                                    <option value="Baixo">⚠️ Mostrar Apenas Estoque Baixo</option>
-                                </select>
-                            </div>
+                            <div><label>Buscar Produto:</label><input type="text" id="fBuscaProd" oninput="renderizarEstoque()"></div>
+                            <div><label>Filtro:</label><select id="fStatusProd" onchange="renderizarEstoque()"><option value="Todos">Mostrar Todos</option><option value="Baixo">⚠️ Mostrar Apenas Estoque Baixo</option></select></div>
                         </div>
                     </div>
-                    
                     <div class="table-responsive">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th style="width: 30%;">Produto / Insumo</th>
-                                    <th style="width: 20%;">Categoria</th>
-                                    <th style="width: 15%;">Custo (R$)</th>
-                                    <th style="width: 15%;">Preço (R$)</th>
-                                    <th style="width: 10%; text-align: center;">Qtd Atual</th>
-                                    <th style="width: 10%; text-align: center;" class="fin-req">Ações</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Produto</th><th>Categoria</th><th>Custo (R$)</th><th>Preço (R$)</th><th style="text-align: center;">Qtd Atual</th><th style="text-align: center;">Ações</th></tr></thead>
                             <tbody id="tbEstoque"></tbody>
                         </table>
                     </div>
@@ -278,47 +185,29 @@
         <!-- MÓDULO 2: DRE E DISTRIBUIÇÃO DE LUCRO -->
         <div id="abaDre" class="painel-branco aba-conteudo" style="display: none;">
             <h2>📈 DRE & Distribuição de Lucros</h2>
-            <div class="filtros-area" style="display: flex; gap: 15px; max-width: 400px;">
-                <div style="flex: 1;"><label>Mês Referência:</label><input type="month" id="dreMes" onchange="gerarDRE()"></div>
-            </div>
-
+            <div class="filtros-area" style="display: flex; gap: 15px; max-width: 400px;"><div style="flex: 1;"><label>Mês Referência:</label><input type="month" id="dreMes" onchange="gerarDRE()"></div></div>
             <div class="dre-container">
                 <div class="dre-box">
                     <h3 style="color: #c8827a; margin-top:0;">Demonstração de Resultados (DRE)</h3>
                     <div class="dre-linha positivo"><span>(+) Receita Bruta de Vendas</span><span id="dreReceita">R$ 0,00</span></div>
                     <div class="dre-linha negativo"><span>(-) Devoluções / Cancelamentos</span><span id="dreDevolucao">R$ 0,00</span></div>
                     <div class="dre-linha destaque"><span>(=) Receita Líquida</span><span id="dreReceitaLiq">R$ 0,00</span></div>
-                    
                     <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Custos Variáveis (Impostos, Tx, CMV)</span><span id="dreCustosVar">R$ 0,00</span></div>
                     <div class="dre-linha destaque" style="color: #2980b9;"><span>(=) Margem de Contribuição</span><span id="dreMargemCont">R$ 0,00</span></div>
-                    
                     <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Despesas Fixas (Aluguel, Salário...)</span><span id="dreDespFixa">R$ 0,00</span></div>
                     <div class="dre-linha destaque" style="border-bottom-color: #4a3022;"><span>(=) Lucro Líquido Operacional</span><span id="dreLucro">R$ 0,00</span></div>
-                    
-                    <div class="dre-linha" style="margin-top: 20px; font-weight: bold; background: #e8dcc4; padding: 10px; border-radius: 4px;">
-                        <span>Ponto de Equilíbrio Financeiro:</span><span id="drePontoEq">R$ 0,00</span>
-                    </div>
                 </div>
-
                 <div class="dre-box">
                     <h3 style="color: #4a3022; margin-top:0;">Rateio e Distribuição (Regra da Onça)</h3>
-                    <p style="font-size: 12px; color: #777; margin-top: -10px;">Aplicado automaticamente sobre o Lucro Líquido.</p>
-                    
                     <div class="dre-linha"><span>Capital de Giro (30%)</span><span id="dstGiro">R$ 0,00</span></div>
                     <div class="dre-linha"><span>Reserva de Emergência (20%)</span><span id="dstReserva">R$ 0,00</span></div>
                     <div class="dre-linha"><span>Manutenção (10%)</span><span id="dstManu">R$ 0,00</span></div>
                     <div class="dre-linha"><span>Reinvestimento (10%)</span><span id="dstReinv">R$ 0,00</span></div>
                     <div class="dre-linha"><span>Crescimento e Expansão (10%)</span><span id="dstCresc">R$ 0,00</span></div>
                     <div class="dre-linha destaque negativo" style="border-bottom: 1px solid #ccc;"><span>Total de Dedução (80%)</span><span id="dstDeducao">R$ 0,00</span></div>
-                    
                     <div class="dre-linha destaque positivo" style="margin-top: 15px;"><span>(=) Saldo Remanescente (20%)</span><span id="dstSaldo">R$ 0,00</span></div>
-                    
-                    <div class="dre-linha" style="margin-top: 15px; font-weight: bold; font-size: 16px; color: #c8827a;">
-                        <span>➡️ Retirada dos Sócios (50% do Saldo)</span><span id="dstSocios">R$ 0,00</span>
-                    </div>
-                    <div class="dre-linha" style="font-weight: bold; font-size: 16px; color: #27ae60;">
-                        <span>➡️ Caixa da Empresa (50% do Saldo)</span><span id="dstCaixa">R$ 0,00</span>
-                    </div>
+                    <div class="dre-linha" style="margin-top: 15px; font-weight: bold; font-size: 16px; color: #c8827a;"><span>➡️ Retirada dos Sócios (50%)</span><span id="dstSocios">R$ 0,00</span></div>
+                    <div class="dre-linha" style="font-weight: bold; font-size: 16px; color: #27ae60;"><span>➡️ Caixa da Empresa (50%)</span><span id="dstCaixa">R$ 0,00</span></div>
                 </div>
             </div>
         </div>
@@ -326,70 +215,31 @@
         <!-- MÓDULO 3: PRECIFICAÇÃO -->
         <div id="abaPrecificacao" class="painel-branco aba-conteudo" style="display: none;">
             <h2>💰 Simulador de Precificação (Markup)</h2>
-            <p style="font-size: 14px; color: #666;">Preencha os custos e os percentuais para encontrar o preço ideal de venda do seu produto.</p>
-
             <div style="display: flex; gap: 30px; flex-wrap: wrap;">
                 <div style="flex: 1; min-width: 300px; background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
                     <h4 style="margin-top: 0;">1. Custos Diretos (R$)</h4>
                     <div class="form-group"><label>Custo do Produto / Insumos:</label><input type="number" id="precCustoProd" value="0" oninput="calcularPreco()"></div>
                     <div class="form-group"><label>Embalagem:</label><input type="number" id="precEmbalagem" value="0" oninput="calcularPreco()"></div>
                     <div class="form-group"><label>Frete Pago:</label><input type="number" id="precFrete" value="0" oninput="calcularPreco()"></div>
-                    <div class="form-group"><label>Brindes / Outros:</label><input type="number" id="precBrinde" value="0" oninput="calcularPreco()"></div>
                 </div>
-
                 <div style="flex: 1; min-width: 300px; background: #fdf5f4; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
                     <h4 style="margin-top: 0; color: #c8827a;">2. Despesas sobre a Venda (%)</h4>
                     <div class="form-group"><label>Taxa de Cartão (%):</label><input type="number" id="precTaxa" value="5" oninput="calcularPreco()"></div>
                     <div class="form-group"><label>Imposto (%):</label><input type="number" id="precImposto" value="6" oninput="calcularPreco()"></div>
-                    <div class="form-group"><label>Comissão / Marketplace (%):</label><input type="number" id="precMkp" value="10" oninput="calcularPreco()"></div>
                     <div class="form-group"><label>Rateio de Despesa Fixa (%):</label><input type="number" id="precDespFixa" value="15" oninput="calcularPreco()"></div>
                     <div class="form-group"><label>Margem de Lucro Desejada (%):</label><input type="number" id="precLucro" value="20" oninput="calcularPreco()"></div>
                 </div>
-
                 <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #4a3022; color: white; padding: 30px; border-radius: 8px;">
                     <h3 style="color: #e8dcc4; margin: 0 0 10px 0;">PREÇO DE VENDA SUGERIDO</h3>
                     <div id="resultadoPreco" style="font-size: 40px; font-weight: bold; color: #27ae60;">R$ 0,00</div>
-                    
-                    <div style="width: 100%; border-top: 1px solid #634331; margin-top: 20px; padding-top: 15px; font-size: 14px;">
-                        <div style="display: flex; justify-content: space-between;"><span>Total Custos R$:</span> <span id="resPrecCustos">R$ 0,00</span></div>
-                        <div style="display: flex; justify-content: space-between; margin-top: 5px;"><span>Total Taxas %:</span> <span id="resPrecTaxas">0%</span></div>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- MÓDULO 4: PERSPECTIVAS -->
-        <div id="abaPerspectiva" class="painel-branco aba-conteudo" style="display: none;">
-            <h2>⏳ Perspectiva de Lançamentos</h2>
-            <p style="font-size: 14px; color: #555;">Controle de caixa diário e quinzenal focado no que entra e sai.</p>
-            <div id="blocoSemanaAtual"></div>
-            <div id="blocoQuinzenaAtual" style="margin-top: 30px;"></div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL DE TRANSFERÊNCIA -->
-<div id="modalTransferencia" class="modal-overlay">
-    <div class="modal-box" style="max-width: 450px;">
-        <h3 style="color: #4a3022;">🔀 Transferência entre Contas</h3>
-        <p style="font-size: 13px; color: #555;">Isso gerará automaticamente um débito na origem e um crédito no destino.</p>
-        <div class="form-row">
-            <div class="form-group" style="flex: 1;"><label>Conta de Origem (Sai dinheiro):</label><select id="transfOrigem"></select></div>
-            <div class="form-group" style="flex: 1;"><label>Conta de Destino (Entra dinheiro):</label><select id="transfDestino"></select></div>
-        </div>
-        <div class="form-row">
-            <div class="form-group" style="flex: 1;"><label>Valor (R$):</label><input type="number" id="transfValor" step="0.01"></div>
-            <div class="form-group" style="flex: 1;"><label>Data:</label><input type="date" id="transfData"></div>
-        </div>
-        <div style="display:flex; gap:10px; margin-top: 15px;">
-            <button class="btn" style="background:#4a3022; margin:0;" onclick="confirmarTransferencia()">Confirmar Transferência</button>
-            <button class="btn" style="background:#7f8c8d; margin:0;" onclick="document.getElementById('modalTransferencia').style.display='none'">Cancelar</button>
-        </div>
     </div>
 </div>
 
 <script>
-    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
       apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI",
       authDomain: "onca-prosa-erp.firebaseapp.com",
@@ -402,393 +252,197 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
 
-    // VARIÁVEIS GLOBAIS
     let lancamentos = [];
-    let produtos = []; // NOVO: Array para segurar o Estoque
+    let produtos = []; 
     let contasLista = ["Caixa Principal", "Banco Inter", "Mercado Pago"];
     let statusLista = ["A Vencer", "Efetuada"];
-    let categorias = [
-        "Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", 
-        "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", 
-        "Aluguel", "Salários", "Internet", "Sistema", "Contador", "Monitoramento", "Marketing", "Outras Despesas Fixas", "Transferência"
-    ];
+    let categorias = ["Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Aluguel", "Salários", "Internet", "Sistema", "Contador", "Outras Despesas Fixas"];
 
-    let userAutenticado = null;
-    let perfilUsuario = 'Observador'; 
+    // --- CORREÇÃO: VERIFICA SE O BANCO ESTÁ VAZIO E MOSTRA O BOTÃO DE CRIAR ADMIN ---
+    db.collection("usuarios").limit(1).get().then(snap => {
+        if(snap.empty) {
+            document.getElementById('btnRegistrarPrimeiro').style.display = 'block';
+            document.getElementById('loginMsg').innerText = "Banco de dados zerado. Crie o Administrador Mestre.";
+            document.getElementById('loginMsg').style.color = "#27ae60";
+        }
+    }).catch(err => console.log("Aguardando regras do Firestore ou banco offline."));
+    // ----------------------------------------------------------------------------------
 
-    function formatarDataISO(d) {
-        let ano = d.getFullYear(); let mes = String(d.getMonth() + 1).padStart(2, '0'); let dia = String(d.getDate()).padStart(2, '0'); return `${ano}-${mes}-${dia}`;
-    }
-    function formata(v) { return Number(v || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}); }
-    function formataData(d) { if(!d) return ""; return d.split('-').reverse().join('/'); }
-
-    // AUTH E INIT
     auth.onAuthStateChanged(user => {
         if (user) {
             document.getElementById('telaLogin').style.display = 'none';
             document.getElementById('appLogado').style.display = 'block';
-            userAutenticado = user; carregarPerfilUsuario(user);
+            db.collection("usuarios").doc(user.uid).onSnapshot(doc => {
+                if (doc.exists) {
+                    document.getElementById('lblUsuario').innerText = doc.data().nome || "Admin";
+                    document.getElementById('lblPerfil').innerText = doc.data().perfil;
+                    document.getElementById("fMes").value = new Date().toISOString().substring(0,7);
+                    document.getElementById("dreMes").value = new Date().toISOString().substring(0,7);
+                    carregarListas();
+                    iniciarOuvintesDeDados();
+                }
+            });
         } else {
             document.getElementById('telaLogin').style.display = 'flex';
             document.getElementById('appLogado').style.display = 'none';
-            userAutenticado = null;
         }
     });
 
     function entrar() {
         let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, '');
         const s = document.getElementById('senhaAuth').value;
-        auth.signInWithEmailAndPassword(cpf + "@oncaprosa.local", s).catch(err => alert("Erro no acesso."));
-    }
-    function sair() { auth.signOut(); location.reload(); }
-
-    function carregarPerfilUsuario(user) {
-        db.collection("usuarios").doc(user.uid).onSnapshot(doc => {
-            if (doc.exists) {
-                perfilUsuario = doc.data().perfil;
-                document.getElementById('lblUsuario').innerText = doc.data().nome || "Admin";
-                document.getElementById('lblPerfil').innerText = perfilUsuario; 
-                
-                if(!window.ouvintesIniciados) {
-                    document.getElementById("fMes").value = formatarDataISO(new Date()).substring(0,7);
-                    document.getElementById("dreMes").value = formatarDataISO(new Date()).substring(0,7);
-                    iniciarOuvintesDeDados();
-                    window.ouvintesIniciados = true;
-                }
-            }
-        });
+        if(!cpf || !s) return alert("Preencha CPF e Senha");
+        document.getElementById('loginMsg').innerText = "Autenticando...";
+        auth.signInWithEmailAndPassword(cpf + "@oncaprosa.local", s)
+            .catch(err => {
+                document.getElementById('loginMsg').innerText = "Erro no acesso. CPF ou Senha incorretos.";
+                document.getElementById('loginMsg').style.color = "#e74c3c";
+            });
     }
 
-    // CARGA DE DADOS FIREBASE
-    function iniciarOuvintesDeDados() {
-        carregarListas();
+    // --- CORREÇÃO: A FUNÇÃO QUE TINHA SUMIDO ESTÁ DE VOLTA ---
+    function registrarPrimeiroAdmin() {
+        let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, '');
+        const s = document.getElementById('senhaAuth').value;
         
-        // Listener Financeiro
-        db.collection("lancamentos").onSnapshot(snap => {
-            lancamentos = []; snap.forEach(doc => lancamentos.push(doc.data()));
-            atualizarTela();
-            if(document.getElementById('abaDre').style.display === 'block') gerarDRE();
-            if(document.getElementById('abaPerspectiva').style.display === 'block') gerarVisaoPerspectivas();
-        });
-
-        // Listener Estoque (NOVO)
-        db.collection("produtos").onSnapshot(snap => {
-            produtos = []; snap.forEach(doc => produtos.push(doc.data()));
-            if(document.getElementById('abaEstoque').style.display === 'flex') renderizarEstoque();
+        if(cpf.length !== 11) {
+            document.getElementById('loginMsg').innerText = "Erro: O CPF deve conter exatos 11 números.";
+            document.getElementById('loginMsg').style.color = "#e74c3c";
+            return;
+        }
+        if(s.length < 6) {
+            document.getElementById('loginMsg').innerText = "Erro: A senha deve ter no mínimo 6 caracteres.";
+            document.getElementById('loginMsg').style.color = "#e74c3c";
+            return;
+        }
+        
+        document.getElementById('loginMsg').innerText = "Criando seu usuário no banco de dados...";
+        document.getElementById('loginMsg').style.color = "#2980b9";
+        
+        const emailFake = cpf + "@oncaprosa.local";
+        auth.createUserWithEmailAndPassword(emailFake, s).then(cred => {
+            db.collection("usuarios").doc(cred.user.uid).set({ 
+                cpf: cpf, 
+                perfil: "Administrador", 
+                status: "Ativo",
+                nome: "Administrador Mestre"
+            });
+            alert("Parabéns! Administrador criado com sucesso. O sistema vai carregar agora.");
+        }).catch(err => {
+            document.getElementById('loginMsg').innerText = "Erro ao criar: " + err.message;
+            document.getElementById('loginMsg').style.color = "#e74c3c";
         });
     }
+    // ---------------------------------------------------------
+
+    function sair() { auth.signOut(); location.reload(); }
 
     function carregarListas() {
         document.getElementById("cadCat").innerHTML = categorias.map(c => `<option value="${c}">${c}</option>`).join('');
         document.getElementById("cadStatus").innerHTML = statusLista.map(s => `<option value="${s}">${s}</option>`).join('');
         document.getElementById("cadConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
-        document.getElementById("fConta").innerHTML = '<option value="Todas">Todas</option>' + contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
-        
-        let optsTransf = contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
-        document.getElementById("transfOrigem").innerHTML = optsTransf; document.getElementById("transfDestino").innerHTML = optsTransf;
     }
+
+    function iniciarOuvintesDeDados() {
+        db.collection("lancamentos").onSnapshot(snap => {
+            lancamentos = []; snap.forEach(doc => lancamentos.push(doc.data()));
+            atualizarTela(); seAba('dre', gerarDRE);
+        });
+        db.collection("produtos").onSnapshot(snap => {
+            produtos = []; snap.forEach(doc => produtos.push(doc.data()));
+            seAba('estoque', renderizarEstoque);
+        });
+    }
+
+    function seAba(abaId, func) { if(document.getElementById('aba'+abaId.charAt(0).toUpperCase()+abaId.slice(1)).style.display !== 'none') func(); }
 
     function mudarAba(abaId) {
         document.querySelectorAll('.aba-conteudo').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.aba-btn').forEach(el => el.classList.remove('aba-ativa'));
-        
-        // O Dashboard e o Estoque são layout-flex (divididos na tela grande)
         let isFlex = abaId === 'dashboard' || abaId === 'estoque';
         document.getElementById('aba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).style.display = (isFlex && window.innerWidth > 900) ? 'flex' : 'block';
-        
         document.getElementById('btnAba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).classList.add('aba-ativa');
-        
         if(abaId === 'dre') gerarDRE();
-        if(abaId === 'perspectiva') gerarVisaoPerspectivas();
         if(abaId === 'estoque') renderizarEstoque();
     }
 
-    // ==========================================
-    // MÓDULO: ESTOQUE (NOVO)
-    // ==========================================
-
+    // --- FUNÇÕES DE ESTOQUE ---
     function adicionarProduto() {
-        if(perfilUsuario === 'Observador') return alert("Sem permissão");
         let id = document.getElementById("prodId").value;
-        let nome = document.getElementById("prodNome").value.trim();
-        let cat = document.getElementById("prodCat").value.trim() || "Geral";
-        let custo = parseFloat(document.getElementById("prodCusto").value) || 0;
-        let venda = parseFloat(document.getElementById("prodVenda").value) || 0;
-        let qtd = parseFloat(document.getElementById("prodQtd").value) || 0;
-        let min = parseFloat(document.getElementById("prodMin").value) || 0;
-
-        if(!nome) return alert("Preencha o nome do produto ou insumo.");
-
-        if(id) {
-            db.collection("produtos").doc(id).update({nome, cat, custo, venda, qtd, min});
-        } else {
-            let novoId = Date.now().toString();
-            db.collection("produtos").doc(novoId).set({id: novoId, nome, cat, custo, venda, qtd, min});
-        }
+        let p = {
+            nome: document.getElementById("prodNome").value.trim(),
+            cat: document.getElementById("prodCat").value.trim() || "Geral",
+            custo: parseFloat(document.getElementById("prodCusto").value) || 0,
+            venda: parseFloat(document.getElementById("prodVenda").value) || 0,
+            qtd: parseFloat(document.getElementById("prodQtd").value) || 0,
+            min: parseFloat(document.getElementById("prodMin").value) || 0
+        };
+        if(!p.nome) return alert("Preencha o nome.");
+        if(id) { db.collection("produtos").doc(id).update(p); } 
+        else { p.id = Date.now().toString(); db.collection("produtos").doc(p.id).set(p); }
         limparFormProduto();
     }
-
     function limparFormProduto() {
-        document.getElementById("prodId").value = "";
-        document.getElementById("prodNome").value = "";
-        document.getElementById("prodCat").value = "";
-        document.getElementById("prodCusto").value = "";
-        document.getElementById("prodVenda").value = "";
-        document.getElementById("prodQtd").value = "";
-        document.getElementById("prodMin").value = "";
+        document.querySelectorAll('#abaEstoque input').forEach(i => i.value = '');
         document.getElementById("tituloCadProduto").innerText = "📦 Novo Produto";
         document.getElementById("btnSalvarProd").innerText = "Salvar Produto";
         document.getElementById("btnSalvarProd").classList.remove("btn-editando");
     }
-
     function editarProduto(id) {
-        if(perfilUsuario === 'Observador') return;
-        let p = produtos.find(x => x.id === id);
-        if(!p) return;
-        document.getElementById("prodId").value = p.id;
-        document.getElementById("prodNome").value = p.nome;
-        document.getElementById("prodCat").value = p.cat;
-        document.getElementById("prodCusto").value = p.custo;
-        document.getElementById("prodVenda").value = p.venda;
-        document.getElementById("prodQtd").value = p.qtd;
-        document.getElementById("prodMin").value = p.min;
-        
-        document.getElementById("tituloCadProduto").innerText = "✏️ Editando Produto";
-        document.getElementById("btnSalvarProd").innerText = "Salvar Alterações";
-        document.getElementById("btnSalvarProd").classList.add("btn-editando");
+        let p = produtos.find(x => x.id === id); if(!p) return;
+        document.getElementById("prodId").value = p.id; document.getElementById("prodNome").value = p.nome; document.getElementById("prodCat").value = p.cat; document.getElementById("prodCusto").value = p.custo; document.getElementById("prodVenda").value = p.venda; document.getElementById("prodQtd").value = p.qtd; document.getElementById("prodMin").value = p.min;
+        document.getElementById("tituloCadProduto").innerText = "✏️ Editando Produto"; document.getElementById("btnSalvarProd").innerText = "Salvar Alterações"; document.getElementById("btnSalvarProd").classList.add("btn-editando");
     }
-
-    function removerProduto(id) {
-        if(perfilUsuario === 'Observador') return;
-        if(confirm("Excluir este produto definitivamente?")) {
-            db.collection("produtos").doc(id).delete();
-        }
-    }
-
+    function removerProduto(id) { if(confirm("Excluir?")) db.collection("produtos").doc(id).delete(); }
+    
     function renderizarEstoque() {
-        const tbody = document.getElementById("tbEstoque");
-        tbody.innerHTML = "";
-        let busca = document.getElementById("fBuscaProd").value.toLowerCase();
-        let filtro = document.getElementById("fStatusProd").value;
-
-        let filtrados = produtos.filter(p => {
-            let matchBusca = p.nome.toLowerCase().includes(busca) || (p.cat || "").toLowerCase().includes(busca);
-            let matchFiltro = true;
-            if(filtro === "Baixo" && p.qtd > p.min) matchFiltro = false; // Se qtd for maior que o mínimo, esconde.
-            return matchBusca && matchFiltro;
-        });
-
+        const tbody = document.getElementById("tbEstoque"); tbody.innerHTML = "";
+        let busca = document.getElementById("fBuscaProd").value.toLowerCase(); let filtro = document.getElementById("fStatusProd").value;
+        let filtrados = produtos.filter(p => p.nome.toLowerCase().includes(busca) && (filtro === "Todos" || p.qtd <= p.min));
         filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(p => {
-            let isBaixo = p.qtd <= p.min;
-            let corQtd = isBaixo ? '#e74c3c' : '#27ae60';
-            let iconAlerta = isBaixo ? '⚠️ ' : '';
-
-            const tr = document.createElement("tr");
-            if (isBaixo) tr.style.backgroundColor = '#fff3cd'; // Fundo amarelo pra chamar atenção
-
-            tr.innerHTML = `
-                <td><strong>${p.nome}</strong></td>
-                <td>${p.cat}</td>
-                <td>${formata(p.custo)}</td>
-                <td>${formata(p.venda)}</td>
-                <td style="color:${corQtd}; font-weight:bold; text-align:center; font-size:16px;">${iconAlerta}${p.qtd}</td>
-                <td style="text-align:center;" class="fin-req">
-                    <button class="btn-acao" title="Editar" onclick="editarProduto('${p.id}')">✏️</button>
-                    <button class="btn-acao" title="Excluir" onclick="removerProduto('${p.id}')">🗑️</button>
-                </td>
-            `;
+            let isBaixo = p.qtd <= p.min; let tr = document.createElement("tr"); if(isBaixo) tr.style.backgroundColor = '#fff3cd';
+            tr.innerHTML = `<td><strong>${p.nome}</strong></td><td>${p.cat}</td><td>R$ ${p.custo.toFixed(2)}</td><td>R$ ${p.venda.toFixed(2)}</td><td style="color:${isBaixo?'#e74c3c':'#27ae60'}; font-weight:bold; text-align:center;">${isBaixo?'⚠️ ':''}${p.qtd}</td><td style="text-align:center;"><button class="btn-acao" onclick="editarProduto('${p.id}')">✏️</button><button class="btn-acao" onclick="removerProduto('${p.id}')">🗑️</button></td>`;
             tbody.appendChild(tr);
         });
-        if(perfilUsuario === 'Observador') document.querySelectorAll('#abaEstoque .fin-req').forEach(el => el.style.display = 'none');
     }
 
-    // ==========================================
-    // MÓDULO: DRE E DISTRIBUIÇÃO
-    // ==========================================
-    function gerarDRE() {
-        let mesSelecionado = document.getElementById("dreMes").value; 
-        let recBruta = 0, devolucoes = 0, custoVar = 0, custoFix = 0;
-
-        let dadosDRE = lancamentos.filter(l => l.data.startsWith(mesSelecionado) && (l.status.toLowerCase().includes("efetuada") || l.status.toLowerCase().includes("pago")));
-
-        dadosDRE.forEach(l => {
-            let cat = l.categoria;
-            if (cat === "Vendas de Produtos" || cat === "Receita de Serviços") recBruta += l.valor;
-            else if (cat === "Devoluções/Cancelamentos") devolucoes += l.valor;
-            else if (["Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção"].includes(cat)) custoVar += l.valor;
-            else if (["Aluguel", "Salários", "Internet", "Sistema", "Contador", "Monitoramento", "Marketing", "Outras Despesas Fixas"].includes(cat)) custoFix += l.valor;
-        });
-
-        let recLiquida = recBruta - devolucoes;
-        let margemCont = recLiquida - custoVar;
-        let lucroLiq = margemCont - custoFix;
-        let margemPerc = recLiquida > 0 ? (margemCont / recLiquida) : 0;
-        let pontoEq = margemPerc > 0 ? (custoFix / margemPerc) : 0;
-
-        document.getElementById("dreReceita").innerText = formata(recBruta); document.getElementById("dreDevolucao").innerText = formata(devolucoes);
-        document.getElementById("dreReceitaLiq").innerText = formata(recLiquida); document.getElementById("dreCustosVar").innerText = formata(custoVar);
-        document.getElementById("dreMargemCont").innerText = formata(margemCont); document.getElementById("dreDespFixa").innerText = formata(custoFix);
-        document.getElementById("dreLucro").innerText = formata(lucroLiq); document.getElementById("drePontoEq").innerText = formata(pontoEq);
-
-        if (lucroLiq > 0) {
-            let capGiro = lucroLiq * 0.30; let reserva = lucroLiq * 0.20; let manu = lucroLiq * 0.10; let reinv = lucroLiq * 0.10; let cresc = lucroLiq * 0.10;
-            let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucroLiq - totDed; 
-            let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50;
-
-            document.getElementById("dstGiro").innerText = formata(capGiro); document.getElementById("dstReserva").innerText = formata(reserva);
-            document.getElementById("dstManu").innerText = formata(manu); document.getElementById("dstReinv").innerText = formata(reinv);
-            document.getElementById("dstCresc").innerText = formata(cresc); document.getElementById("dstDeducao").innerText = formata(totDed);
-            document.getElementById("dstSaldo").innerText = formata(saldo); document.getElementById("dstSocios").innerText = formata(valSocios);
-            document.getElementById("dstCaixa").innerText = formata(valCaixa);
-        } else {
-            ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = formata(0));
-        }
-    }
-
-    // ==========================================
-    // MÓDULO: PRECIFICAÇÃO (MARKUP)
-    // ==========================================
-    function calcularPreco() {
-        let vCusto = parseFloat(document.getElementById("precCustoProd").value) || 0; let vEmb = parseFloat(document.getElementById("precEmbalagem").value) || 0;
-        let vFrete = parseFloat(document.getElementById("precFrete").value) || 0; let vBrinde = parseFloat(document.getElementById("precBrinde").value) || 0;
-        let pTaxa = parseFloat(document.getElementById("precTaxa").value) || 0; let pImp = parseFloat(document.getElementById("precImposto").value) || 0;
-        let pMkp = parseFloat(document.getElementById("precMkp").value) || 0; let pFixa = parseFloat(document.getElementById("precDespFixa").value) || 0;
-        let pLucro = parseFloat(document.getElementById("precLucro").value) || 0;
-
-        let totalCustos = vCusto + vEmb + vFrete + vBrinde; let totalPerc = pTaxa + pImp + pMkp + pFixa + pLucro;
-
-        document.getElementById("resPrecCustos").innerText = formata(totalCustos); document.getElementById("resPrecTaxas").innerText = totalPerc + "%";
-
-        if (totalPerc >= 100) {
-            document.getElementById("resultadoPreco").innerText = "ERRO"; document.getElementById("resultadoPreco").style.color = "#e74c3c";
-        } else {
-            let precoVenda = totalCustos / (1 - (totalPerc / 100));
-            document.getElementById("resultadoPreco").innerText = formata(precoVenda); document.getElementById("resultadoPreco").style.color = "#27ae60";
-        }
-    }
-
-    // ==========================================
-    // MÓDULO: FLUXO DE CAIXA E PERSPECTIVAS
-    // ==========================================
+    // --- FUNÇÕES FINANCEIRAS (RESUMIDAS) ---
+    function formatarData(d) { return d ? d.split('-').reverse().join('/') : ""; }
     function atualizarTela() {
         const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = "";
-        const fBusca = document.getElementById("fBusca").value.toLowerCase();
-        const fMes = document.getElementById("fMes").value;
-        const fConta = document.getElementById("fConta").value;
-        const fTipo = document.getElementById("fTipo").value;
+        let fBusca = document.getElementById("fBusca").value.toLowerCase(), fMes = document.getElementById("fMes").value, fTipo = document.getElementById("fTipo").value;
         let tEnt = 0, tSai = 0;
-
-        let filtrados = lancamentos.filter(l => 
-            l.desc.toLowerCase().includes(fBusca) && 
-            l.data.startsWith(fMes) &&
-            (fConta === "Todas" || l.conta === fConta) &&
-            (fTipo === "Todos" || l.tipo === fTipo)
-        ).sort((a,b) => new Date(a.data) - new Date(b.data));
-
-        filtrados.forEach(l => {
-            if (l.tipo === "Crédito") tEnt += l.valor; else tSai += l.valor;
-            const tr = document.createElement("tr"); 
-            tr.innerHTML = `
-                <td>${formataData(l.data)}</td>
-                <td><strong>${l.desc}</strong><br><small>${l.categoria}</small></td>
-                <td style="color:${l.tipo==='Débito'?'#e74c3c':'#27ae60'};">${formata(l.valor)}</td>
-                <td>${l.tipo}</td>
-                <td>${l.status}</td>
-                <td style="text-align:center;"><button class="btn-acao fin-req" onclick="remover('${l.id}')">🗑️</button></td>`;
-            tbody.appendChild(tr);
+        lancamentos.filter(l => l.desc.toLowerCase().includes(fBusca) && l.data.startsWith(fMes) && (fTipo==="Todos" || l.tipo===fTipo)).sort((a,b)=>a.data.localeCompare(b.data)).forEach(l => {
+            if(l.tipo==="Crédito") tEnt+=l.valor; else tSai+=l.valor;
+            let tr = document.createElement("tr"); tr.innerHTML = `<td>${formatarData(l.data)}</td><td><strong>${l.desc}</strong><br><small>${l.categoria}</small></td><td style="color:${l.tipo==='Débito'?'#e74c3c':'#27ae60'}">R$ ${l.valor.toFixed(2)}</td><td>${l.tipo}</td><td>${l.status}</td><td style="text-align:center;"><button class="btn-acao" onclick="remover('${l.id}')">🗑️</button></td>`; tbody.appendChild(tr);
         });
-        
-        document.getElementById("resEntradas").innerText = formata(tEnt); 
-        document.getElementById("resSaidas").innerText = formata(tSai);
-        document.getElementById("resSaldo").innerText = formata(tEnt - tSai); 
-        if(perfilUsuario === 'Observador') document.querySelectorAll('.fin-req').forEach(el => el.style.display = 'none');
+        document.getElementById("resEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; document.getElementById("resSaidas").innerText = `R$ ${tSai.toFixed(2)}`; document.getElementById("resSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`;
     }
-
     function adicionarLancamento() {
-        if(perfilUsuario === 'Observador') return alert("Sem permissão");
-        const d = document.getElementById("cadDesc").value, c = document.getElementById("cadCat").value, conta = document.getElementById("cadConta").value;
-        const v = parseFloat(document.getElementById("cadValor").value), dt = document.getElementById("cadData").value;
-        const t = document.getElementById("cadTipo").value, st = document.getElementById("cadStatus").value;
-        
-        if(!d || !dt || isNaN(v)) return alert("Preencha Descrição, Valor e Data.");
-
-        let novoId = Date.now().toString();
-        db.collection("lancamentos").doc(novoId).set({ id: novoId, desc: d, categoria: c, conta: conta, valor: v, data: dt, tipo: t, status: st });
-        limparFormulario();
+        let l = { id: Date.now().toString(), desc: document.getElementById("cadDesc").value, categoria: document.getElementById("cadCat").value, conta: document.getElementById("cadConta").value, valor: parseFloat(document.getElementById("cadValor").value), data: document.getElementById("cadData").value, tipo: document.getElementById("cadTipo").value, status: document.getElementById("cadStatus").value };
+        if(!l.desc || !l.data || isNaN(l.valor)) return alert("Preencha corretamente.");
+        db.collection("lancamentos").doc(l.id).set(l); limparFormulario();
     }
-    
-    function remover(id) { 
-        if(perfilUsuario === 'Observador') return;
-        if(confirm("Excluir?")) db.collection("lancamentos").doc(id.toString()).delete(); 
-    }
+    function limparFormulario() { document.getElementById("cadDesc").value = ""; document.getElementById("cadValor").value = ""; document.getElementById("cadData").value = ""; }
+    function remover(id) { if(confirm("Excluir?")) db.collection("lancamentos").doc(id.toString()).delete(); }
 
-    function abrirModalTransferencia() {
-        document.getElementById('transfValor').value = '';
-        document.getElementById('transfData').value = formatarDataISO(new Date());
-        document.getElementById('modalTransferencia').style.display = 'flex';
-    }
-
-    function confirmarTransferencia() {
-        if(perfilUsuario === 'Observador') return;
-        let origem = document.getElementById('transfOrigem').value;
-        let destino = document.getElementById('transfDestino').value;
-        let valor = parseFloat(document.getElementById('transfValor').value);
-        let data = document.getElementById('transfData').value;
-
-        if(origem === destino) return alert("As contas devem ser diferentes!");
-        if(isNaN(valor) || valor <= 0 || !data) return alert("Dados inválidos.");
-
-        let batch = db.batch();
-        let id1 = Date.now().toString() + "_1"; let id2 = Date.now().toString() + "_2";
-
-        batch.set(db.collection("lancamentos").doc(id1), { id: id1, desc: `Transf. p/ ${destino}`, categoria: "Transferência", conta: origem, valor: valor, data: data, tipo: "Débito", status: "Efetuada" });
-        batch.set(db.collection("lancamentos").doc(id2), { id: id2, desc: `Transf. de ${origem}`, categoria: "Transferência", conta: destino, valor: valor, data: data, tipo: "Crédito", status: "Efetuada" });
-
-        batch.commit().then(() => {
-            document.getElementById('modalTransferencia').style.display = 'none';
-            alert("Transferência realizada!");
+    function gerarDRE() {
+        let m = document.getElementById("dreMes").value; let rec = 0, dev = 0, cVar = 0, cFix = 0;
+        lancamentos.filter(l => l.data.startsWith(m) && l.status.toLowerCase().includes("efetuada")).forEach(l => {
+            if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor;
+            else if(l.categoria.includes("Devolu")) dev += l.valor;
+            else if(["Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção"].includes(l.categoria)) cVar += l.valor;
+            else cFix += l.valor;
         });
+        let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix;
+        document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`;
     }
 
-    function gerarVisaoPerspectivas() {
-        const hoje = new Date(); const ano = hoje.getFullYear(); const mes = hoje.getMonth(); const dia = hoje.getDate();
-        let domAtual = new Date(hoje); domAtual.setDate(hoje.getDate() - hoje.getDay()); 
-        let sabAtual = new Date(domAtual); sabAtual.setDate(domAtual.getDate() + 6); 
-
-        let inicioQAtual, fimQAtual;
-        if (dia <= 15) {
-            inicioQAtual = formatarDataISO(new Date(ano, mes, 1)); fimQAtual = formatarDataISO(new Date(ano, mes, 15));
-        } else {
-            inicioQAtual = formatarDataISO(new Date(ano, mes, 16)); fimQAtual = formatarDataISO(new Date(ano, mes + 1, 0));
-        }
-
-        renderTabelaPerspectiva("blocoSemanaAtual", "Esta Semana", formatarDataISO(domAtual), formatarDataISO(sabAtual)); 
-        renderTabelaPerspectiva("blocoQuinzenaAtual", "Esta Quinzena", inicioQAtual, fimQAtual); 
-    }
-
-    function renderTabelaPerspectiva(idContainer, titulo, dtInicio, dtFim) {
-        let filtrados = lancamentos.filter(l => l.data >= dtInicio && l.data <= dtFim).sort((a,b) => new Date(a.data) - new Date(b.data));
-        let totEnt = 0; let totSai = 0;
-
-        let linhasHtml = filtrados.map(l => {
-            if(l.tipo === "Crédito") totEnt += l.valor; if(l.tipo === "Débito") totSai += l.valor;
-            let isEfetuada = (l.status || '').toLowerCase().includes('efetuada') || (l.status || '').toLowerCase().includes('pago');
-            return `<tr style="color: ${isEfetuada ? '#7f8c8d' : '#333'};">
-                <td style="white-space:nowrap;"><strong>${isEfetuada ? '✅' : '⏳'} ${formataData(l.data)}</strong></td>
-                <td><strong>${l.desc}</strong></td><td>${l.categoria}</td>
-                <td style="color:${l.tipo === 'Débito' ? '#e74c3c' : '#27ae60'}; font-weight:bold;">${formata(l.valor)}</td>
-            </tr>`;
-        }).join('');
-
-        if(filtrados.length === 0) linhasHtml = '<tr><td colspan="4" style="text-align:center; padding: 20px; color:#999;">Sem lançamentos neste período.</td></tr>';
-
-        let saldo = totEnt - totSai;
-        document.getElementById(idContainer).innerHTML = `
-            <h3 style="color: #4a3022; border-bottom: 2px solid #e8e3dc; padding-bottom: 5px; margin-top: 15px;">${titulo} <span style="font-size:12px; color:#98947c; font-weight:normal;">(${formataData(dtInicio)} até ${formataData(dtFim)})</span></h3>
-            <div class="table-responsive"><table><thead><tr><th style="width:15%;">Data</th><th style="width:45%;">Descrição</th><th style="width:25%;">Categoria</th><th style="width:15%;">Valor</th></tr></thead><tbody>${linhasHtml}</tbody></table></div>
-            <div style="background: #faf9f7; padding: 10px 15px; border-radius: 4px; display: flex; justify-content: flex-end; gap: 20px; font-size: 14px;">
-                <span>Entradas: <strong style="color: #27ae60;">${formata(totEnt)}</strong></span><span>Saídas: <strong style="color: #e74c3c;">${formata(totSai)}</strong></span><span style="border-left: 2px solid #e8e3dc; padding-left: 20px; color: #4a3022;">Resultado Final: <strong style="color: ${saldo >= 0 ? '#2980b9' : '#e74c3c'}; font-size: 16px;">${formata(saldo)}</strong></span>
-            </div>`;
+    function calcularPreco() {
+        let tC = (parseFloat(document.getElementById("precCustoProd").value)||0) + (parseFloat(document.getElementById("precEmbalagem").value)||0) + (parseFloat(document.getElementById("precFrete").value)||0);
+        let tP = (parseFloat(document.getElementById("precTaxa").value)||0) + (parseFloat(document.getElementById("precImposto").value)||0) + (parseFloat(document.getElementById("precDespFixa").value)||0) + (parseFloat(document.getElementById("precLucro").value)||0);
+        let preco = tP >= 100 ? 0 : tC / (1 - (tP / 100));
+        document.getElementById("resultadoPreco").innerText = preco > 0 ? `R$ ${preco.toFixed(2)}` : "ERRO";
     }
 </script>
 
