@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Onça Prosa - ERP Gerencial 9.0</title>
+    <!-- Bibliotecas PDF e Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
@@ -107,7 +110,7 @@
         .badge-entregue { background-color: #27ae60; }
         .badge-manutencao { background-color: #8e44ad; }
         
-        /* Recibo de Impressão */
+        /* Recibo de Impressão A4 (Oculto até ser chamado) */
         .folha-a4 { background: white; padding: 40px; width: 100%; max-width: 800px; margin: 0 auto; color: #333; font-family: 'Segoe UI', sans-serif; }
         .folha-a4-header { display: flex; justify-content: space-between; border-bottom: 3px solid #4a3022; padding-bottom: 15px; margin-bottom: 20px; }
         .folha-a4-header img { height: 80px; border-radius: 50%; }
@@ -149,7 +152,7 @@
         </div>
     </div>
 
-    <!-- NAVBAR REORGANIZADA CONFORME SOLICITADO -->
+    <!-- NAVBAR REORGANIZADA -->
     <div class="navbar">
         <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard</button>
         <button id="btnAbaFinanceiro" class="aba-btn fin-req" onclick="mudarAba('financeiro')">💸 Financeiro</button>
@@ -345,17 +348,11 @@
                 <h2 id="tituloCadCliente">👥 Novo Cliente</h2>
                 <input type="hidden" id="cliId">
                 <div class="form-group"><label>Nome do Cliente:</label><input type="text" id="cliNome"></div>
-                
-                <!-- Ajustado: Telefone e Nascimento em linhas separadas -->
                 <div class="form-group"><label>WhatsApp/Tel:</label><input type="text" id="cliTel" placeholder="(XX) 9XXXX-XXXX"></div>
                 <div class="form-group"><label>Nascimento:</label><input type="date" id="cliNasc"></div>
-                
                 <div class="form-group"><label>E-mail:</label><input type="email" id="cliEmail"></div>
-                
-                <!-- Ajustado: CEP e Endereço em linhas separadas -->
                 <div class="form-group"><label>CEP:</label><input type="text" id="cliCep" placeholder="00000-000"></div>
                 <div class="form-group"><label>Endereço Completo:</label><input type="text" id="cliEnd" placeholder="Rua, Número, Bairro, Cidade"></div>
-                
                 <div class="form-group"><label>Observações / Gostos:</label><input type="text" id="cliObs" placeholder="Ex: Prefere entregas na parte da manhã"></div>
                 
                 <div class="form-group"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fdf5f4; padding: 10px; border-radius: 6px; border: 1px solid #e8e3dc;"><input type="checkbox" id="cliPromo" style="width: auto; margin: 0;" checked> Autoriza envio de promoções</label></div>
@@ -363,12 +360,10 @@
                 <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormCliente()">Limpar</button>
             </div>
             <div class="painel-conteudo">
-                
                 <div id="boxAniversariantes" class="box-aniversariantes">
                     <h4>🎂 Aniversariantes deste mês</h4>
                     <div id="listaAniversariantes" style="font-size: 13px; color: #004d40;"></div>
                 </div>
-
                 <div class="painel-branco">
                     <h2 style="margin-top:0;">📋 Carteira de Clientes</h2>
                     <div class="filtros-area"><div class="filtros-grid" style="grid-template-columns: 1fr;"><div><label>Buscar Cliente:</label><input type="text" id="fBuscaCli" oninput="renderizarClientes()" placeholder="Nome, telefone, e-mail ou CEP..."></div></div></div>
@@ -411,7 +406,7 @@
                 
                 <div class="form-group" style="margin-top: 10px;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #eef2f5; padding: 10px; border-radius: 6px; border: 1px solid #ccd1d9; color: #2980b9;">
-                        <input type="checkbox" id="compraLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divCompraFin').style.display = this.checked ? 'block' : 'none'"> Gerar Lançamento Financeiro
+                        <input type="checkbox" id="compraLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divCompraFin').style.display = this.checked ? 'block' : 'none'"> Gerar Lançamento Financeiro Automático
                     </label>
                 </div>
 
@@ -618,6 +613,34 @@
 
         <!-- MÓDULO 10: GESTÃO E LOGS -->
         <div id="abaGestao" class="painel-branco aba-conteudo admin-req" style="display: none;">
+            
+            <!-- CENTRAL DE RELATORIOS (NOVA) -->
+            <div class="admin-area" style="margin-bottom: 30px; background: #e3f2fd; border-color: #b2ebf2;">
+                <h3 style="color: #00695c; margin-top: 0;">📊 Central de Relatórios Analíticos</h3>
+                <p style="font-size: 13px; margin-top: -10px; margin-bottom: 15px; color: #004d40;">Gere relatórios detalhados em Excel ou PDF para análise de performance e auditoria.</p>
+                <div style="display:flex; gap:10px; align-items: flex-end; flex-wrap: wrap;">
+                    <div style="flex: 3; min-width: 200px;">
+                        <label>Selecione o Relatório Desejado:</label>
+                        <select id="selRelatorioGestao" style="border: 1px solid #00897b;">
+                            <option value="1">Patrimônio Ativo</option>
+                            <option value="2">Patrimônio Baixado (Sucata)</option>
+                            <option value="3">Catálogo de Produtos e Ficha Técnica</option>
+                            <option value="4">Estoque de Insumos / Matéria-Prima</option>
+                            <option value="5">Histórico de Compras por Mês</option>
+                            <option value="6">Inteligência de Clientes (Tickets e Tempo Inativo)</option>
+                            <option value="7">Lista de Fornecedores e Volume de Negócios</option>
+                            <option value="8">Volume de Orçamentos (Mês a Mês)</option>
+                            <option value="9">Vendas Realizadas e Conversão (Mês a Mês)</option>
+                            <option value="10">Demonstrativo Financeiro Resumido (Receita x Despesa)</option>
+                        </select>
+                    </div>
+                    <button class="btn-acao-topo" style="background:#1e88e5; height: 38px; padding: 0 20px;" onclick="exportarRelatorioExcel()">📥 Exportar Excel</button>
+                    <button class="btn-acao-topo" style="background:#e53935; height: 38px; padding: 0 20px;" onclick="exportarRelatorioPDF()">📥 Exportar PDF</button>
+                </div>
+            </div>
+
+            <!-- FIM CENTRAL RELATÓRIOS -->
+
             <h2>⚙️ Gestão de Equipe, Configurações e Logs</h2>
             <div class="admin-area" style="margin-bottom: 30px;">
                 <h3 style="color: #d35400; margin-top: 0;">👥 Cadastro de Pessoas e Acessos</h3>
@@ -668,6 +691,17 @@
 <!-- ========================================== -->
 <!-- MODAIS DO SISTEMA                          -->
 <!-- ========================================== -->
+
+<!-- Container Oculto para Gerar PDF do Relatório -->
+<div id="areaRelatorioPDF" style="display:none; background:white; padding:20px; width:100%; color:#333; font-family:sans-serif;">
+    <h1 style="color:#4a3022; border-bottom:2px solid #e8e3dc; padding-bottom:10px; font-size:24px;" id="relTituloPdf">Relatório</h1>
+    <p style="font-size:12px; color:#666; margin-top:-10px;">Gerado em: <span id="relDataPdf"></span> pelo Onça Prosa ERP v9.0</p>
+    <table style="width:100%; border-collapse:collapse; margin-top:20px; font-size:12px;" id="relTabelaPdf">
+        <thead style="background-color:#4a3022; color:white; text-align:left;"></thead>
+        <tbody></tbody>
+    </table>
+    <h3 style="text-align:right; margin-top:20px; color:#c8827a;" id="relRodapePdf"></h3>
+</div>
 
 <!-- Modal: Concluir Venda -->
 <div id="modalConcluirVenda" class="modal-overlay">
@@ -1021,7 +1055,7 @@
             let tr = document.createElement("tr"); 
             let promoHtml = c.promo ? '<span style="color:#27ae60;font-weight:bold;">Sim</span>' : '<span style="color:#e74c3c;">Não</span>'; 
             let nasc = c.nasc ? formatarDataSimples(c.nasc) : "-";
-            tr.innerHTML = `<td><strong>${c.nome}</strong></td><td>${c.tel}<br><small>${c.email}</small></td><td>${c.end}<br><small>CEP: ${c.cep||'-'}</small></td><td>🎂 ${nasc}<br><small>${c.obs}</small></td><td style="text-align:center;">${promoHtml}</td><td style="text-align:center;"><button class="btn-acao" title="Ver Histórico" onclick="abrirModalHistorico('${c.id}')">📝</button><button class="btn-acao" onclick="editarCliente('${c.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerCliente('${c.id}')">🗑️</button></td>`; 
+            tr.innerHTML = `<td><strong>${c.nome}</strong></td><td>${c.tel||'-'}<br><small>${c.email||'-'}</small></td><td>${c.end||'-'}<br><small>CEP: ${c.cep||'-'}</small></td><td>🎂 ${nasc}<br><small>${c.obs||'-'}</small></td><td style="text-align:center;">${promoHtml}</td><td style="text-align:center;"><button class="btn-acao" title="Ver Histórico" onclick="abrirModalHistorico('${c.id}')">📝</button><button class="btn-acao" onclick="editarCliente('${c.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerCliente('${c.id}')">🗑️</button></td>`; 
             tbody.appendChild(tr); 
         }); 
         checarAniversariantes();
@@ -1317,6 +1351,213 @@
     }
 
     function gerarPDFOrcamento() { const elemento = document.getElementById('areaImpressaoA4'); let nomeDoc = document.getElementById("printTipoDoc").innerText; let idDoc = document.getElementById("printId").innerText; html2pdf().set({ margin: 10, filename: `${nomeDoc}_OncaProsa_${idDoc}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(elemento).save(); }
+
+
+    // ==========================================
+    // MÓDULO CENTRAL DE RELATÓRIOS (NOVO)
+    // ==========================================
+    
+    function compilarDadosRelatorio(tipo) {
+        let cabecalho = [];
+        let dados = [];
+        let rodape = "";
+        let titulo = "";
+
+        if (tipo === "1") {
+            titulo = "Relação de Patrimônio Ativo";
+            cabecalho = ["ID", "Identificação", "Marca", "Qtd", "Aquisição", "Vida Útil", "Valor Original (R$)"];
+            let ativos = patrimonios.filter(p => !p.baixado);
+            let total = 0;
+            ativos.forEach(p => {
+                let v = parseFloat(p.valorCompra) || 0;
+                total += v;
+                dados.push([p.id.substring(p.id.length-6), p.identificacao, p.marca||'-', p.qtd, formatarDataSimples(p.dataCompra), p.vidaUtil||'-', formatarDinheiro(v)]);
+            });
+            rodape = `Total de Patrimônio Ativo: ${formatarDinheiro(total)}`;
+        } 
+        else if (tipo === "2") {
+            titulo = "Relação de Patrimônio Baixado (Sucata)";
+            cabecalho = ["ID", "Identificação", "Marca", "Qtd", "Data Compra", "Data Baixa", "Valor Original Perdido (R$)"];
+            let baixados = patrimonios.filter(p => p.baixado);
+            let total = 0;
+            baixados.forEach(p => {
+                let v = parseFloat(p.valorCompra) || 0;
+                total += v;
+                dados.push([p.id.substring(p.id.length-6), p.identificacao, p.marca||'-', p.qtd, formatarDataSimples(p.dataCompra), formatarDataSimples(p.dataBaixa), formatarDinheiro(v)]);
+            });
+            rodape = `Total do Valor Original Perdido: ${formatarDinheiro(total)}`;
+        }
+        else if (tipo === "3") {
+            titulo = "Relatório de Produtos e Fichas Técnicas";
+            cabecalho = ["Produto Final", "Categoria", "Composição (Insumos)", "Custo de Produção (R$)", "Markup (%)", "Preço de Venda (R$)"];
+            produtosFinais.forEach(p => {
+                let recText = (p.receita || []).map(r => `${r.qtd}x ${r.nome}`).join(' | ');
+                dados.push([p.nome, p.cat||'-', recText, formatarDinheiro(p.custo), `${p.margem}%`, formatarDinheiro(p.precoVenda)]);
+            });
+        }
+        else if (tipo === "4") {
+            titulo = "Relatório Físico-Financeiro de Insumos (Estoque)";
+            cabecalho = ["Insumo/MP", "Fornecedor", "Quantidade Físico", "Custo Unitário (R$)", "Valor Total Alocado (R$)"];
+            let totalEstoque = 0;
+            produtos.forEach(p => {
+                let vTotal = p.qtd * p.custo;
+                totalEstoque += vTotal;
+                dados.push([p.nome, p.fornecedor||'-', p.qtd, formatarDinheiro(p.custo), formatarDinheiro(vTotal)]);
+            });
+            rodape = `Valor Físico-Financeiro Total do Estoque: ${formatarDinheiro(totalEstoque)}`;
+        }
+        else if (tipo === "5") {
+            titulo = "Relatório de Compras Mensais";
+            cabecalho = ["Data da Compra", "Mês Ref.", "Insumo Adquirido", "Fornecedor", "Qtd", "Valor Pago (R$)"];
+            let cSort = [...compras].sort((a,b) => (b.data||"").localeCompare(a.data||""));
+            let totalGeral = 0;
+            cSort.forEach(c => {
+                totalGeral += c.valorTotal;
+                let mes = c.data ? c.data.substring(0,7).split('-').reverse().join('/') : '-';
+                dados.push([formatarDataSimples(c.data), mes, c.insumoNome, c.fornecedor||'-', c.qtd, formatarDinheiro(c.valorTotal)]);
+            });
+            rodape = `Volume Histórico de Compras: ${formatarDinheiro(totalGeral)}`;
+        }
+        else if (tipo === "6") {
+            titulo = "Inteligência de Clientes e Frequência";
+            cabecalho = ["Cliente", "Telefone", "Pedidos Pagos/Prontos", "Total Investido (R$)", "Última Compra", "Dias Inativos"];
+            let agora = new Date().getTime();
+            clientes.forEach(c => {
+                let vCli = vendas.filter(v => v.clienteId === c.id && ['Entregue', 'Pronto', 'Em Produção'].includes(v.status));
+                let totalGasto = vCli.reduce((a,b) => a + b.totalGeral, 0);
+                let qtdPed = vCli.length;
+                let ultCompraObj = vCli.sort((a,b)=>(b.dataCriacao||"").localeCompare(a.dataCriacao||""))[0];
+                let ultCompra = ultCompraObj ? ultCompraObj.dataCriacao : null;
+                let dias = '-';
+                if(ultCompra) {
+                    let dDate = new Date(ultCompra + "T12:00:00Z").getTime();
+                    dias = Math.floor((agora - dDate) / (1000 * 60 * 60 * 24)) + " dias";
+                }
+                dados.push([c.nome, c.tel||'-', qtdPed, formatarDinheiro(totalGasto), formatarDataSimples(ultCompra), dias]);
+            });
+            // Ordenar por quem gastou mais
+            dados.sort((a,b) => parseFloat(b[3].replace(/[R$\s\.]/g,'').replace(',','.')) - parseFloat(a[3].replace(/[R$\s\.]/g,'').replace(',','.')));
+        }
+        else if (tipo === "7") {
+            titulo = "Lista de Fornecedores e Volume de Compras";
+            cabecalho = ["Fornecedor", "Contato", "Nota Produto", "Nota Entrega", "Qtd Compras Feitas no Sistema"];
+            fornecedores.forEach(f => {
+                let qtd = compras.filter(c => c.fornecedor === f.nome).length;
+                dados.push([f.nome, f.contato||'-', `${f.notaProd}/5`, `${f.notaEnt}/5`, qtd]);
+            });
+            // Ordenar pelos que mais vendem pra nós
+            dados.sort((a,b) => b[4] - a[4]);
+        }
+        else if (tipo === "8") {
+            titulo = "Volume de Orçamentos Criados (Mês a Mês)";
+            cabecalho = ["Mês", "Orçamentos Emitidos", "Potencial de Venda (R$)"];
+            let meses = {};
+            vendas.forEach(v => {
+                if(!v.dataCriacao) return;
+                let m = v.dataCriacao.substring(0,7).split('-').reverse().join('/');
+                if(!meses[m]) meses[m] = { q: 0, v: 0 };
+                meses[m].q++; meses[m].v += v.totalGeral;
+            });
+            Object.keys(meses).forEach(m => {
+                dados.push([m, meses[m].q, formatarDinheiro(meses[m].v)]);
+            });
+            // Sort por mes (mais recente) - Como é string MM/YYYY precisaria logica custom, mas o foreach puxa cronologico.
+        }
+        else if (tipo === "9") {
+            titulo = "Vendas Reais e Taxa de Conversão (Mês a Mês)";
+            cabecalho = ["Mês", "Tentativas (Orçamentos)", "Fechamentos (Vendas)", "Taxa Conversão (%)", "Receita Fechada (R$)"];
+            let meses = {};
+            vendas.forEach(v => {
+                if(!v.dataCriacao) return;
+                let m = v.dataCriacao.substring(0,7).split('-').reverse().join('/');
+                if(!meses[m]) meses[m] = { o: 0, v: 0, r: 0 };
+                meses[m].o++;
+                if(['Entregue', 'Pronto', 'Em Produção'].includes(v.status)) {
+                    meses[m].v++; meses[m].r += v.totalGeral;
+                }
+            });
+            Object.keys(meses).forEach(m => {
+                let mv = meses[m];
+                let tx = mv.o > 0 ? ((mv.v / mv.o)*100).toFixed(1) + '%' : '0%';
+                dados.push([m, mv.o, mv.v, tx, formatarDinheiro(mv.r)]);
+            });
+        }
+        else if (tipo === "10") {
+            titulo = "Demonstrativo Financeiro Resumido (Efetuados)";
+            cabecalho = ["Mês Ref.", "Receitas (R$)", "Despesas (R$)", "Saldo (R$)"];
+            let mesesFin = {};
+            lancamentos.filter(l => (l.status||"").includes("Efetuada")).forEach(l => {
+                if(!l.data) return;
+                let m = l.data.substring(0,7).split('-').reverse().join('/');
+                if(!mesesFin[m]) mesesFin[m] = { r: 0, d: 0 };
+                if(l.tipo === "Crédito") mesesFin[m].r += l.valor;
+                if(l.tipo === "Débito") mesesFin[m].d += l.valor;
+            });
+            Object.keys(mesesFin).sort().reverse().forEach(m => {
+                let rec = mesesFin[m].r; let desp = mesesFin[m].d;
+                dados.push([m, formatarDinheiro(rec), formatarDinheiro(desp), formatarDinheiro(rec - desp)]);
+            });
+        }
+
+        if(dados.length === 0) dados.push(["Nenhum dado encontrado para este relatório."]);
+
+        return { titulo, cabecalho, dados, rodape };
+    }
+
+    function exportarRelatorioExcel() {
+        if(typeof XLSX === 'undefined') return alert("Erro ao carregar o gerador de Excel. Atualize a página.");
+        
+        let val = document.getElementById("selRelatorioGestao").value;
+        let r = compilarDadosRelatorio(val);
+        
+        // Monta a Matriz do Excel
+        let matriz = [];
+        matriz.push([r.titulo]);
+        matriz.push([]); // Espaço
+        matriz.push(r.cabecalho);
+        r.dados.forEach(d => matriz.push(d));
+        if(r.rodape) { matriz.push([]); matriz.push([r.rodape]); }
+
+        let ws = XLSX.utils.aoa_to_sheet(matriz);
+        let wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Relatorio");
+        XLSX.writeFile(wb, `OncaProsa_Relatorio_${val}_${new Date().toISOString().substring(0,10)}.xlsx`);
+        
+        registrarLog("GESTÃO", `Exportou relatório ${r.titulo} em Excel.`);
+    }
+
+    function exportarRelatorioPDF() {
+        let val = document.getElementById("selRelatorioGestao").value;
+        let r = compilarDadosRelatorio(val);
+        
+        document.getElementById("relTituloPdf").innerText = r.titulo;
+        document.getElementById("relDataPdf").innerText = new Date().toLocaleString('pt-BR');
+        
+        let thead = document.querySelector("#relTabelaPdf thead");
+        thead.innerHTML = "<tr>" + r.cabecalho.map(c => `<th style="padding:10px; border-bottom:2px solid #ccc;">${c}</th>`).join('') + "</tr>";
+        
+        let tbody = document.querySelector("#relTabelaPdf tbody");
+        tbody.innerHTML = "";
+        r.dados.forEach(linha => {
+            tbody.innerHTML += "<tr>" + linha.map(col => `<td style="padding:8px; border-bottom:1px solid #eee;">${col}</td>`).join('') + "</tr>";
+        });
+
+        document.getElementById("relRodapePdf").innerText = r.rodape || "";
+        
+        let elemento = document.getElementById('areaRelatorioPDF');
+        elemento.style.display = "block"; // Mostra rapido pra printar
+        
+        html2pdf().set({ 
+            margin: 10, 
+            filename: `OncaProsa_Relatorio_${val}.pdf`, 
+            image: { type: 'jpeg', quality: 0.98 }, 
+            html2canvas: { scale: 2, useCORS: true }, 
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } // Paisagem pra caber tudo
+        }).from(elemento).save().then(() => {
+            elemento.style.display = "none"; // Oculta dnv
+            registrarLog("GESTÃO", `Exportou relatório ${r.titulo} em PDF.`);
+        });
+    }
 
 </script>
 
