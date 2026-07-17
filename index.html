@@ -212,12 +212,10 @@
                 <div class="form-group"><label>Conta:</label><select id="cadConta"></select></div>
                 <div class="form-row">
                     <div class="form-group" style="flex: 1;"><label>Valor (R$):</label><input type="number" id="cadValor" step="0.01"></div>
-                    <!-- AQUI FOI ALTERADO DE DATA INICIAL PARA VENCIMENTO -->
                     <div class="form-group" style="flex: 1;"><label>Vencimento:</label><input type="date" id="cadData"></div>
                 </div>
                 <div class="form-row"><div class="form-group" style="flex: 1;"><label>Tipo:</label><select id="cadTipo"><option value="Débito">Débito</option><option value="Crédito">Crédito</option></select></div><div class="form-group" style="flex: 1;"><label>Status:</label><select id="cadStatus"></select></div></div>
                 
-                <!-- FREQUENCIA E PARCELAMENTO -->
                 <div style="background: #faf9f7; padding: 10px; border-radius: 6px; border: 1px solid #e8e3dc; margin-bottom: 10px;" id="boxFreqFinanceiro">
                     <div class="form-row">
                         <div class="form-group" style="flex: 2; margin: 0;">
@@ -278,7 +276,10 @@
                     <thead><tr><th>Item</th><th>Qtd</th><th>Preço</th><th>X</th></tr></thead>
                     <tbody id="tbCarrinho"></tbody>
                 </table>
-                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Desconto (R$):</label><input type="number" id="vendaDesconto" step="0.01" value="0" oninput="atualizarTotaisCarrinho()"></div></div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;"><label>Desconto (R$):</label><input type="number" id="vendaDesconto" step="0.01" value="0" oninput="atualizarTotaisCarrinho()"></div>
+                    <div class="form-group" style="flex: 1;"><label>Frete (R$):</label><input type="number" id="vendaFrete" step="0.01" value="0" oninput="atualizarTotaisCarrinho()"></div>
+                </div>
                 <div style="text-align: right; font-size: 18px; font-weight: bold; color: #4a3022; margin-bottom: 15px; border-top: 2px solid #eee; padding-top: 10px;">
                     Total: <span id="vendaTotalGeral" style="color: #27ae60;">R$ 0,00</span>
                 </div>
@@ -304,7 +305,7 @@
                     </div>
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>Data</th><th>Cliente</th><th>Total (R$)</th><th style="text-align:center;">Status</th><th style="text-align: center;">Esteira Produtiva / PDF</th></tr></thead>
+                            <thead><tr><th>Data</th><th>Cliente</th><th>Total (R$)</th><th style="text-align:center;">Status</th><th style="text-align: center;">Esteira Produtiva / PDF / Whats</th></tr></thead>
                             <tbody id="tbComercial"></tbody>
                         </table>
                     </div>
@@ -628,7 +629,7 @@
             </div>
 
             <div class="config-grid">
-                <!-- FORMAS DE RECEBIMENTO (NOVO) -->
+                <!-- FORMAS DE RECEBIMENTO -->
                 <div style="background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc; grid-column: 1 / -1;">
                     <h3 style="margin-top: 0;">💳 Formas de Recebimento e Taxas</h3>
                     <p style="font-size: 13px; color: #666; margin-top: -15px; margin-bottom: 15px;">Ao selecionar essa forma na conclusão de uma venda, o sistema deduzirá automaticamente o % cadastrado como despesa de taxa.</p>
@@ -651,7 +652,7 @@
 <!-- MODAIS DO SISTEMA                          -->
 <!-- ========================================== -->
 
-<!-- Modal: Concluir Venda (NOVO) -->
+<!-- Modal: Concluir Venda -->
 <div id="modalConcluirVenda" class="modal-overlay">
     <div class="modal-box" style="max-width: 500px;">
         <h3 style="color: #27ae60; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">
@@ -745,32 +746,52 @@
     </div>
 </div>
 
-<!-- Modal: Impressão PDF -->
+<!-- Modal: Impressão PDF ATUALIZADO COM WHATSAPP, EMITENTE, VALIDADE E FRETE -->
 <div id="modalImpressao" class="modal-overlay" style="background: rgba(0,0,0,0.9); z-index: 10001; padding: 20px 0;">
     <div style="width: 100%; max-width: 850px; background: none; display: flex; flex-direction: column; align-items: center; max-height: 100vh;">
-        <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px;"><button onclick="document.getElementById('modalImpressao').style.display='none'" style="background:#e74c3c; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold;">❌ Fechar</button><div><button onclick="window.print()" style="background:#3498db; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold; margin-right:10px;">🖨️ Imprimir</button><button onclick="gerarPDFOrcamento()" style="background:#27ae60; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold;">📥 Baixar PDF</button></div></div>
-        <div id="areaImpressaoA4" class="folha-a4" style="overflow-y: auto;">
-            <div class="folha-a4-header"><div><h1 style="color: #4a3022; margin: 0; font-family: 'Georgia', serif;">Onça Prosa</h1><p style="color: #c8827a; margin: 5px 0 0 0; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">• Feito com carinho •</p></div><div style="text-align: right;"><h2 id="printTipoDoc" style="margin: 0; color: #4a3022;">ORÇAMENTO</h2><p style="margin: 5px 0 0 0; font-size: 13px; color: #666;">Nº <span id="printId">0000</span><br>Data: <span id="printData">00/00/0000</span></p></div></div>
-            <div class="folha-a4-info"><strong>CLIENTE:</strong> <span id="printCliNome">Nome</span><br><strong>CONTATO:</strong> <span id="printCliTel">Telefone/Email</span></div>
-            <table class="tabela-impressao"><thead><tr><th>Qtd</th><th>Descrição do Item</th><th>Valor Unit.</th><th>Subtotal</th></tr></thead><tbody id="printTbItens"></tbody></table>
-            <div class="folha-a4-totais"><p>Subtotal: <span id="printSubtotal">R$ 0,00</span></p><p style="color: #e74c3c;">Desconto: <span id="printDesconto">R$ 0,00</span></p><h3 style="color: #27ae60; margin-top: 10px; font-size: 20px;">Total a Pagar: <span id="printTotalGeral">R$ 0,00</span></h3></div>
-            <div style="margin-top: 50px; font-size: 11px; color: #7f8c8d; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">Obrigado por escolher a Onça Prosa!<br>Documento gerado pelo sistema Onça Prosa ERP.</div>
+        <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <button onclick="document.getElementById('modalImpressao').style.display='none'" style="background:#e74c3c; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold;">❌ Fechar</button>
+            <div>
+                <button onclick="enviarWhatsappOrcamento()" style="background:#25D366; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold; margin-right:10px;">💬 WhatsApp</button>
+                <button onclick="window.print()" style="background:#3498db; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold; margin-right:10px;">🖨️ Imprimir</button>
+                <button onclick="gerarPDFOrcamento()" style="background:#27ae60; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold;">📥 Baixar PDF</button>
+            </div>
         </div>
-    </div>
-</div>
-
-<!-- Modal: Manutenção de Equipamentos -->
-<div id="modalManutencao" class="modal-overlay">
-    <div class="modal-box" style="max-width: 450px;">
-        <h3 style="color: #4a3022; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">🔧 Registrar Manutenção<button onclick="document.getElementById('modalManutencao').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
-        <p style="margin-top: -10px; color: #8e44ad; font-weight: bold; font-size: 14px;" id="manuIdent">Equipamento</p>
-        <input type="hidden" id="manuEquipId">
-        <div class="form-row"><div class="form-group" style="flex:1;"><label>Data:</label><input type="date" id="manuData"></div></div>
-        <div class="form-group"><label>Técnico / Empresa:</label><input type="text" id="manuQuem"></div>
-        <div class="form-group"><label>Valor (R$):</label><input type="number" id="manuValor" step="0.01"></div>
-        <div class="form-group" style="margin-top: 10px;"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox" id="manuLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divManuConta').style.display = this.checked ? 'block' : 'none'"> Lançar Despesa no Financeiro</label></div>
-        <div class="form-group" id="divManuConta" style="display:none;"><label>Conta para Débito:</label><select id="manuConta"></select></div>
-        <button class="btn" style="background:#8e44ad; margin-top:15px;" onclick="efetuarManutencao()">Salvar Manutenção</button>
+        <div id="areaImpressaoA4" class="folha-a4" style="overflow-y: auto;">
+            <div class="folha-a4-header">
+                <div>
+                    <h1 style="color: #4a3022; margin: 0; font-family: 'Georgia', serif;">Onça Prosa</h1>
+                    <p style="color: #c8827a; margin: 5px 0 0 0; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">• Feito com carinho •</p>
+                </div>
+                <div style="text-align: right;">
+                    <h2 id="printTipoDoc" style="margin: 0; color: #4a3022;">ORÇAMENTO</h2>
+                    <p style="margin: 5px 0 0 0; font-size: 13px; color: #666;">Nº <span id="printId">0000</span><br>Data: <span id="printData">00/00/0000</span></p>
+                </div>
+            </div>
+            <div class="folha-a4-info" style="display: flex; justify-content: space-between;">
+                <div>
+                    <strong>CLIENTE:</strong> <span id="printCliNome">Nome</span><br>
+                    <strong>CONTATO:</strong> <span id="printCliTel">Telefone/Email</span>
+                </div>
+                <div style="text-align: right;">
+                    <strong>EMITIDO POR:</strong> <span id="printEmitente">Usuário</span><br>
+                    <strong>VÁLIDO ATÉ:</strong> <span id="printValidade">00/00/0000</span>
+                </div>
+            </div>
+            <table class="tabela-impressao">
+                <thead><tr><th>Qtd</th><th>Descrição do Item</th><th>Valor Unit.</th><th>Subtotal</th></tr></thead>
+                <tbody id="printTbItens"></tbody>
+            </table>
+            <div class="folha-a4-totais">
+                <p>Subtotal: <span id="printSubtotal">R$ 0,00</span></p>
+                <p style="color: #e74c3c;">Desconto: <span id="printDesconto">R$ 0,00</span></p>
+                <p style="color: #2980b9;">Frete: <span id="printFrete">R$ 0,00</span></p>
+                <h3 style="color: #27ae60; margin-top: 10px; font-size: 20px;">Total a Pagar: <span id="printTotalGeral">R$ 0,00</span></h3>
+            </div>
+            <div style="margin-top: 50px; font-size: 11px; color: #7f8c8d; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">
+                Obrigado por escolher a Onça Prosa!<br>Documento gerado pelo sistema Onça Prosa ERP.
+            </div>
+        </div>
     </div>
 </div>
 
@@ -796,11 +817,11 @@
     let statusLista = ["A Vencer", "Efetuada"]; 
     let categorias = ["Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", "Impostos de Venda", "Taxas de Pagamento", "Comissões", "Mercadorias", "Insumos de Produção", "Aluguel", "Salários", "Manutenção Equip.", "Internet", "Sistema", "Contador", "Outras Despesas Fixas", "Perdas e Avarias"];
     
-    // NOVO: Array de Formas de Pagamento
     let formasPagamento = [{nome: "Dinheiro", taxa: 0}, {nome: "Cartão de Crédito", taxa: 3.5}, {nome: "Cartão de Débito", taxa: 1.5}, {nome: "PIX", taxa: 0}];
     
     let userAutenticado = null; let perfilUsuario = 'Vendedor'; 
     let carrinhoAtual = []; let fichaAtual = [];
+    let vendaAtualImpressao = null; // Variável para armazenar dados para o Whatsapp
 
     function registrarLog(acao, detalhes) { if(!userAutenticado) return; let nomeLog = document.getElementById('lblUsuario').innerText || "Usuário Desconhecido"; db.collection("logs").add({ dataHora: new Date().toISOString(), usuario: nomeLog, acao: acao, detalhes: detalhes }).catch(e => console.error(e)); }
 
@@ -891,30 +912,9 @@
     // MÓDULO GESTÃO (CONFIGURAÇÕES GERAIS)
     // ==========================================
     function salvarConfigNaNuvem() { db.collection("config").doc("listas").set({ categorias: categorias, contasLista: contasLista, formasPagamento: formasPagamento }); }
-    
-    function addConfig(t) { 
-        if (t === 'cat') { let v = document.getElementById("novaCatInput").value.trim(); if(v && !categorias.includes(v)) { categorias.push(v); document.getElementById("novaCatInput").value=""; } }
-        if (t === 'conta') { let v = document.getElementById("novaContaInput").value.trim(); if(v && !contasLista.includes(v)) { contasLista.push(v); document.getElementById("novaContaInput").value=""; } }
-        salvarConfigNaNuvem(); 
-    }
-    
-    function remConfig(t, i) { 
-        if(t === 'cat') categorias.splice(i,1); 
-        if(t === 'conta') contasLista.splice(i,1); 
-        if(t === 'forma') formasPagamento.splice(i,1);
-        salvarConfigNaNuvem(); 
-    }
-
-    function addFormaPagamento() {
-        let nome = document.getElementById("novaFormaNome").value.trim();
-        let taxa = parseFloat(document.getElementById("novaFormaTaxa").value) || 0;
-        if(!nome) return alert("Informe o nome da forma de pagamento.");
-        formasPagamento.push({ nome: nome, taxa: taxa });
-        document.getElementById("novaFormaNome").value = "";
-        document.getElementById("novaFormaTaxa").value = "0";
-        salvarConfigNaNuvem();
-        registrarLog("CONFIG", `Adicionou Forma de Pagto: ${nome} (${taxa}%)`);
-    }
+    function addConfig(t) { if (t === 'cat') { let v = document.getElementById("novaCatInput").value.trim(); if(v && !categorias.includes(v)) { categorias.push(v); document.getElementById("novaCatInput").value=""; } } if (t === 'conta') { let v = document.getElementById("novaContaInput").value.trim(); if(v && !contasLista.includes(v)) { contasLista.push(v); document.getElementById("novaContaInput").value=""; } } salvarConfigNaNuvem(); }
+    function remConfig(t, i) { if(t === 'cat') categorias.splice(i,1); if(t === 'conta') contasLista.splice(i,1); if(t === 'forma') formasPagamento.splice(i,1); salvarConfigNaNuvem(); }
+    function addFormaPagamento() { let nome = document.getElementById("novaFormaNome").value.trim(); let taxa = parseFloat(document.getElementById("novaFormaTaxa").value) || 0; if(!nome) return alert("Informe o nome da forma de pagamento."); formasPagamento.push({ nome: nome, taxa: taxa }); document.getElementById("novaFormaNome").value = ""; document.getElementById("novaFormaTaxa").value = "0"; salvarConfigNaNuvem(); registrarLog("CONFIG", `Adicionou Forma de Pagto: ${nome} (${taxa}%)`); }
 
     // ==========================================
     // MÓDULO FINANCEIRO (PARCELAMENTO E PARCIAL)
@@ -922,7 +922,6 @@
     function adicionarLancamento() {
         let idEdit = document.getElementById("editId").value;
         let l = { desc: document.getElementById("cadDesc").value, categoria: document.getElementById("cadCat").value, conta: document.getElementById("cadConta").value, valor: parseFloat(document.getElementById("cadValor").value), data: document.getElementById("cadData").value, tipo: document.getElementById("cadTipo").value, status: document.getElementById("cadStatus").value };
-        
         let freq = document.getElementById("cadFreq") ? document.getElementById("cadFreq").value : "Único";
         let qtdFreq = parseInt(document.getElementById("cadQtdFreq") ? document.getElementById("cadQtdFreq").value : 1) || 1;
 
@@ -939,37 +938,24 @@
             let dataBase = new Date(l.data + "T12:00:00Z");
 
             for(let i = 1; i <= qtdFreq; i++) {
-                let d = new Date(dataBase);
-                d.setMonth(d.getMonth() + (i - 1));
-                
+                let d = new Date(dataBase); d.setMonth(d.getMonth() + (i - 1));
                 let novoL = {...l};
                 novoL.id = Date.now().toString() + i + Math.floor(Math.random()*1000);
-                novoL.valor = valParcela;
-                novoL.data = d.toISOString().substring(0,10);
-                novoL.isRecorrente = (freq === 'Recorrente');
-                novoL.parcelaAtual = i;
-                novoL.parcelaTotal = qtdFreq;
-                
+                novoL.valor = valParcela; novoL.data = d.toISOString().substring(0,10); novoL.isRecorrente = (freq === 'Recorrente'); novoL.parcelaAtual = i; novoL.parcelaTotal = qtdFreq;
                 if(freq === 'Parcelado') novoL.desc = `${l.desc} (${i}/${qtdFreq})`;
                 if(freq === 'Recorrente' && qtdFreq > 1) novoL.desc = `${l.desc} (Ref. ${i}/${qtdFreq})`;
-
                 batch.set(db.collection("lancamentos").doc(novoL.id), novoL);
             }
-            batch.commit().then(() => {
-                registrarLog("FINANCEIRO", `Cadastrou: ${l.desc} (${freq} - ${qtdFreq}x)`);
-                limparFormulario();
-            });
+            batch.commit().then(() => { registrarLog("FINANCEIRO", `Cadastrou: ${l.desc} (${freq} - ${qtdFreq}x)`); limparFormulario(); });
         }
     }
     
     function atualizarTelaFinanceiro() { 
         const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = ""; let fBusca = document.getElementById("fBusca").value.toLowerCase(); let fMes = document.getElementById("fMes").value; let fTipo = document.getElementById("fTipo").value; let fConta = document.getElementById("fConta").value; 
         let filtrados = lancamentos.filter(l => l.desc.toLowerCase().includes(fBusca) && l.data.startsWith(fMes) && (fTipo==="Todos" || l.tipo===fTipo) && (fConta==="Todas" || l.conta===fConta)).sort((a,b)=>a.data.localeCompare(b.data)); 
-        
         filtrados.forEach(l => { 
             let tr = document.createElement("tr"); 
             let htmlParcial = l.status === "A Vencer" ? `<button class="btn-acao-topo" style="background:#27ae60; font-size:10px; padding:2px 5px; margin-left:5px;" title="Pagamento Parcial" onclick="abrirModalParcial('${l.id}')">💸 Parc.</button>` : "";
-            
             tr.innerHTML = `<td>${formatarDataSimples(l.data)}</td><td><strong>${l.desc}</strong><br><small>🏦 ${l.conta || 'Geral'}</small></td><td>${l.categoria}</td><td style="color:${l.tipo==='Débito'?'#e74c3c':'#27ae60'}; font-weight:bold;">${formatarDinheiro(l.valor)}</td><td>${l.tipo}</td><td><select onchange="mudarStatusLanc('${l.id}', this.value)" style="padding:4px; font-size:12px; border-radius:4px;"><option value="A Vencer" ${l.status==='A Vencer'?'selected':''}>A Vencer</option><option value="Efetuada" ${l.status==='Efetuada'?'selected':''}>Efetuada</option></select></td><td class="fin-req" style="text-align:center; display:flex; justify-content:center; align-items:center;">${htmlParcial} <button class="btn-acao" onclick="editarLanc('${l.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerLanc('${l.id}')">🗑️</button></td>`; 
             tbody.appendChild(tr); 
         }); 
@@ -978,73 +964,29 @@
     function mudarStatusLanc(id, novoStatus) { 
         let l = lancamentos.find(x => x.id === id);
         if(novoStatus === 'Efetuada' && l && l.isRecorrente && l.parcelaAtual === l.parcelaTotal) {
-            if(confirm(`Este é o último lançamento da despesa recorrente "${l.desc.split(' (Ref')[0]}".\n\nDeseja renovar esta recorrência automaticamente por mais ${l.parcelaTotal} meses?`)) {
-                renovarRecorrencia(l);
-            }
+            if(confirm(`Este é o último lançamento da despesa recorrente "${l.desc.split(' (Ref')[0]}".\n\nDeseja renovar esta recorrência automaticamente por mais ${l.parcelaTotal} meses?`)) { renovarRecorrencia(l); }
         }
-        db.collection("lancamentos").doc(id).update({status: novoStatus}); 
-        registrarLog("FINANCEIRO", `Mudou status do lançamento ${id} para ${novoStatus}`); 
+        db.collection("lancamentos").doc(id).update({status: novoStatus}); registrarLog("FINANCEIRO", `Mudou status do lançamento ${id} para ${novoStatus}`); 
     }
 
     function renovarRecorrencia(lOriginal) {
-        let batch = db.batch();
-        let dataBase = new Date(lOriginal.data + "T12:00:00Z");
-        let descBase = lOriginal.desc.split(' (Ref')[0];
-        
+        let batch = db.batch(); let dataBase = new Date(lOriginal.data + "T12:00:00Z"); let descBase = lOriginal.desc.split(' (Ref')[0];
         for(let i = 1; i <= lOriginal.parcelaTotal; i++) {
-            let d = new Date(dataBase);
-            d.setMonth(d.getMonth() + i); 
-            
-            let novoL = {...lOriginal};
-            novoL.id = Date.now().toString() + i + Math.floor(Math.random()*1000);
-            novoL.data = d.toISOString().substring(0,10);
-            novoL.status = "A Vencer";
-            novoL.parcelaAtual = i;
-            novoL.desc = `${descBase} (Ref. ${i}/${lOriginal.parcelaTotal})`;
-            
+            let d = new Date(dataBase); d.setMonth(d.getMonth() + i); 
+            let novoL = {...lOriginal}; novoL.id = Date.now().toString() + i + Math.floor(Math.random()*1000); novoL.data = d.toISOString().substring(0,10); novoL.status = "A Vencer"; novoL.parcelaAtual = i; novoL.desc = `${descBase} (Ref. ${i}/${lOriginal.parcelaTotal})`;
             batch.set(db.collection("lancamentos").doc(novoL.id), novoL);
         }
         batch.commit().then(() => alert("Recorrência renovada com sucesso para o próximo ciclo!"));
     }
 
-    function abrirModalParcial(id) {
-        let l = lancamentos.find(x => x.id === id); if(!l) return;
-        document.getElementById("parcialId").value = l.id;
-        document.getElementById("parcialDesc").innerText = l.desc;
-        document.getElementById("parcialValorTotal").value = l.valor.toFixed(2);
-        document.getElementById("parcialValorPago").value = "";
-        document.getElementById("parcialDataRestante").value = "";
-        document.getElementById("modalParcial").style.display = 'flex';
-    }
-
+    function abrirModalParcial(id) { let l = lancamentos.find(x => x.id === id); if(!l) return; document.getElementById("parcialId").value = l.id; document.getElementById("parcialDesc").innerText = l.desc; document.getElementById("parcialValorTotal").value = l.valor.toFixed(2); document.getElementById("parcialValorPago").value = ""; document.getElementById("parcialDataRestante").value = ""; document.getElementById("modalParcial").style.display = 'flex'; }
     function confirmarParcial() {
-        let id = document.getElementById("parcialId").value;
-        let l = lancamentos.find(x => x.id === id);
-        let pago = parseFloat(document.getElementById("parcialValorPago").value);
-        let dataRestante = document.getElementById("parcialDataRestante").value;
-        
-        if(!pago || pago <= 0 || pago >= l.valor) return alert("O valor pago deve ser maior que zero e menor que o total.");
-        if(!dataRestante) return alert("Informe a nova data de vencimento para o saldo restante.");
-        
-        let restante = l.valor - pago;
-        let batch = db.batch();
-        
+        let id = document.getElementById("parcialId").value; let l = lancamentos.find(x => x.id === id); let pago = parseFloat(document.getElementById("parcialValorPago").value); let dataRestante = document.getElementById("parcialDataRestante").value;
+        if(!pago || pago <= 0 || pago >= l.valor) return alert("O valor pago deve ser maior que zero e menor que o total."); if(!dataRestante) return alert("Informe a nova data de vencimento para o saldo restante.");
+        let restante = l.valor - pago; let batch = db.batch();
         batch.update(db.collection("lancamentos").doc(id), { valor: pago, status: "Efetuada", desc: l.desc + " (Pago Parcial)" });
-        
-        let idNovo = "PARC_" + Date.now().toString();
-        let novoL = {...l};
-        novoL.id = idNovo;
-        novoL.valor = restante;
-        novoL.data = dataRestante;
-        novoL.status = "A Vencer";
-        novoL.desc = l.desc.split(' (Pago')[0] + " (Saldo Restante)";
-        batch.set(db.collection("lancamentos").doc(idNovo), novoL);
-        
-        batch.commit().then(() => {
-            registrarLog("FINANCEIRO", `Pagamento parcial. Despesa: ${l.desc}. Pago: R$ ${pago}. Restante jogado para ${formatarDataSimples(dataRestante)}`);
-            alert("Pagamento parcial registrado. O saldo restante foi lançado para a nova data!");
-            document.getElementById("modalParcial").style.display = 'none';
-        });
+        let idNovo = "PARC_" + Date.now().toString(); let novoL = {...l}; novoL.id = idNovo; novoL.valor = restante; novoL.data = dataRestante; novoL.status = "A Vencer"; novoL.desc = l.desc.split(' (Pago')[0] + " (Saldo Restante)"; batch.set(db.collection("lancamentos").doc(idNovo), novoL);
+        batch.commit().then(() => { registrarLog("FINANCEIRO", `Pagamento parcial. Despesa: ${l.desc}. Pago: R$ ${pago}. Restante jogado para ${formatarDataSimples(dataRestante)}`); alert("Pagamento parcial registrado. O saldo restante foi lançado para a nova data!"); document.getElementById("modalParcial").style.display = 'none'; });
     }
 
     function editarLanc(id) { let l = lancamentos.find(x => x.id === id); if(!l) return; document.getElementById("editId").value = l.id; document.getElementById("cadDesc").value = l.desc; document.getElementById("cadCat").value = l.categoria; document.getElementById("cadConta").value = l.conta || contasLista[0]; document.getElementById("cadValor").value = l.valor; document.getElementById("cadData").value = l.data; document.getElementById("cadTipo").value = l.tipo; document.getElementById("cadStatus").value = l.status; document.getElementById("tituloCadastro").innerText = "✏️ Editar Lançamento"; document.querySelector("#painelCadastro .btn").innerText = "Salvar Alterações"; if(document.getElementById("cadFreq")) document.getElementById("boxFreqFinanceiro").style.display = "none"; }
@@ -1053,14 +995,20 @@
     function gerarDRE() { let m = document.getElementById("dreMes").value; let rec = 0, dev = 0, cVar = 0, cFix = 0; let tEnt = 0, tSai = 0; let lancMes = lancamentos.filter(l => l.data.startsWith(m)); lancMes.forEach(l => { if(l.tipo === "Crédito") tEnt += l.valor; else if(l.tipo === "Débito") tSai += l.valor; if(l.status.toLowerCase().includes("efetuada")) { if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor; else if(l.categoria.includes("Devolu")) dev += l.valor; else if(["Impostos de Venda", "Taxas de Pagamento", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Perdas e Avarias"].includes(l.categoria)) cVar += l.valor; else cFix += l.valor; } }); document.getElementById("resDashEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; document.getElementById("resDashSaidas").innerText = `R$ ${tSai.toFixed(2)}`; document.getElementById("resDashSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`; document.getElementById("resDashSaldo").style.color = (tEnt-tSai) >= 0 ? "#4a3022" : "#e74c3c"; let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix; document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`; if (lucro > 0) { let capGiro = lucro * 0.30; let reserva = lucro * 0.20; let manu = lucro * 0.10; let reinv = lucro * 0.10; let cresc = lucro * 0.10; let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucro - totDed; let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50; document.getElementById("dstGiro").innerText = `R$ ${capGiro.toFixed(2)}`; document.getElementById("dstReserva").innerText = `R$ ${reserva.toFixed(2)}`; document.getElementById("dstManu").innerText = `R$ ${manu.toFixed(2)}`; document.getElementById("dstReinv").innerText = `R$ ${reinv.toFixed(2)}`; document.getElementById("dstCresc").innerText = `R$ ${cresc.toFixed(2)}`; document.getElementById("dstDeducao").innerText = `R$ ${totDed.toFixed(2)}`; document.getElementById("dstSaldo").innerText = `R$ ${saldo.toFixed(2)}`; document.getElementById("dstSocios").innerText = `R$ ${valSocios.toFixed(2)}`; document.getElementById("dstCaixa").innerText = `R$ ${valCaixa.toFixed(2)}`; } else { ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = "R$ 0.00"); } }
 
     // ==========================================
-    // MÓDULO COMERCIAL E VENDAS (+ MODAL FINANCEIRO)
+    // MÓDULO PERDAS E AVARIAS
+    // ==========================================
+    function abrirModalPerda(id, tipo) { let item = tipo === 'insumo' ? produtos.find(x => x.id === id) : produtosFinais.find(x => x.id === id); if (!item) return; let custo = tipo === 'insumo' ? item.custo : item.custo; document.getElementById("perdaItemId").value = id; document.getElementById("perdaTipo").value = tipo; document.getElementById("perdaItemNome").value = item.nome; document.getElementById("perdaCustoUnit").value = custo; document.getElementById("perdaQtd").value = ""; document.getElementById("perdaData").value = new Date().toISOString().substring(0,10); document.getElementById("perdaValorTotal").innerText = "R$ 0,00"; document.getElementById("modalPerda").style.display = "flex"; }
+    function calcularTotalPerda() { let custoUnit = parseFloat(document.getElementById("perdaCustoUnit").value) || 0; let qtd = parseFloat(document.getElementById("perdaQtd").value) || 0; document.getElementById("perdaValorTotal").innerText = formatarDinheiro(custoUnit * qtd); }
+    function efetuarRegistroPerda() { let id = document.getElementById("perdaItemId").value; let tipo = document.getElementById("perdaTipo").value; let nome = document.getElementById("perdaItemNome").value; let qtd = parseFloat(document.getElementById("perdaQtd").value); let data = document.getElementById("perdaData").value; let motivo = document.getElementById("perdaMotivo").value; let custoUnit = parseFloat(document.getElementById("perdaCustoUnit").value); let totalPerda = qtd * custoUnit; if (isNaN(qtd) || qtd <= 0) return alert("Informe uma quantidade válida."); if (!data) return alert("Informe a data."); if (!confirm(`Confirmar registro de perda de ${qtd}x ${nome}?\nIsso lançará uma despesa de ${formatarDinheiro(totalPerda)} no Financeiro.`)) return; let batch = db.batch(); if (tipo === 'insumo') { let p = produtos.find(x => x.id === id); if(p) batch.update(db.collection("produtos").doc(id), { qtd: p.qtd - qtd }); } let lancId = "PERDA_" + Date.now().toString(); let lanc = { id: lancId, desc: `Perda/Avaria: ${nome} (${motivo})`, categoria: "Perdas e Avarias", conta: contasLista.length > 0 ? contasLista[0] : "Caixa Principal", valor: totalPerda, data: data, tipo: "Débito", status: "Efetuada" }; batch.set(db.collection("lancamentos").doc(lancId), lanc); batch.commit().then(() => { registrarLog("ESTOQUE", `Registrou perda de ${qtd}x ${nome} (${motivo}) - Total: R$ ${totalPerda.toFixed(2)}`); alert("Perda registrada com sucesso!"); document.getElementById("modalPerda").style.display = "none"; }).catch(err => alert("Erro ao registrar perda: " + err.message)); }
+
+    // ==========================================
+    // MÓDULO COMERCIAL E VENDAS (+ MODAL FINANCEIRO) + WHATSAPP E PDF
     // ==========================================
     function atualizarTaxaVenda() {
         let forma = document.getElementById("vendaFinForma").value;
         let objForma = formasPagamento.find(x => x.nome === forma);
         let taxa = objForma ? objForma.taxa : 0;
         document.getElementById("vendaFinTaxa").value = taxa + "%";
-        
         let totalVal = parseFloat(document.getElementById("vendaFinTotal").value.replace('R$','').replace('.','').replace(',','.').trim()) || 0;
         let descReais = (totalVal * taxa) / 100;
         document.getElementById("vendaFinAvisoTaxa").innerText = taxa > 0 ? `A taxa de ${formatarDinheiro(descReais)} será lançada como despesa separada.` : "";
@@ -1074,66 +1022,37 @@
         document.getElementById("vendaFinVenc").value = new Date().toISOString().substring(0,10);
         document.getElementById("vendaFinFreq").value = "Único";
         document.getElementById("divVendaQtdFreq").style.display = "none";
-        
         if(formasPagamento.length > 0) document.getElementById("vendaFinForma").value = formasPagamento[0].nome;
         atualizarTaxaVenda();
-        
         document.getElementById("modalConcluirVenda").style.display = "flex";
     }
 
     function finalizarVendaComFinanceiro() {
         let idVenda = document.getElementById("vendaFinId").value;
         let v = vendas.find(x => x.id === idVenda); if(!v) return;
-        
-        let conta = document.getElementById("vendaFinConta").value;
-        let dataVenc = document.getElementById("vendaFinVenc").value;
-        let freq = document.getElementById("vendaFinFreq").value;
-        let qtdFreq = parseInt(document.getElementById("vendaFinQtdFreq").value) || 1;
-        let forma = document.getElementById("vendaFinForma").value;
-        let objForma = formasPagamento.find(x => x.nome === forma);
-        let taxa = objForma ? objForma.taxa : 0;
-
+        let conta = document.getElementById("vendaFinConta").value; let dataVenc = document.getElementById("vendaFinVenc").value; let freq = document.getElementById("vendaFinFreq").value; let qtdFreq = parseInt(document.getElementById("vendaFinQtdFreq").value) || 1;
+        let forma = document.getElementById("vendaFinForma").value; let objForma = formasPagamento.find(x => x.nome === forma); let taxa = objForma ? objForma.taxa : 0;
         if(!dataVenc) return alert("Informe a data de vencimento.");
 
-        let batch = db.batch();
-        let valBase = v.totalGeral;
-        let valParcela = freq === 'Parcelado' ? (valBase / qtdFreq) : valBase;
-        
-        // A Taxa também é dividida pelas parcelas para ficar justo no DRE mensal
-        let valorTaxaPorParcela = (valParcela * taxa) / 100;
-        
-        let dataBase = new Date(dataVenc + "T12:00:00Z");
+        let batch = db.batch(); let valBase = v.totalGeral; let valParcela = freq === 'Parcelado' ? (valBase / qtdFreq) : valBase; let valorTaxaPorParcela = (valParcela * taxa) / 100; let dataBase = new Date(dataVenc + "T12:00:00Z");
 
         for(let i = 1; i <= qtdFreq; i++) {
-            let d = new Date(dataBase);
-            d.setMonth(d.getMonth() + (i - 1));
-            let strData = d.toISOString().substring(0,10);
-            
+            let d = new Date(dataBase); d.setMonth(d.getMonth() + (i - 1)); let strData = d.toISOString().substring(0,10);
             let descReceita = `Venda #${v.id.substring(v.id.length-4)} - ${v.clienteNome}`;
-            if(freq === 'Parcelado') descReceita += ` (${i}/${qtdFreq})`;
-            if(freq === 'Recorrente' && qtdFreq > 1) descReceita += ` (Ref. ${i}/${qtdFreq})`;
-            descReceita += ` [${forma}]`;
+            if(freq === 'Parcelado') descReceita += ` (${i}/${qtdFreq})`; if(freq === 'Recorrente' && qtdFreq > 1) descReceita += ` (Ref. ${i}/${qtdFreq})`; descReceita += ` [${forma}]`;
 
-            // Lança a Receita TOTAL (Crédito)
             let idRec = "REC_" + Date.now().toString() + i + Math.floor(Math.random()*100);
             let lancReceita = { id: idRec, desc: descReceita, categoria: "Vendas de Produtos", conta: conta, valor: valParcela, data: strData, tipo: "Crédito", status: "Efetuada" };
             batch.set(db.collection("lancamentos").doc(idRec), lancReceita);
 
-            // Lança a Despesa da Taxa da Maquininha/Marketplace (Débito)
             if(valorTaxaPorParcela > 0) {
                 let idTaxa = "TAX_" + Date.now().toString() + i + Math.floor(Math.random()*100);
                 let lancTaxa = { id: idTaxa, desc: `Taxa ${forma} - Venda #${v.id.substring(v.id.length-4)}`, categoria: "Taxas de Pagamento", conta: conta, valor: valorTaxaPorParcela, data: strData, tipo: "Débito", status: "Efetuada" };
                 batch.set(db.collection("lancamentos").doc(idTaxa), lancTaxa);
             }
         }
-
         batch.update(db.collection("vendas").doc(v.id), { status: "Entregue" });
-
-        batch.commit().then(() => {
-            registrarLog("COMERCIAL", `Pedido ${v.id.substring(v.id.length-4)} finalizado e lançado no financeiro (${forma}).`);
-            alert("Venda Finalizada! Lançamentos financeiros (Receita e Taxas) gerados com sucesso.");
-            document.getElementById("modalConcluirVenda").style.display = "none";
-        });
+        batch.commit().then(() => { registrarLog("COMERCIAL", `Pedido ${v.id.substring(v.id.length-4)} finalizado e lançado no financeiro (${forma}).`); alert("Venda Finalizada! Lançamentos financeiros gerados com sucesso."); document.getElementById("modalConcluirVenda").style.display = "none"; });
     }
 
     function avancarStatusVenda(id) {
@@ -1144,117 +1063,105 @@
                 v.itens.forEach(itemVenda => { let pFinal = produtosFinais.find(pf => pf.id === itemVenda.prodId); if(pFinal && pFinal.receita) { pFinal.receita.forEach(ingrediente => { let qtdDeduzir = ingrediente.qtd * itemVenda.qtd; if(!deducoes[ingrediente.insumoId]) deducoes[ingrediente.insumoId] = 0; deducoes[ingrediente.insumoId] += qtdDeduzir; }); } });
                 Object.keys(deducoes).forEach(insumoId => { let pEstoque = produtos.find(x => x.id === insumoId); if(pEstoque) { let prodRef = db.collection("produtos").doc(insumoId); batch.update(prodRef, { qtd: pEstoque.qtd - deducoes[insumoId] }); } });
                 batch.update(db.collection("vendas").doc(v.id), { status: "Em Produção" });
-                batch.commit().then(() => { registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} gerado. Insumos abatidos do estoque.`); alert("Pedido gerado e Matéria-prima deduzida do Estoque!"); });
+                batch.commit().then(() => { registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} gerado. Insumos abatidos.`); alert("Pedido gerado e Matéria-prima deduzida do Estoque!"); });
             }
         } else if (v.status === "Em Produção") {
             if(confirm("Marcar pedido como Pronto?")) { db.collection("vendas").doc(id).update({status: "Pronto"}); registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} marcado como Pronto.`); }
-        } else if (v.status === "Pronto") {
-            // AQUI AGORA ABRE O MODAL PARA DEFINIR COMO O CLIENTE PAGOU
-            abrirModalConcluirVenda(id);
-        }
+        } else if (v.status === "Pronto") { abrirModalConcluirVenda(id); }
     }
 
     function carregarSelectsComercial() { let htmlCli = '<option value="">Selecione um cliente...</option>'; clientes.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(c => htmlCli += `<option value="${c.id}">${c.nome}</option>`); document.getElementById("vendaCliente").innerHTML = htmlCli; let htmlProd = '<option value="">Selecione um produto final...</option>'; produtosFinais.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(p => htmlProd += `<option value="${p.id}">${p.nome} (Venda: R$ ${p.precoVenda.toFixed(2)})</option>`); document.getElementById("vendaProduto").innerHTML = htmlProd; }
     function adicionarItemCarrinho() { let prodId = document.getElementById("vendaProduto").value; let qtd = parseInt(document.getElementById("vendaQtd").value); if(!prodId || isNaN(qtd) || qtd <= 0) return alert("Selecione um produto e quantidade válida."); let p = produtosFinais.find(x => x.id === prodId); if(p) { carrinhoAtual.push({ prodId: p.id, nome: p.nome, preco: p.precoVenda, qtd: qtd, total: p.precoVenda * qtd }); atualizarTotaisCarrinho(); } }
     function removerItemCarrinho(index) { carrinhoAtual.splice(index, 1); atualizarTotaisCarrinho(); }
-    function atualizarTotaisCarrinho() { const tb = document.getElementById("tbCarrinho"); tb.innerHTML = ""; let subtotal = 0; carrinhoAtual.forEach((item, i) => { subtotal += item.total; let tr = document.createElement("tr"); tr.innerHTML = `<td>${item.nome}</td><td>${item.qtd}</td><td>${formatarDinheiro(item.total)}</td><td><button class="btn-acao" style="color:red; font-size:12px; padding:0;" onclick="removerItemCarrinho(${i})">🗑️</button></td>`; tb.appendChild(tr); }); let desc = parseFloat(document.getElementById("vendaDesconto").value) || 0; let totalFinal = subtotal - desc; if(totalFinal < 0) totalFinal = 0; document.getElementById("vendaTotalGeral").innerText = formatarDinheiro(totalFinal); }
-    function limparCarrinho() { carrinhoAtual = []; document.getElementById("vendaCliente").value = ""; document.getElementById("vendaProduto").value = ""; document.getElementById("vendaQtd").value = "1"; document.getElementById("vendaDesconto").value = "0"; atualizarTotaisCarrinho(); }
-    function salvarOrcamento() { if(carrinhoAtual.length === 0) return alert("O carrinho está vazio."); let cliId = document.getElementById("vendaCliente").value; if(!cliId) return alert("Selecione o Cliente."); let cliente = clientes.find(x => x.id === cliId); let subtotal = carrinhoAtual.reduce((acc, item) => acc + item.total, 0); let desc = parseFloat(document.getElementById("vendaDesconto").value) || 0; let vendaObj = { id: Date.now().toString(), clienteId: cliId, clienteNome: cliente.nome, clienteTel: cliente.tel, dataCriacao: new Date().toISOString().substring(0,10), itens: carrinhoAtual, subtotal: subtotal, desconto: desc, totalGeral: subtotal - desc, status: "Orçamento" }; db.collection("vendas").doc(vendaObj.id).set(vendaObj).then(() => { registrarLog("COMERCIAL", `Gerou orçamento para ${cliente.nome} | Total: ${formatarDinheiro(vendaObj.totalGeral)}`); alert("Orçamento salvo com sucesso!"); limparCarrinho(); }); }
+    
+    // ATUALIZADO COM FRETE
+    function atualizarTotaisCarrinho() { 
+        const tb = document.getElementById("tbCarrinho"); tb.innerHTML = ""; let subtotal = 0; 
+        carrinhoAtual.forEach((item, i) => { subtotal += item.total; let tr = document.createElement("tr"); tr.innerHTML = `<td>${item.nome}</td><td>${item.qtd}</td><td>${formatarDinheiro(item.total)}</td><td><button class="btn-acao" style="color:red; font-size:12px; padding:0;" onclick="removerItemCarrinho(${i})">🗑️</button></td>`; tb.appendChild(tr); }); 
+        let desc = parseFloat(document.getElementById("vendaDesconto").value) || 0; 
+        let frete = parseFloat(document.getElementById("vendaFrete").value) || 0; 
+        let totalFinal = subtotal - desc + frete; 
+        if(totalFinal < 0) totalFinal = 0; 
+        document.getElementById("vendaTotalGeral").innerText = formatarDinheiro(totalFinal); 
+    }
+    
+    function limparCarrinho() { carrinhoAtual = []; document.getElementById("vendaCliente").value = ""; document.getElementById("vendaProduto").value = ""; document.getElementById("vendaQtd").value = "1"; document.getElementById("vendaDesconto").value = "0"; document.getElementById("vendaFrete").value = "0"; atualizarTotaisCarrinho(); }
+    
+    // ATUALIZADO COM FRETE E EMITENTE
+    function salvarOrcamento() { 
+        if(carrinhoAtual.length === 0) return alert("O carrinho está vazio."); 
+        let cliId = document.getElementById("vendaCliente").value; if(!cliId) return alert("Selecione o Cliente."); 
+        let cliente = clientes.find(x => x.id === cliId); 
+        let subtotal = carrinhoAtual.reduce((acc, item) => acc + item.total, 0); 
+        let desc = parseFloat(document.getElementById("vendaDesconto").value) || 0; 
+        let frete = parseFloat(document.getElementById("vendaFrete").value) || 0; 
+        let emitente = document.getElementById("lblUsuario").innerText || "Sistema";
+        
+        let vendaObj = { id: Date.now().toString(), clienteId: cliId, clienteNome: cliente.nome, clienteTel: cliente.tel, dataCriacao: new Date().toISOString().substring(0,10), itens: carrinhoAtual, subtotal: subtotal, desconto: desc, frete: frete, totalGeral: (subtotal - desc + frete), status: "Orçamento", emitente: emitente }; 
+        db.collection("vendas").doc(vendaObj.id).set(vendaObj).then(() => { registrarLog("COMERCIAL", `Gerou orçamento para ${cliente.nome} | Total: ${formatarDinheiro(vendaObj.totalGeral)}`); alert("Orçamento salvo com sucesso!"); limparCarrinho(); }); 
+    }
+
     function renderizarComercial() {
         const tbody = document.getElementById("tbComercial"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaVenda").value.toLowerCase(); let status = document.getElementById("fStatusVenda").value; let mes = document.getElementById("fMesVenda").value;
         let qtdOrc = 0, qtdProd = 0, qtdPronto = 0, qtdEnt = 0;
         let filtrados = vendas.filter(v => { if(v.status === "Orçamento") qtdOrc++; if(v.status === "Em Produção") qtdProd++; if(v.status === "Pronto") qtdPronto++; if(v.status === "Entregue") qtdEnt++; let matchBusca = v.clienteNome.toLowerCase().includes(busca); let matchStatus = status === "Todos" || v.status === status; let matchMes = v.dataCriacao.startsWith(mes); return matchBusca && matchStatus && matchMes; });
         filtrados.sort((a,b) => b.dataCriacao.localeCompare(a.dataCriacao)).forEach(v => {
             let tr = document.createElement("tr"); let corBadge = v.status === "Orçamento" ? "badge-orcamento" : (v.status === "Em Produção" ? "badge-producao" : (v.status === "Pronto" ? "badge-pronto" : "badge-entregue"));
-            let btnAvancar = ""; if(v.status === "Orçamento") btnAvancar = `<button class="btn-acao-topo" style="background:#f39c12; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Converter em Pedido (Baixa Estoque)</button>`; else if(v.status === "Em Produção") btnAvancar = `<button class="btn-acao-topo" style="background:#3498db; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Marcar como Pronto</button>`; else if(v.status === "Pronto") btnAvancar = `<button class="btn-acao-topo" style="background:#27ae60; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Lançar Pagamento e Entregar</button>`; else btnAvancar = `<span style="color:#27ae60; font-size:12px; font-weight:bold;">Finalizado</span>`;
-            tr.innerHTML = `<td>${formatarDataSimples(v.dataCriacao)}</td><td><strong>${v.clienteNome}</strong></td><td><strong style="color:#27ae60;">${formatarDinheiro(v.totalGeral)}</strong></td><td style="text-align:center;"><span class="badge ${corBadge}">${v.status}</span></td><td style="text-align:center; display:flex; flex-direction:column; gap:5px; align-items:center;">${btnAvancar}<div><button class="btn-acao" title="Imprimir" onclick="abrirModalImpressao('${v.id}')">🖨️</button><button class="btn-acao" style="color:red;" onclick="removerVenda('${v.id}')">🗑️</button></div></td>`; tbody.appendChild(tr);
+            let btnAvancar = ""; if(v.status === "Orçamento") btnAvancar = `<button class="btn-acao-topo" style="background:#f39c12; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Converter em Pedido</button>`; else if(v.status === "Em Produção") btnAvancar = `<button class="btn-acao-topo" style="background:#3498db; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Marcar como Pronto</button>`; else if(v.status === "Pronto") btnAvancar = `<button class="btn-acao-topo" style="background:#27ae60; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Lançar Pagto e Entregar</button>`; else btnAvancar = `<span style="color:#27ae60; font-size:12px; font-weight:bold;">Finalizado</span>`;
+            tr.innerHTML = `<td>${formatarDataSimples(v.dataCriacao)}</td><td><strong>${v.clienteNome}</strong></td><td><strong style="color:#27ae60;">${formatarDinheiro(v.totalGeral)}</strong></td><td style="text-align:center;"><span class="badge ${corBadge}">${v.status}</span></td><td style="text-align:center; display:flex; flex-direction:column; gap:5px; align-items:center;">${btnAvancar}<div><button class="btn-acao" title="Imprimir / PDF / WhatsApp" onclick="abrirModalImpressao('${v.id}')">🖨️</button><button class="btn-acao" style="color:red;" onclick="removerVenda('${v.id}')">🗑️</button></div></td>`; tbody.appendChild(tr);
         });
         document.getElementById("resComercialOrc").innerText = qtdOrc; document.getElementById("resComercialProd").innerText = qtdProd; document.getElementById("resComercialPronto").innerText = qtdPronto; document.getElementById("resComercialEnt").innerText = qtdEnt;
         let totalConvertidos = qtdProd + qtdPronto + qtdEnt; let totalGeral = qtdOrc + totalConvertidos; document.getElementById("resComercialTaxa").innerText = (totalGeral > 0 ? ((totalConvertidos / totalGeral) * 100).toFixed(0) : 0) + "%";
     }
-    
     function removerVenda(id) { if(confirm("Atenção: Excluir um pedido NÃO devolve os insumos ao estoque. Deseja excluir mesmo assim?")) { registrarLog("COMERCIAL", `Excluiu orçamento/pedido ID: ${id}`); db.collection("vendas").doc(id).delete(); } }
-    function abrirModalImpressao(id) { let v = vendas.find(x => x.id === id); if(!v) return; document.getElementById("printTipoDoc").innerText = v.status === "Orçamento" ? "ORÇAMENTO" : "PEDIDO"; document.getElementById("printId").innerText = v.id.substring(v.id.length - 6); document.getElementById("printData").innerText = formatarDataSimples(v.dataCriacao); document.getElementById("printCliNome").innerText = v.clienteNome; document.getElementById("printCliTel").innerText = v.clienteTel || "Não informado"; const tbody = document.getElementById("printTbItens"); tbody.innerHTML = ""; v.itens.forEach(item => { let tr = document.createElement("tr"); tr.innerHTML = `<td>${item.qtd}</td><td>${item.nome}</td><td>${formatarDinheiro(item.preco)}</td><td>${formatarDinheiro(item.total)}</td>`; tbody.appendChild(tr); }); document.getElementById("printSubtotal").innerText = formatarDinheiro(v.subtotal); document.getElementById("printDesconto").innerText = formatarDinheiro(v.desconto); document.getElementById("printTotalGeral").innerText = formatarDinheiro(v.totalGeral); document.getElementById("modalImpressao").style.display = "flex"; }
-    function gerarPDFOrcamento() { const elemento = document.getElementById('areaImpressaoA4'); let nomeDoc = document.getElementById("printTipoDoc").innerText; let idDoc = document.getElementById("printId").innerText; html2pdf().set({ margin: 10, filename: `${nomeDoc}_OncaProsa_${idDoc}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(elemento).save(); }
-
-    // ==========================================
-    // MÓDULO: COMPRAS 
-    // ==========================================
-    function calcularRateioCompra() {
-        let qtd = parseFloat(document.getElementById("compraQtd").value) || 0;
-        let lote = parseFloat(document.getElementById("compraLote").value) || 0;
-        let frete = parseFloat(document.getElementById("compraFrete").value) || 0;
-        let imposto = parseFloat(document.getElementById("compraImposto").value) || 0;
-        let total = lote + frete + imposto;
-        let unitario = qtd > 0 ? (total / qtd) : 0;
-        document.getElementById("lblCompraTotal").innerText = formatarDinheiro(total);
-        document.getElementById("lblCompraCustoUnit").innerText = formatarDinheiro(unitario);
-        return { total: total, unitario: unitario, qtd: qtd };
-    }
-
-    function efetuarCompra() {
-        let insumoId = document.getElementById("compraInsumo").value;
-        let forn = document.getElementById("compraFornecedor").value;
-        let calc = calcularRateioCompra();
-        let dataC = document.getElementById("compraData").value;
-        let conta = document.getElementById("compraConta").value;
-        let lancarFin = document.getElementById("compraLancarFin").checked;
-
-        if(!insumoId || calc.qtd <= 0 || calc.total <= 0) return alert("Selecione um insumo válido, quantidade e informe os valores.");
-        let msgConfirm = lancarFin ? `O estoque será alimentado e os lançamentos gerados no Financeiro.` : `Apenas o estoque será alimentado (SEM lançamento financeiro).`;
-        if(!confirm(`Confirma o registro desta compra?\n\n${msgConfirm}`)) return;
-
-        let batch = db.batch();
-        let compraId = Date.now().toString();
-        let pAtual = produtos.find(x => x.id === insumoId);
-        let insumoNome = pAtual.nome;
-        let marca = pAtual.marca || 'S/M';
+    
+    // ATUALIZADO IMPRESSAO/WHATSAPP COM FRETE E VALIDADE
+    function abrirModalImpressao(id) { 
+        let v = vendas.find(x => x.id === id); if(!v) return; 
+        vendaAtualImpressao = v; // Guarda para o Whatsapp
         
-        let objCompra = { id: compraId, insumoId: insumoId, insumoNome: insumoNome, fornecedor: forn, qtd: calc.qtd, valorLote: parseFloat(document.getElementById("compraLote").value)||0, frete: parseFloat(document.getElementById("compraFrete").value)||0, impostos: parseFloat(document.getElementById("compraImposto").value)||0, valorTotal: calc.total, custoUnitario: calc.unitario, data: dataC, contaPagamento: conta };
-        batch.set(db.collection("compras").doc(compraId), objCompra);
-        batch.update(db.collection("produtos").doc(insumoId), { qtd: pAtual.qtd + calc.qtd, custo: calc.unitario });
+        document.getElementById("printTipoDoc").innerText = v.status === "Orçamento" ? "ORÇAMENTO" : "PEDIDO"; 
+        document.getElementById("printId").innerText = v.id.substring(v.id.length - 6); 
+        document.getElementById("printData").innerText = formatarDataSimples(v.dataCriacao); 
+        document.getElementById("printCliNome").innerText = v.clienteNome; 
+        document.getElementById("printCliTel").innerText = v.clienteTel || "Não informado"; 
+        
+        document.getElementById("printEmitente").innerText = v.emitente || "Não informado";
+        let dValidade = new Date(v.dataCriacao + "T12:00:00Z");
+        dValidade.setDate(dValidade.getDate() + 7);
+        document.getElementById("printValidade").innerText = dValidade.toLocaleDateString('pt-BR');
 
-        if(lancarFin) {
-            let venc = document.getElementById("compraVencimento").value;
-            let freq = document.getElementById("compraFreq").value;
-            let qtdFreq = parseInt(document.getElementById("compraQtdFreq").value) || 1;
-            
-            if(!venc) return alert("Informe a data de vencimento para o lançamento.");
-            
-            let valBase = calc.total;
-            let valParcela = freq === 'Parcelado' ? (valBase / qtdFreq) : valBase;
-            let dataBase = new Date(venc + "T12:00:00Z");
-
-            for(let i = 1; i <= qtdFreq; i++) {
-                let d = new Date(dataBase); d.setMonth(d.getMonth() + (i - 1));
-                let strData = d.toISOString().substring(0,10);
-                
-                let descLanc = `Compra: ${insumoNome} - ${marca} - ${forn||'S/F'}`;
-                if(freq === 'Parcelado') descLanc += ` (${i}/${qtdFreq})`;
-                if(freq === 'Recorrente' && qtdFreq > 1) descLanc += ` (Ref. ${i}/${qtdFreq})`;
-
-                let idLanc = "COMP_" + compraId + "_" + i;
-                let lanc = { id: idLanc, desc: descLanc, categoria: "Insumos de Produção", conta: conta, valor: valParcela, data: strData, tipo: "Débito", status: "A Vencer", isRecorrente: (freq === 'Recorrente'), parcelaAtual: i, parcelaTotal: qtdFreq };
-                batch.set(db.collection("lancamentos").doc(idLanc), lanc);
-            }
-        }
-
-        batch.commit().then(() => {
-            registrarLog("COMPRAS", `Efetuou compra de ${calc.qtd}x ${insumoNome}. Estoque atualizado.`);
-            alert("Compra registrada com sucesso!");
-            document.getElementById("compraInsumo").value = ""; document.getElementById("compraQtd").value = "1"; document.getElementById("compraLote").value = "0"; document.getElementById("compraFrete").value = "0"; document.getElementById("compraImposto").value = "0"; document.getElementById("compraLancarFin").checked = false; document.getElementById("divCompraFin").style.display = "none"; calcularRateioCompra();
-        });
+        const tbody = document.getElementById("printTbItens"); tbody.innerHTML = ""; 
+        v.itens.forEach(item => { let tr = document.createElement("tr"); tr.innerHTML = `<td>${item.qtd}</td><td>${item.nome}</td><td>${formatarDinheiro(item.preco)}</td><td>${formatarDinheiro(item.total)}</td>`; tbody.appendChild(tr); }); 
+        
+        document.getElementById("printSubtotal").innerText = formatarDinheiro(v.subtotal); 
+        document.getElementById("printDesconto").innerText = formatarDinheiro(v.desconto); 
+        document.getElementById("printFrete").innerText = formatarDinheiro(v.frete || 0); 
+        document.getElementById("printTotalGeral").innerText = formatarDinheiro(v.totalGeral); 
+        
+        document.getElementById("modalImpressao").style.display = "flex"; 
     }
 
-    function renderizarCompras() {
-        const tbody = document.getElementById("tbCompras"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaCompra").value.toLowerCase(); let mes = document.getElementById("fMesCompra").value;
-        let filtrados = compras.filter(c => c.insumoNome.toLowerCase().includes(busca) && c.data.startsWith(mes));
-        filtrados.sort((a,b) => b.data.localeCompare(a.data)).forEach(c => {
-            let tr = document.createElement("tr");
-            tr.innerHTML = `<td>${formatarDataSimples(c.data)}</td><td><strong>${c.insumoNome}</strong></td><td>${c.fornecedor||'-'}</td><td style="color:#2980b9; font-weight:bold;">${c.qtd}</td><td style="color:#27ae60;">${formatarDinheiro(c.custoUnitario)}</td><td style="color:#e74c3c; font-weight:bold;">${formatarDinheiro(c.valorTotal)}</td>`;
-            tbody.appendChild(tr);
-        });
+    function enviarWhatsappOrcamento() {
+        if(!vendaAtualImpressao) return;
+        let v = vendaAtualImpressao;
+        let telFormatado = v.clienteTel.replace(/\D/g, '');
+        if(!telFormatado) return alert("O cliente não possui um telefone válido cadastrado.");
+        
+        let msg = `Olá, *${v.clienteNome}*!\n\nAqui é da *Onça Prosa* 🐆.\nSegue o resumo do seu orçamento (Nº ${v.id.substring(v.id.length-6)}):\n\n`;
+        v.itens.forEach(i => msg += `- ${i.qtd}x ${i.nome}\n`);
+        msg += `\n*Subtotal:* ${formatarDinheiro(v.subtotal)}`;
+        if(v.desconto > 0) msg += `\n*Desconto:* -${formatarDinheiro(v.desconto)}`;
+        if(v.frete > 0) msg += `\n*Frete:* ${formatarDinheiro(v.frete)}`;
+        msg += `\n*Total a Pagar:* ${formatarDinheiro(v.totalGeral)}`;
+        msg += `\n\n_Válido até: ${document.getElementById("printValidade").innerText}_`;
+        msg += `\n\nCaso queira o PDF detalhado deste orçamento, é só pedir! Ficamos à disposição.`;
+
+        let url = `https://wa.me/55${telFormatado}?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
     }
+
+    function gerarPDFOrcamento() { const elemento = document.getElementById('areaImpressaoA4'); let nomeDoc = document.getElementById("printTipoDoc").innerText; let idDoc = document.getElementById("printId").innerText; html2pdf().set({ margin: 10, filename: `${nomeDoc}_OncaProsa_${idDoc}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(elemento).save(); }
 
 </script>
 
