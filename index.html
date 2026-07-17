@@ -79,6 +79,17 @@
         .lista-itens li button { background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
         .admin-area { background: #fff3cd; padding: 20px; border-radius: 8px; border: 1px solid #ffeeba; box-sizing: border-box; }
 
+        /* Modais */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(74,48,34,0.8); display: none; justify-content: center; align-items: center; z-index: 10000; padding: 20px; box-sizing: border-box;}
+        .modal-box { background: white; padding: 25px; border-radius: 10px; width: 100%; box-shadow: 0 5px 25px rgba(0,0,0,0.3); max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
+        
+        /* Timeline CRM */
+        .historico-item { background: #faf9f7; padding: 12px; border-left: 4px solid #c8827a; border-radius: 4px; margin-bottom: 10px; font-size: 13px; position: relative; }
+        .historico-item .data-badge { font-weight: bold; color: #4a3022; margin-bottom: 4px; display: inline-block; }
+        .historico-item .tipo-badge { background: #e8dcc4; color: #4a3022; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 8px; }
+        .historico-item button.del-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 14px; }
+        .historico-item button.del-btn:hover { text-decoration: underline; }
+
         @media (max-width: 900px) { .layout-flex { flex-direction: column; } .painel-cadastro, .painel-conteudo { width: 100%; position: static; } .config-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -264,7 +275,7 @@
                 <div class="form-group">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fdf5f4; padding: 10px; border-radius: 6px; border: 1px solid #e8e3dc;">
                         <input type="checkbox" id="cliPromo" style="width: auto; margin: 0;" checked> 
-                        Autoriza envio de promoções e contato
+                        Autoriza envio de promoções
                     </label>
                 </div>
                 <button class="btn" id="btnSalvarCli" style="margin-top: 10px;" onclick="adicionarCliente()">Salvar Cliente</button>
@@ -327,7 +338,6 @@
         <!-- ========================================== -->
         <!-- MÓDULO 6: GESTÃO (Apenas Admin)            -->
         <!-- ========================================== -->
-        <!-- AQUI FOI CORRIGIDO O BUG: removido o "admin-req" da classe principal da DIV, mantendo o controle puramente visual pelas abas -->
         <div id="abaGestao" class="painel-branco aba-conteudo" style="display: none;">
             <h2>⚙️ Gestão de Equipe e Configurações</h2>
             
@@ -384,6 +394,44 @@
     </div>
 </div>
 
+<!-- ========================================== -->
+<!-- MODAL: HISTÓRICO DE ATIVIDADES CRM         -->
+<!-- ========================================== -->
+<div id="modalHistorico" class="modal-overlay">
+    <div class="modal-box" style="max-width: 550px;">
+        <h3 style="color: #4a3022; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">
+            📝 Histórico do Cliente
+            <button onclick="fecharModalHistorico()" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button>
+        </h3>
+        <p style="margin-top: -10px; color: #c8827a; font-weight: bold; font-size: 16px;" id="histNomeCliente">Nome do Cliente</p>
+        
+        <input type="hidden" id="histClienteId">
+        
+        <div style="background: #faf9f7; padding: 15px; border-radius: 8px; border: 1px solid #e8e3dc; margin-bottom: 20px;">
+            <h4 style="margin: 0 0 10px 0; color: #666;">Novo Registro</h4>
+            <div class="form-row">
+                <div class="form-group" style="flex:1;"><label>Data:</label><input type="date" id="histData"></div>
+                <div class="form-group" style="flex:1;"><label>Tipo de Contato:</label>
+                    <select id="histTipo">
+                        <option value="WhatsApp">WhatsApp</option>
+                        <option value="Ligação">Ligação</option>
+                        <option value="E-mail">E-mail</option>
+                        <option value="Reunião">Reunião</option>
+                        <option value="Venda">Venda</option>
+                        <option value="Reclamação">Reclamação</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group"><label>Descrição / Resumo:</label><input type="text" id="histDesc" placeholder="O que foi conversado ou negociado?"></div>
+            <button class="btn" style="background:#27ae60; padding: 10px;" onclick="salvarHistorico()">Registrar Atividade</button>
+        </div>
+
+        <h4 style="margin: 0 0 10px 0; color: #4a3022; border-bottom: 2px solid #e8e3dc; padding-bottom: 5px;">Últimas Atividades</h4>
+        <div id="listaHistorico" style="display: flex; flex-direction: column; gap: 5px;"></div>
+    </div>
+</div>
+
 <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI",
@@ -403,6 +451,7 @@
     let produtos = []; 
     let clientes = [];
     let fornecedores = [];
+    let historicoClientes = []; // NOVO: Armazena o histórico do CRM
     let usuariosLista = [];
     let contasLista = ["Caixa Principal", "Banco Inter", "Mercado Pago"];
     let statusLista = ["A Vencer", "Efetuada"];
@@ -411,7 +460,6 @@
     let userAutenticado = null;
     let perfilUsuario = 'Vendedor'; 
 
-    // VERIFICA SE O BANCO ESTÁ VAZIO
     db.collection("usuarios").limit(1).get().then(snap => {
         if(snap.empty) {
             document.getElementById('btnRegistrarPrimeiro').style.display = 'block';
@@ -451,7 +499,6 @@
     });
 
     function aplicarPermissoes() {
-        // Inicialmente escondemos abas exclusivas
         document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = 'none');
         
         if (perfilUsuario === 'Administrador') {
@@ -539,9 +586,18 @@
             if(document.getElementById('abaClientes').style.display !== 'none') renderizarClientes();
         });
 
+        // Ouvinte do Histórico CRM (NOVO)
+        db.collection("historico_clientes").onSnapshot(snap => {
+            historicoClientes = []; snap.forEach(doc => historicoClientes.push(doc.data()));
+            // Atualiza a tela se o modal de alguém estiver aberto
+            if(document.getElementById('modalHistorico').style.display === 'flex') {
+                renderizarHistoricoModal(document.getElementById('histClienteId').value);
+            }
+        });
+
         db.collection("fornecedores").onSnapshot(snap => {
             fornecedores = []; snap.forEach(doc => fornecedores.push(doc.data()));
-            carregarFornecedoresSelect(); // Atualiza o select do estoque
+            carregarFornecedoresSelect(); 
             if(document.getElementById('abaFornecedores').style.display !== 'none') renderizarFornecedores();
         });
 
@@ -599,13 +655,8 @@
         }).catch(err => alert("Erro ao criar usuário: " + err.message));
     }
 
-    function alterarUser(id, campo, valor) {
-        let obj = {}; obj[campo] = valor;
-        db.collection("usuarios").doc(id).update(obj);
-    }
-    function excluirUser(id) {
-        if(confirm("Tem certeza que deseja excluir este acesso?")) db.collection("usuarios").doc(id).delete();
-    }
+    function alterarUser(id, campo, valor) { let obj = {}; obj[campo] = valor; db.collection("usuarios").doc(id).update(obj); }
+    function excluirUser(id) { if(confirm("Tem certeza que deseja excluir este acesso?")) db.collection("usuarios").doc(id).delete(); }
     function salvarConfigNaNuvem() { db.collection("config").doc("listas").set({ categorias: categorias, contasLista: contasLista }); }
     function addConfig(t) {
         let idInp = t === 'cat' ? "novaCatInput" : "novaContaInput";
@@ -621,7 +672,7 @@
         salvarConfigNaNuvem();
     }
 
-    // --- ABA CLIENTES (CRM) ---
+    // --- ABA CLIENTES E HISTÓRICO CRM (NOVO) ---
     function adicionarCliente() {
         let id = document.getElementById("cliId").value;
         let c = {
@@ -649,7 +700,16 @@
         filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(c => {
             let tr = document.createElement("tr");
             let promoHtml = c.promo ? '<span style="color:#27ae60;font-weight:bold;">Sim</span>' : '<span style="color:#e74c3c;">Não</span>';
-            tr.innerHTML = `<td><strong>${c.nome}</strong></td><td>${c.tel}<br><small>${c.email}</small></td><td>${c.end}</td><td style="text-align:center;">${promoHtml}</td><td style="text-align:center;"><button class="btn-acao" onclick="editarCliente('${c.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerCliente('${c.id}')">🗑️</button></td>`;
+            tr.innerHTML = `
+                <td><strong>${c.nome}</strong></td>
+                <td>${c.tel}<br><small>${c.email}</small></td>
+                <td>${c.end}</td>
+                <td style="text-align:center;">${promoHtml}</td>
+                <td style="text-align:center;">
+                    <button class="btn-acao" title="Ver Histórico (CRM)" onclick="abrirModalHistorico('${c.id}')">📝</button>
+                    <button class="btn-acao" title="Editar Cliente" onclick="editarCliente('${c.id}')">✏️</button>
+                    <button class="btn-acao" title="Excluir" style="color:red;" onclick="removerCliente('${c.id}')">🗑️</button>
+                </td>`;
             tbody.appendChild(tr);
         });
     }
@@ -658,7 +718,62 @@
         document.getElementById("cliId").value = c.id; document.getElementById("cliNome").value = c.nome; document.getElementById("cliTel").value = c.tel; document.getElementById("cliEmail").value = c.email; document.getElementById("cliEnd").value = c.end; document.getElementById("cliPromo").checked = c.promo;
         document.getElementById("tituloCadCliente").innerText = "✏️ Editando Cliente"; document.getElementById("btnSalvarCli").innerText = "Salvar Alterações";
     }
-    function removerCliente(id) { if(confirm("Excluir cliente?")) db.collection("clientes").doc(id).delete(); }
+    function removerCliente(id) { if(confirm("Excluir cliente definitivamente?")) db.collection("clientes").doc(id).delete(); }
+
+    // Funções do Modal Histórico
+    function formatarDataSimples(d) { return d ? d.split('-').reverse().join('/') : ""; }
+
+    function abrirModalHistorico(clienteId) {
+        let c = clientes.find(x => x.id === clienteId); if(!c) return;
+        document.getElementById('histClienteId').value = clienteId;
+        document.getElementById('histNomeCliente').innerText = c.nome;
+        document.getElementById('histData').value = new Date().toISOString().substring(0,10);
+        document.getElementById('histDesc').value = "";
+        document.getElementById('modalHistorico').style.display = 'flex';
+        renderizarHistoricoModal(clienteId);
+    }
+    function fecharModalHistorico() {
+        document.getElementById('modalHistorico').style.display = 'none';
+    }
+    function salvarHistorico() {
+        let h = {
+            id: Date.now().toString(),
+            clienteId: document.getElementById('histClienteId').value,
+            data: document.getElementById('histData').value,
+            tipo: document.getElementById('histTipo').value,
+            desc: document.getElementById('histDesc').value.trim()
+        };
+        if(!h.data || !h.desc) return alert("Preencha a Data e a Descrição.");
+        db.collection("historico_clientes").doc(h.id).set(h);
+        document.getElementById('histDesc').value = ""; // limpa apenas a descrição
+    }
+    function renderizarHistoricoModal(clienteId) {
+        let div = document.getElementById("listaHistorico");
+        div.innerHTML = "";
+        let filtrados = historicoClientes.filter(h => h.clienteId === clienteId).sort((a,b) => b.data.localeCompare(a.data));
+        
+        if(filtrados.length === 0) {
+            div.innerHTML = "<p style='color:#999; font-size:13px; text-align:center;'>Nenhuma atividade registrada ainda.</p>";
+            return;
+        }
+
+        filtrados.forEach(h => {
+            let item = document.createElement("div");
+            item.className = "historico-item";
+            item.innerHTML = `
+                <span class="data-badge">${formatarDataSimples(h.data)}</span> 
+                <span class="tipo-badge">${h.tipo}</span>
+                <p style="margin: 5px 0 0 0; color: #333;">${h.desc}</p>
+                <button class="del-btn" title="Apagar Registro" onclick="removerHistorico('${h.id}')">🗑️</button>
+            `;
+            div.appendChild(item);
+        });
+    }
+    function removerHistorico(id) {
+        if(confirm("Deseja apagar este registro do histórico?")) {
+            db.collection("historico_clientes").doc(id).delete();
+        }
+    }
 
     // --- ABA FORNECEDORES ---
     function adicionarFornecedor() {
