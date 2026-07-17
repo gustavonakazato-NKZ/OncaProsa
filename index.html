@@ -125,7 +125,7 @@
 <div id="telaLogin">
     <div class="titulo-empresa">
         <img src="Logo-oncaprosa.jpeg" alt="Logo Onça Prosa" onerror="this.style.display='none'">
-        <div class="menor">ERP Gerencial</div>
+        <div class="menor">ERP Gerencial v9.0</div>
     </div>
     <div class="login-box">
         <h2>🔒 Acesso Restrito</h2>
@@ -149,7 +149,6 @@
         </div>
     </div>
 
-    <!-- NAVBAR REORGANIZADA -->
     <div class="navbar">
         <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard</button>
         <button id="btnAbaFinanceiro" class="aba-btn fin-req" onclick="mudarAba('financeiro')">💸 Financeiro</button>
@@ -202,7 +201,7 @@
             </div>
         </div>
 
-        <!-- MÓDULO 2: FINANCEIRO (COM PARCELAMENTOS E RECORRÊNCIA) -->
+        <!-- MÓDULO 2: FINANCEIRO -->
         <div id="abaFinanceiro" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro fin-req" id="painelCadastro">
                 <h2 id="tituloCadastro">💸 Novo Lançamento</h2>
@@ -385,7 +384,7 @@
             </div>
         </div>
 
-        <!-- MÓDULO 6: COMPRAS COM LANÇAMENTO FINANCEIRO -->
+        <!-- MÓDULO 6: COMPRAS -->
         <div id="abaCompras" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro fin-req">
                 <h2>📥 Registrar Compra</h2>
@@ -412,7 +411,6 @@
                     </div>
                 </div>
                 
-                <!-- INTEGRAÇÃO FINANCEIRA COM BOTAO -->
                 <div class="form-group" style="margin-top: 10px;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #eef2f5; padding: 10px; border-radius: 6px; border: 1px solid #ccd1d9; color: #2980b9;">
                         <input type="checkbox" id="compraLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divCompraFin').style.display = this.checked ? 'block' : 'none'"> Gerar Lançamento Financeiro Automático
@@ -420,20 +418,20 @@
                 </div>
 
                 <div id="divCompraFin" style="display: none; background: #faf9f7; padding: 15px; border-radius: 6px; border: 1px solid #e8e3dc; margin-bottom: 15px;">
+                    <div class="form-group" style="width: 100%; margin-bottom: 10px;"><label>Conta para Débito:</label><select id="compraConta"></select></div>
                     <div class="form-row">
-                        <div class="form-group" style="flex: 1;"><label>Conta Débito:</label><select id="compraConta"></select></div>
                         <div class="form-group" style="flex: 1;"><label>1º Vencimento:</label><input type="date" id="compraVencimento"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group" style="flex: 2; margin: 0;">
-                            <label>Pagamento / Frequência:</label>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Frequência:</label>
                             <select id="compraFreq" onchange="document.getElementById('divCompraQtdFreq').style.display = this.value !== 'Único' ? 'block' : 'none'">
                                 <option value="Único">Único (À vista)</option>
-                                <option value="Parcelado">Parcelado (Divide o valor)</option>
-                                <option value="Recorrente">Recorrente (Mensalidade)</option>
+                                <option value="Parcelado">Parcelado (Divide)</option>
+                                <option value="Recorrente">Recorrente</option>
                             </select>
                         </div>
-                        <div class="form-group" id="divCompraQtdFreq" style="flex: 1; display: none; margin: 0;">
+                    </div>
+                    <div class="form-row" id="divCompraQtdFreq" style="display: none; margin-top: 5px;">
+                        <div class="form-group" style="flex: 1;">
                             <label>Nº Parc/Meses:</label>
                             <input type="number" id="compraQtdFreq" value="2" min="2">
                         </div>
@@ -500,7 +498,7 @@
             </div>
         </div>
 
-        <!-- MÓDULO 8: PRODUTOS FINAIS (FICHA TÉCNICA / CATÁLOGO) -->
+        <!-- MÓDULO 8: PRODUTOS FINAIS -->
         <div id="abaProdutosFinais" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro">
                 <h2 id="tituloCadProdutoFinal">🛍️ Novo Produto Final</h2>
@@ -556,7 +554,7 @@
             </div>
         </div>
 
-        <!-- MÓDULO 9: PATRIMÔNIO E EQUIPAMENTOS COM CORREÇÃO DE PARCELAMENTO -->
+        <!-- MÓDULO 9: PATRIMÔNIO (CORRIGIDO) -->
         <div id="abaPatrimonio" class="layout-flex aba-conteudo admin-req" style="display: none;">
             <div class="painel-cadastro">
                 <h2 id="tituloCadPat">🛠️ Novo Equipamento</h2>
@@ -570,29 +568,28 @@
                     <div class="form-group" style="margin: 0;"><label>Vida Útil Estimada:</label><input type="text" id="patVida" placeholder="Ex: 5 anos"></div>
                 </div>
                 
-                <!-- CHECKBOX CORRIGIDO PARA LANÇAR FINANCEIRO -->
                 <div class="form-group" style="margin-top: 10px;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #eef2f5; padding: 10px; border-radius: 6px; border: 1px solid #ccd1d9; color: #2980b9;">
                         <input type="checkbox" id="patLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divPatFin').style.display = this.checked ? 'block' : 'none'"> Lançar Despesa Automática
                     </label>
                 </div>
                 
-                <!-- PAINEL FINANCEIRO DE PATRIMONIO ADICIONADO -->
+                <!-- PAINEL FINANCEIRO DE PATRIMONIO CORRIGIDO NO LAYOUT -->
                 <div id="divPatFin" style="display:none; background: #faf9f7; padding: 15px; border-radius: 6px; border: 1px solid #e8e3dc; margin-bottom: 15px;">
+                    <div class="form-group" style="width: 100%; margin-bottom: 10px;"><label>Conta para Débito:</label><select id="patConta"></select></div>
                     <div class="form-row">
-                        <div class="form-group" style="flex: 1;"><label>Conta para Débito:</label><select id="patConta"></select></div>
                         <div class="form-group" style="flex: 1;"><label>1º Vencimento:</label><input type="date" id="patVencimento"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group" style="flex: 2; margin: 0;">
-                            <label>Pagamento / Frequência:</label>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Frequência:</label>
                             <select id="patFreq" onchange="document.getElementById('divPatQtdFreq').style.display = this.value !== 'Único' ? 'block' : 'none'">
                                 <option value="Único">Único (À vista)</option>
-                                <option value="Parcelado">Parcelado (Divide o valor)</option>
-                                <option value="Recorrente">Recorrente (Aluguel/Mensalidade)</option>
+                                <option value="Parcelado">Parcelado (Divide)</option>
+                                <option value="Recorrente">Recorrente (Aluguel)</option>
                             </select>
                         </div>
-                        <div class="form-group" id="divPatQtdFreq" style="flex: 1; display: none; margin: 0;">
+                    </div>
+                    <div class="form-row" id="divPatQtdFreq" style="display: none; margin-top: 5px;">
+                        <div class="form-group" style="flex: 1;">
                             <label>Nº Parc/Meses:</label>
                             <input type="number" id="patQtdFreq" value="2" min="2">
                         </div>
@@ -652,7 +649,6 @@
             </div>
 
             <div class="config-grid">
-                <!-- FORMAS DE RECEBIMENTO -->
                 <div style="background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc; grid-column: 1 / -1;">
                     <h3 style="margin-top: 0;">💳 Formas de Recebimento e Taxas</h3>
                     <p style="font-size: 13px; color: #666; margin-top: -15px; margin-bottom: 15px;">Ao selecionar essa forma na conclusão de uma venda, o sistema deduzirá automaticamente o % cadastrado como despesa de taxa.</p>
@@ -678,68 +674,34 @@
 <!-- Modal: Concluir Venda -->
 <div id="modalConcluirVenda" class="modal-overlay">
     <div class="modal-box" style="max-width: 500px;">
-        <h3 style="color: #27ae60; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">
-            💸 Concluir Venda e Lançar Financeiro
-            <button onclick="document.getElementById('modalConcluirVenda').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button>
-        </h3>
+        <h3 style="color: #27ae60; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">💸 Concluir Venda e Lançar Financeiro<button onclick="document.getElementById('modalConcluirVenda').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
         <p style="margin-top: -10px; color: #666; font-size: 13px;" id="lblVendaCliente">Finalizar Venda - Cliente X</p>
-        
         <input type="hidden" id="vendaFinId">
-        
         <div style="background: #faf9f7; padding: 15px; border-radius: 8px; border: 1px solid #e8e3dc; margin-bottom: 15px;">
             <div class="form-group"><label>Valor Total do Pedido (R$):</label><input type="text" id="vendaFinTotal" readonly style="background:#eef2f5; font-weight:bold; color:#27ae60; font-size:18px;"></div>
-            
-            <div class="form-row">
-                <div class="form-group" style="flex: 2;"><label>Forma de Recebimento:</label><select id="vendaFinForma" onchange="atualizarTaxaVenda()"></select></div>
-                <div class="form-group" style="flex: 1;"><label>Taxa Descontada (%):</label><input type="text" id="vendaFinTaxa" readonly style="background:#eef2f5;"></div>
-            </div>
+            <div class="form-row"><div class="form-group" style="flex: 2;"><label>Forma de Recebimento:</label><select id="vendaFinForma" onchange="atualizarTaxaVenda()"></select></div><div class="form-group" style="flex: 1;"><label>Taxa Descontada (%):</label><input type="text" id="vendaFinTaxa" readonly style="background:#eef2f5;"></div></div>
             <p style="font-size: 12px; color: #e74c3c; margin: 0; text-align: right;" id="vendaFinAvisoTaxa">A taxa de R$ 0,00 será lançada como despesa separada.</p>
         </div>
-
-        <div class="form-row">
-            <div class="form-group" style="flex: 1;"><label>Conta Recebimento:</label><select id="vendaFinConta"></select></div>
-            <div class="form-group" style="flex: 1;"><label>1º Vencimento:</label><input type="date" id="vendaFinVenc"></div>
-        </div>
-        
-        <div class="form-row">
-            <div class="form-group" style="flex: 2;">
-                <label>Frequência (Para dividir):</label>
-                <select id="vendaFinFreq" onchange="document.getElementById('divVendaQtdFreq').style.display = this.value !== 'Único' ? 'block' : 'none'">
-                    <option value="Único">Único (À vista)</option>
-                    <option value="Parcelado">Parcelado (Divide o valor)</option>
-                    <option value="Recorrente">Mensalidade/Recorrente</option>
-                </select>
-            </div>
-            <div class="form-group" id="divVendaQtdFreq" style="flex: 1; display: none;">
-                <label>Qtd Parcelas:</label>
-                <input type="number" id="vendaFinQtdFreq" value="2" min="2">
-            </div>
-        </div>
-
+        <div class="form-row"><div class="form-group" style="flex: 1;"><label>Conta Recebimento:</label><select id="vendaFinConta"></select></div><div class="form-group" style="flex: 1;"><label>1º Vencimento:</label><input type="date" id="vendaFinVenc"></div></div>
+        <div class="form-row"><div class="form-group" style="flex: 2;"><label>Frequência (Para dividir):</label><select id="vendaFinFreq" onchange="document.getElementById('divVendaQtdFreq').style.display = this.value !== 'Único' ? 'block' : 'none'"><option value="Único">Único (À vista)</option><option value="Parcelado">Parcelado (Divide o valor)</option><option value="Recorrente">Mensalidade/Recorrente</option></select></div><div class="form-group" id="divVendaQtdFreq" style="flex: 1; display: none;"><label>Qtd Parcelas:</label><input type="number" id="vendaFinQtdFreq" value="2" min="2"></div></div>
         <button class="btn" style="background:#27ae60; margin-top: 15px;" onclick="finalizarVendaComFinanceiro()">Confirmar Pagamento e Marcar Entregue</button>
     </div>
 </div>
 
-<!-- Modal: Pagamento Parcial (Financeiro) -->
+<!-- Modal: Pagamento Parcial -->
 <div id="modalParcial" class="modal-overlay">
     <div class="modal-box" style="max-width: 400px;">
-        <h3 style="color: #27ae60; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">
-            💸 Pagamento Parcial
-            <button onclick="document.getElementById('modalParcial').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button>
-        </h3>
+        <h3 style="color: #27ae60; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">💸 Pagamento Parcial<button onclick="document.getElementById('modalParcial').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
         <p style="margin-top: -10px; color: #666; font-size: 13px;" id="parcialDesc">Descrição da despesa/receita</p>
-        
         <input type="hidden" id="parcialId">
-        
         <div class="form-group"><label>Valor Total (R$):</label><input type="text" id="parcialValorTotal" readonly style="background:#eef2f5; font-weight:bold;"></div>
         <div class="form-group"><label>Valor Pago / Recebido AGORA (R$):</label><input type="number" id="parcialValorPago" step="0.01"></div>
         <div class="form-group"><label>Nova Data p/ o Saldo Restante:</label><input type="date" id="parcialDataRestante"></div>
-        
         <button class="btn" style="background:#27ae60;" onclick="confirmarParcial()">Confirmar Pagamento e Gerar Saldo</button>
     </div>
 </div>
 
-<!-- Modal: Registro de Perdas/Avarias -->
+<!-- Modal: Perdas/Avarias -->
 <div id="modalPerda" class="modal-overlay">
     <div class="modal-box" style="max-width: 450px;">
         <h3 style="color: #d35400; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">📉 Registrar Perda / Avaria<button onclick="document.getElementById('modalPerda').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
@@ -859,12 +821,9 @@
                     perfilUsuario = d.perfil; document.getElementById('lblUsuario').innerText = d.nome || "Usuário"; document.getElementById('lblPerfil').innerText = perfilUsuario;
                     document.getElementById("fMes").value = new Date().toISOString().substring(0,7); document.getElementById("dreMes").value = new Date().toISOString().substring(0,7); document.getElementById("fMesVenda").value = new Date().toISOString().substring(0,7); document.getElementById("fMesCompra").value = new Date().toISOString().substring(0,7);
                     let dataHoje = new Date().toISOString().substring(0,10);
-                    
-                    // PREENCHE AS DATAS DO PATRIMÔNIO AO CARREGAR O SISTEMA
                     document.getElementById("compraData").value = dataHoje; document.getElementById("compraVencimento").value = dataHoje; 
                     document.getElementById("patData").value = dataHoje; document.getElementById("patVencimento").value = dataHoje; 
                     document.getElementById("perdaData").value = dataHoje; document.getElementById("cadData").value = dataHoje;
-                    
                     aplicarPermissoes(); carregarListas(); iniciarOuvintesDeDados();
                 }
             });
@@ -936,17 +895,11 @@
     function formatarDinheiro(v) { return Number(v || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}); }
     function formatarDataSimples(d) { return d ? d.split('-').reverse().join('/') : ""; }
 
-    // ==========================================
-    // MÓDULO GESTÃO (CONFIGURAÇÕES GERAIS)
-    // ==========================================
     function salvarConfigNaNuvem() { db.collection("config").doc("listas").set({ categorias: categorias, contasLista: contasLista, formasPagamento: formasPagamento }); }
     function addConfig(t) { if (t === 'cat') { let v = document.getElementById("novaCatInput").value.trim(); if(v && !categorias.includes(v)) { categorias.push(v); document.getElementById("novaCatInput").value=""; } } if (t === 'conta') { let v = document.getElementById("novaContaInput").value.trim(); if(v && !contasLista.includes(v)) { contasLista.push(v); document.getElementById("novaContaInput").value=""; } } salvarConfigNaNuvem(); }
     function remConfig(t, i) { if(t === 'cat') categorias.splice(i,1); if(t === 'conta') contasLista.splice(i,1); if(t === 'forma') formasPagamento.splice(i,1); salvarConfigNaNuvem(); }
     function addFormaPagamento() { let nome = document.getElementById("novaFormaNome").value.trim(); let taxa = parseFloat(document.getElementById("novaFormaTaxa").value) || 0; if(!nome) return alert("Informe o nome da forma de pagamento."); formasPagamento.push({ nome: nome, taxa: taxa }); document.getElementById("novaFormaNome").value = ""; document.getElementById("novaFormaTaxa").value = "0"; salvarConfigNaNuvem(); registrarLog("CONFIG", `Adicionou Forma de Pagto: ${nome} (${taxa}%)`); }
 
-    // ==========================================
-    // MÓDULO FINANCEIRO (PARCELAMENTO E PARCIAL)
-    // ==========================================
     function adicionarLancamento() {
         let idEdit = document.getElementById("editId").value;
         let l = { desc: document.getElementById("cadDesc").value, categoria: document.getElementById("cadCat").value, conta: document.getElementById("cadConta").value, valor: parseFloat(document.getElementById("cadValor").value), data: document.getElementById("cadData").value, tipo: document.getElementById("cadTipo").value, status: document.getElementById("cadStatus").value };
@@ -980,7 +933,7 @@
     
     function atualizarTelaFinanceiro() { 
         const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = ""; let fBusca = document.getElementById("fBusca").value.toLowerCase(); let fMes = document.getElementById("fMes").value; let fTipo = document.getElementById("fTipo").value; let fConta = document.getElementById("fConta").value; 
-        let filtrados = lancamentos.filter(l => l.desc.toLowerCase().includes(fBusca) && l.data.startsWith(fMes) && (fTipo==="Todos" || l.tipo===fTipo) && (fConta==="Todas" || l.conta===fConta)).sort((a,b)=>a.data.localeCompare(b.data)); 
+        let filtrados = lancamentos.filter(l => (l.desc || "").toLowerCase().includes(fBusca) && l.data.startsWith(fMes) && (fTipo==="Todos" || l.tipo===fTipo) && (fConta==="Todas" || l.conta===fConta)).sort((a,b)=>a.data.localeCompare(b.data)); 
         filtrados.forEach(l => { 
             let tr = document.createElement("tr"); 
             let htmlParcial = l.status === "A Vencer" ? `<button class="btn-acao-topo" style="background:#27ae60; font-size:10px; padding:2px 5px; margin-left:5px;" title="Pagamento Parcial" onclick="abrirModalParcial('${l.id}')">💸 Parc.</button>` : "";
@@ -1022,16 +975,10 @@
     function removerLanc(id) { if(confirm("Tem certeza?")) { registrarLog("FINANCEIRO", `Excluiu lançamento ID: ${id}`); db.collection("lancamentos").doc(id.toString()).delete(); } }
     function gerarDRE() { let m = document.getElementById("dreMes").value; let rec = 0, dev = 0, cVar = 0, cFix = 0; let tEnt = 0, tSai = 0; let lancMes = lancamentos.filter(l => l.data.startsWith(m)); lancMes.forEach(l => { if(l.tipo === "Crédito") tEnt += l.valor; else if(l.tipo === "Débito") tSai += l.valor; if(l.status.toLowerCase().includes("efetuada")) { if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor; else if(l.categoria.includes("Devolu")) dev += l.valor; else if(["Impostos de Venda", "Taxas de Pagamento", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Perdas e Avarias"].includes(l.categoria)) cVar += l.valor; else cFix += l.valor; } }); document.getElementById("resDashEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; document.getElementById("resDashSaidas").innerText = `R$ ${tSai.toFixed(2)}`; document.getElementById("resDashSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`; document.getElementById("resDashSaldo").style.color = (tEnt-tSai) >= 0 ? "#4a3022" : "#e74c3c"; let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix; document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`; if (lucro > 0) { let capGiro = lucro * 0.30; let reserva = lucro * 0.20; let manu = lucro * 0.10; let reinv = lucro * 0.10; let cresc = lucro * 0.10; let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucro - totDed; let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50; document.getElementById("dstGiro").innerText = `R$ ${capGiro.toFixed(2)}`; document.getElementById("dstReserva").innerText = `R$ ${reserva.toFixed(2)}`; document.getElementById("dstManu").innerText = `R$ ${manu.toFixed(2)}`; document.getElementById("dstReinv").innerText = `R$ ${reinv.toFixed(2)}`; document.getElementById("dstCresc").innerText = `R$ ${cresc.toFixed(2)}`; document.getElementById("dstDeducao").innerText = `R$ ${totDed.toFixed(2)}`; document.getElementById("dstSaldo").innerText = `R$ ${saldo.toFixed(2)}`; document.getElementById("dstSocios").innerText = `R$ ${valSocios.toFixed(2)}`; document.getElementById("dstCaixa").innerText = `R$ ${valCaixa.toFixed(2)}`; } else { ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = "R$ 0.00"); } }
 
-    // ==========================================
-    // MÓDULO PERDAS E AVARIAS
-    // ==========================================
     function abrirModalPerda(id, tipo) { let item = tipo === 'insumo' ? produtos.find(x => x.id === id) : produtosFinais.find(x => x.id === id); if (!item) return; let custo = tipo === 'insumo' ? item.custo : item.custo; document.getElementById("perdaItemId").value = id; document.getElementById("perdaTipo").value = tipo; document.getElementById("perdaItemNome").value = item.nome; document.getElementById("perdaCustoUnit").value = custo; document.getElementById("perdaQtd").value = ""; document.getElementById("perdaData").value = new Date().toISOString().substring(0,10); document.getElementById("perdaValorTotal").innerText = "R$ 0,00"; document.getElementById("modalPerda").style.display = "flex"; }
     function calcularTotalPerda() { let custoUnit = parseFloat(document.getElementById("perdaCustoUnit").value) || 0; let qtd = parseFloat(document.getElementById("perdaQtd").value) || 0; document.getElementById("perdaValorTotal").innerText = formatarDinheiro(custoUnit * qtd); }
     function efetuarRegistroPerda() { let id = document.getElementById("perdaItemId").value; let tipo = document.getElementById("perdaTipo").value; let nome = document.getElementById("perdaItemNome").value; let qtd = parseFloat(document.getElementById("perdaQtd").value); let data = document.getElementById("perdaData").value; let motivo = document.getElementById("perdaMotivo").value; let custoUnit = parseFloat(document.getElementById("perdaCustoUnit").value); let totalPerda = qtd * custoUnit; if (isNaN(qtd) || qtd <= 0) return alert("Informe uma quantidade válida."); if (!data) return alert("Informe a data."); if (!confirm(`Confirmar registro de perda de ${qtd}x ${nome}?\nIsso lançará uma despesa de ${formatarDinheiro(totalPerda)} no Financeiro.`)) return; let batch = db.batch(); if (tipo === 'insumo') { let p = produtos.find(x => x.id === id); if(p) batch.update(db.collection("produtos").doc(id), { qtd: p.qtd - qtd }); } let lancId = "PERDA_" + Date.now().toString(); let lanc = { id: lancId, desc: `Perda/Avaria: ${nome} (${motivo})`, categoria: "Perdas e Avarias", conta: contasLista.length > 0 ? contasLista[0] : "Caixa Principal", valor: totalPerda, data: data, tipo: "Débito", status: "Efetuada" }; batch.set(db.collection("lancamentos").doc(lancId), lanc); batch.commit().then(() => { registrarLog("ESTOQUE", `Registrou perda de ${qtd}x ${nome} (${motivo}) - Total: R$ ${totalPerda.toFixed(2)}`); alert("Perda registrada com sucesso!"); document.getElementById("modalPerda").style.display = "none"; }).catch(err => alert("Erro ao registrar perda: " + err.message)); }
 
-    // ==========================================
-    // MÓDULO CLIENTES (CRM) + ANIVERSÁRIOS
-    // ==========================================
     function adicionarCliente() { 
         let id = document.getElementById("cliId").value; 
         let c = { 
@@ -1055,7 +1002,7 @@
     function renderizarClientes() { 
         const tbody = document.getElementById("tbClientes"); tbody.innerHTML = ""; 
         let busca = document.getElementById("fBuscaCli").value.toLowerCase(); 
-        let filtrados = clientes.filter(c => c.nome.toLowerCase().includes(busca) || c.tel.toLowerCase().includes(busca) || c.email.toLowerCase().includes(busca) || (c.cep && c.cep.toLowerCase().includes(busca))); 
+        let filtrados = clientes.filter(c => (c.nome || "").toLowerCase().includes(busca) || (c.tel || "").toLowerCase().includes(busca) || (c.email || "").toLowerCase().includes(busca) || (c.cep || "").toLowerCase().includes(busca)); 
         
         filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(c => { 
             let tr = document.createElement("tr"); 
@@ -1064,7 +1011,6 @@
             tr.innerHTML = `<td><strong>${c.nome}</strong></td><td>${c.tel}<br><small>${c.email}</small></td><td>${c.end}<br><small>CEP: ${c.cep||'-'}</small></td><td>🎂 ${nasc}<br><small>${c.obs}</small></td><td style="text-align:center;">${promoHtml}</td><td style="text-align:center;"><button class="btn-acao" title="Ver Histórico" onclick="abrirModalHistorico('${c.id}')">📝</button><button class="btn-acao" onclick="editarCliente('${c.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerCliente('${c.id}')">🗑️</button></td>`; 
             tbody.appendChild(tr); 
         }); 
-        
         checarAniversariantes();
     }
     
@@ -1092,9 +1038,6 @@
     function editarCliente(id) { let c = clientes.find(x => x.id === id); if(!c) return; document.getElementById("cliId").value = c.id; document.getElementById("cliNome").value = c.nome; document.getElementById("cliTel").value = c.tel; document.getElementById("cliNasc").value = c.nasc || ''; document.getElementById("cliEmail").value = c.email; document.getElementById("cliCep").value = c.cep || ''; document.getElementById("cliEnd").value = c.end; document.getElementById("cliObs").value = c.obs; document.getElementById("cliPromo").checked = c.promo; document.getElementById("tituloCadCliente").innerText = "✏️ Editando Cliente"; document.getElementById("btnSalvarCli").innerText = "Salvar Alterações"; }
     function removerCliente(id) { if(confirm("Excluir cliente?")) { registrarLog("CLIENTES", `Excluiu cliente ID: ${id}`); db.collection("clientes").doc(id).delete(); } }
 
-    // ==========================================
-    // MÓDULO PATRIMÔNIO COM RECORRÊNCIA E PARCELAMENTO
-    // ==========================================
     document.getElementById('patLancarFin').addEventListener('change', function() { document.getElementById('divPatFin').style.display = this.checked ? 'block' : 'none'; });
     
     function salvarEquipamento() {
@@ -1145,7 +1088,6 @@
                 }
             }
         }
-        
         batch.commit().then(() => { alert("Patrimônio registrado!"); limparFormPat(); });
     }
 
@@ -1170,21 +1112,17 @@
     function renderizarPatrimonio() {
         const tbody = document.getElementById("tbPatrimonio"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaPat").value.toLowerCase(); let status = document.getElementById("fStatusPat").value;
         let isBaixado = status === "Baixados";
-        let filtrados = patrimonios.filter(p => p.identificacao.toLowerCase().includes(busca) && (p.baixado === isBaixado));
+        let filtrados = patrimonios.filter(p => (p.identificacao || "").toLowerCase().includes(busca) && (p.baixado === isBaixado));
         
         filtrados.sort((a,b) => b.dataCompra.localeCompare(a.dataCompra)).forEach(p => {
             let tr = document.createElement("tr"); if(p.baixado) tr.style.opacity = "0.6";
-            
             let htmlManu = `<span style="font-size:12px; color:#8e44ad;"><b>${p.qtdManutencao || 0}</b> vez(es) | <b>${formatarDinheiro(p.valorTotalManutencao)}</b></span>`;
             let acoes = "";
             if(!p.baixado) {
                 acoes = `<button class="btn-acao-topo" style="background:#8e44ad; font-size:11px; padding:4px;" onclick="abrirModalManutencao('${p.id}')">🔧 Manutenção</button>
                          <button class="btn-acao" onclick="editarPat('${p.id}')">✏️</button>
                          <button class="btn-acao" style="color:#d35400;" title="Dar Baixa" onclick="darBaixaPat('${p.id}')">⬇️</button>`;
-            } else {
-                acoes = `<span style="color:#e74c3c; font-weight:bold; font-size:11px;">Baixado em: ${formatarDataSimples(p.dataBaixa)}</span>`;
-            }
-
+            } else { acoes = `<span style="color:#e74c3c; font-weight:bold; font-size:11px;">Baixado em: ${formatarDataSimples(p.dataBaixa)}</span>`; }
             tr.innerHTML = `<td><strong>${p.identificacao}</strong></td><td>${p.marca||'-'}</td><td>${p.qtd}</td><td>${formatarDataSimples(p.dataCompra)}<br><small style="color:#e74c3c;">${formatarDinheiro(p.valorCompra)}</small></td><td style="text-align:center;">${htmlManu}</td><td style="text-align:center; display:flex; gap:5px; justify-content:center; align-items:center;">${acoes}</td>`;
             tbody.appendChild(tr);
         });
@@ -1192,69 +1130,27 @@
 
     function editarPat(id) { let p = patrimonios.find(x => x.id === id); if(!p) return; document.getElementById("patId").value = p.id; document.getElementById("patIdent").value = p.identificacao; document.getElementById("patMarca").value = p.marca; document.getElementById("patQtd").value = p.qtd; document.getElementById("patValor").value = p.valorCompra; document.getElementById("patData").value = p.dataCompra; document.getElementById("patVida").value = p.vidaUtil; document.getElementById("patLancarFin").checked = false; document.getElementById('divPatFin').style.display = 'none'; document.getElementById("tituloCadPat").innerText = "✏️ Editando Equipamento"; document.getElementById("btnSalvarPat").innerText = "Salvar Alterações"; }
     
-    function darBaixaPat(id) { 
-        if(confirm("ATENÇÃO: Deseja dar BAIXA neste equipamento? Ele será movido para o status de Sucata/Baixado.")) { 
-            db.collection("patrimonio").doc(id).update({ baixado: true, dataBaixa: new Date().toISOString().substring(0,10) }); 
-            registrarLog("PATRIMÔNIO", `Deu baixa no equipamento ID: ${id}`); 
-        } 
-    }
+    function darBaixaPat(id) { if(confirm("ATENÇÃO: Deseja dar BAIXA neste equipamento? Ele será movido para o status de Sucata/Baixado.")) { db.collection("patrimonio").doc(id).update({ baixado: true, dataBaixa: new Date().toISOString().substring(0,10) }); registrarLog("PATRIMÔNIO", `Deu baixa no equipamento ID: ${id}`); } }
 
-    function abrirModalManutencao(id) {
-        let p = patrimonios.find(x => x.id === id); if(!p) return;
-        document.getElementById("manuEquipId").value = p.id; document.getElementById("manuIdent").innerText = p.identificacao; document.getElementById("manuData").value = new Date().toISOString().substring(0,10); document.getElementById("manuQuem").value = ""; document.getElementById("manuValor").value = ""; document.getElementById("manuLancarFin").checked = false; document.getElementById('divManuConta').style.display = 'none';
-        document.getElementById("modalManutencao").style.display = 'flex';
-    }
+    function abrirModalManutencao(id) { let p = patrimonios.find(x => x.id === id); if(!p) return; document.getElementById("manuEquipId").value = p.id; document.getElementById("manuIdent").innerText = p.identificacao; document.getElementById("manuData").value = new Date().toISOString().substring(0,10); document.getElementById("manuQuem").value = ""; document.getElementById("manuValor").value = ""; document.getElementById("manuLancarFin").checked = false; document.getElementById('divManuConta').style.display = 'none'; document.getElementById("modalManutencao").style.display = 'flex'; }
 
     function efetuarManutencao() {
         let id = document.getElementById("manuEquipId").value; let p = patrimonios.find(x => x.id === id); if(!p) return;
         let data = document.getElementById("manuData").value; let quem = document.getElementById("manuQuem").value.trim(); let valor = parseFloat(document.getElementById("manuValor").value) || 0;
         let lancar = document.getElementById("manuLancarFin").checked; let conta = document.getElementById("manuConta").value;
         if(!data || !quem || valor <= 0) return alert("Preencha a data, o técnico e o valor corretamente.");
-
-        let batch = db.batch();
-        
-        let novoQtd = (p.qtdManutencao || 0) + 1;
-        let novoValorTotal = (p.valorTotalManutencao || 0) + valor;
+        let batch = db.batch(); let novoQtd = (p.qtdManutencao || 0) + 1; let novoValorTotal = (p.valorTotalManutencao || 0) + valor;
         batch.update(db.collection("patrimonio").doc(id), { dataManutencao: data, quemManutencao: quem, qtdManutencao: novoQtd, valorTotalManutencao: novoValorTotal });
-
-        if(lancar) {
-            let lancId = "MANU_" + Date.now().toString();
-            let lanc = { id: lancId, desc: `Manutenção Equip.: ${p.identificacao} (${quem})`, categoria: "Manutenção Equip.", conta: conta, valor: valor, data: data, tipo: "Débito", status: "Efetuada" };
-            batch.set(db.collection("lancamentos").doc(lancId), lanc);
-        }
-
+        if(lancar) { let lancId = "MANU_" + Date.now().toString(); let lanc = { id: lancId, desc: `Manutenção Equip.: ${p.identificacao} (${quem})`, categoria: "Manutenção Equip.", conta: conta, valor: valor, data: data, tipo: "Débito", status: "Efetuada" }; batch.set(db.collection("lancamentos").doc(lancId), lanc); }
         batch.commit().then(() => { registrarLog("PATRIMÔNIO", `Registrou manutenção em ${p.identificacao} (R$ ${valor})`); alert("Manutenção salva!"); document.getElementById("modalManutencao").style.display = 'none'; });
     }
 
-    // ==========================================
-    // MÓDULO COMERCIAL E VENDAS (+ MODAL FINANCEIRO) + WHATSAPP E PDF
-    // ==========================================
-    function atualizarTaxaVenda() {
-        let forma = document.getElementById("vendaFinForma").value;
-        let objForma = formasPagamento.find(x => x.nome === forma);
-        let taxa = objForma ? objForma.taxa : 0;
-        document.getElementById("vendaFinTaxa").value = taxa + "%";
-        let totalVal = parseFloat(document.getElementById("vendaFinTotal").value.replace('R$','').replace('.','').replace(',','.').trim()) || 0;
-        let descReais = (totalVal * taxa) / 100;
-        document.getElementById("vendaFinAvisoTaxa").innerText = taxa > 0 ? `A taxa de ${formatarDinheiro(descReais)} será lançada como despesa separada.` : "";
-    }
+    function atualizarTaxaVenda() { let forma = document.getElementById("vendaFinForma").value; let objForma = formasPagamento.find(x => x.nome === forma); let taxa = objForma ? objForma.taxa : 0; document.getElementById("vendaFinTaxa").value = taxa + "%"; let totalVal = parseFloat(document.getElementById("vendaFinTotal").value.replace('R$','').replace('.','').replace(',','.').trim()) || 0; let descReais = (totalVal * taxa) / 100; document.getElementById("vendaFinAvisoTaxa").innerText = taxa > 0 ? `A taxa de ${formatarDinheiro(descReais)} será lançada como despesa separada.` : ""; }
 
-    function abrirModalConcluirVenda(idVenda) {
-        let v = vendas.find(x => x.id === idVenda); if(!v) return;
-        document.getElementById("vendaFinId").value = v.id;
-        document.getElementById("lblVendaCliente").innerText = `Finalizar Pedido #${v.id.substring(v.id.length-4)} - ${v.clienteNome}`;
-        document.getElementById("vendaFinTotal").value = v.totalGeral.toFixed(2);
-        document.getElementById("vendaFinVenc").value = new Date().toISOString().substring(0,10);
-        document.getElementById("vendaFinFreq").value = "Único";
-        document.getElementById("divVendaQtdFreq").style.display = "none";
-        if(formasPagamento.length > 0) document.getElementById("vendaFinForma").value = formasPagamento[0].nome;
-        atualizarTaxaVenda();
-        document.getElementById("modalConcluirVenda").style.display = "flex";
-    }
+    function abrirModalConcluirVenda(idVenda) { let v = vendas.find(x => x.id === idVenda); if(!v) return; document.getElementById("vendaFinId").value = v.id; document.getElementById("lblVendaCliente").innerText = `Finalizar Pedido #${v.id.substring(v.id.length-4)} - ${v.clienteNome}`; document.getElementById("vendaFinTotal").value = v.totalGeral.toFixed(2); document.getElementById("vendaFinVenc").value = new Date().toISOString().substring(0,10); document.getElementById("vendaFinFreq").value = "Único"; document.getElementById("divVendaQtdFreq").style.display = "none"; if(formasPagamento.length > 0) document.getElementById("vendaFinForma").value = formasPagamento[0].nome; atualizarTaxaVenda(); document.getElementById("modalConcluirVenda").style.display = "flex"; }
 
     function finalizarVendaComFinanceiro() {
-        let idVenda = document.getElementById("vendaFinId").value;
-        let v = vendas.find(x => x.id === idVenda); if(!v) return;
+        let idVenda = document.getElementById("vendaFinId").value; let v = vendas.find(x => x.id === idVenda); if(!v) return;
         let conta = document.getElementById("vendaFinConta").value; let dataVenc = document.getElementById("vendaFinVenc").value; let freq = document.getElementById("vendaFinFreq").value; let qtdFreq = parseInt(document.getElementById("vendaFinQtdFreq").value) || 1;
         let forma = document.getElementById("vendaFinForma").value; let objForma = formasPagamento.find(x => x.nome === forma); let taxa = objForma ? objForma.taxa : 0;
         if(!dataVenc) return alert("Informe a data de vencimento.");
@@ -1327,7 +1223,7 @@
     function renderizarComercial() {
         const tbody = document.getElementById("tbComercial"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaVenda").value.toLowerCase(); let status = document.getElementById("fStatusVenda").value; let mes = document.getElementById("fMesVenda").value;
         let qtdOrc = 0, qtdProd = 0, qtdPronto = 0, qtdEnt = 0;
-        let filtrados = vendas.filter(v => { if(v.status === "Orçamento") qtdOrc++; if(v.status === "Em Produção") qtdProd++; if(v.status === "Pronto") qtdPronto++; if(v.status === "Entregue") qtdEnt++; let matchBusca = v.clienteNome.toLowerCase().includes(busca); let matchStatus = status === "Todos" || v.status === status; let matchMes = v.dataCriacao.startsWith(mes); return matchBusca && matchStatus && matchMes; });
+        let filtrados = vendas.filter(v => { if(v.status === "Orçamento") qtdOrc++; if(v.status === "Em Produção") qtdProd++; if(v.status === "Pronto") qtdPronto++; if(v.status === "Entregue") qtdEnt++; let matchBusca = (v.clienteNome || "").toLowerCase().includes(busca); let matchStatus = status === "Todos" || v.status === status; let matchMes = v.dataCriacao.startsWith(mes); return matchBusca && matchStatus && matchMes; });
         filtrados.sort((a,b) => b.dataCriacao.localeCompare(a.dataCriacao)).forEach(v => {
             let tr = document.createElement("tr"); let corBadge = v.status === "Orçamento" ? "badge-orcamento" : (v.status === "Em Produção" ? "badge-producao" : (v.status === "Pronto" ? "badge-pronto" : "badge-entregue"));
             let btnAvancar = ""; if(v.status === "Orçamento") btnAvancar = `<button class="btn-acao-topo" style="background:#f39c12; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Converter em Pedido</button>`; else if(v.status === "Em Produção") btnAvancar = `<button class="btn-acao-topo" style="background:#3498db; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Marcar como Pronto</button>`; else if(v.status === "Pronto") btnAvancar = `<button class="btn-acao-topo" style="background:#27ae60; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Lançar Pagto e Entregar</button>`; else btnAvancar = `<span style="color:#27ae60; font-size:12px; font-weight:bold;">Finalizado</span>`;
@@ -1367,7 +1263,7 @@
     function enviarWhatsappOrcamento() {
         if(!vendaAtualImpressao) return;
         let v = vendaAtualImpressao;
-        let telFormatado = v.clienteTel.replace(/\D/g, '');
+        let telFormatado = (v.clienteTel || "").replace(/\D/g, '');
         if(!telFormatado) return alert("O cliente não possui um telefone válido cadastrado.");
         
         let msg = `Olá, *${v.clienteNome}*!\n\nAqui é da *Onça Prosa* 🐆.\nSegue o resumo do seu orçamento (Nº ${v.id.substring(v.id.length-6)}):\n\n`;
