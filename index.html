@@ -25,15 +25,15 @@
         #loginMsg { color: #e74c3c; font-size: 14px; margin-bottom: 10px; min-height: 15px; font-weight: bold; }
         
         .header-top { background: #352218; color: #fcf8f2; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-wrap: wrap; gap: 10px; }
-        .navbar { background-color: #4a3022; padding: 10px 20px; display: flex; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; }
-        .aba-btn { background: none; border: none; color: #e8dcc4; font-size: 13px; font-weight: bold; cursor: pointer; padding: 8px 12px; border-radius: 6px; transition: 0.3s; flex: 1; min-width: 100px; text-align: center; }
+        .navbar { background-color: #4a3022; padding: 10px 20px; display: flex; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; justify-content: center; }
+        .aba-btn { background: none; border: none; color: #e8dcc4; font-size: 12px; font-weight: bold; cursor: pointer; padding: 8px 10px; border-radius: 6px; transition: 0.3s; flex: 1; min-width: 90px; text-align: center; white-space: nowrap; }
         .aba-btn:hover { color: white; background-color: #634331; }
         .aba-ativa { color: white; background-color: #c8827a; }
         .aba-ativa:hover { background-color: #b26e67; }
         
         .container-principal { padding: 20px; max-width: 1650px; margin: 0 auto; box-sizing: border-box; }
         .layout-flex { display: flex; gap: 20px; align-items: flex-start; }
-        .painel-cadastro { width: 25%; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 20px; box-sizing: border-box; }
+        .painel-cadastro { width: 25%; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 20px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         .painel-conteudo { width: 75%; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; min-width: 0; }
         .painel-branco { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); box-sizing: border-box; overflow: hidden; width: 100%; }
         
@@ -50,7 +50,7 @@
         .btn-acao-topo:hover { background: #7c7965; }
         
         .resumo-container { display: flex; gap: 20px; flex-wrap: wrap; width: 100%; margin-bottom: 20px; }
-        .card { flex: 1; min-width: 200px; background: white; padding: 15px; border-radius: 8px; text-align: center; border-bottom: 4px solid #ddd; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .card { flex: 1; min-width: 150px; background: white; padding: 15px; border-radius: 8px; text-align: center; border-bottom: 4px solid #ddd; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .card h4 { margin: 0; font-size: 14px; color: #7f8c8d; }
         .card p { margin: 8px 0 0 0; font-size: 24px; font-weight: bold; }
         
@@ -62,7 +62,7 @@
         .table-responsive table { min-width: 800px; } 
         
         th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #eee; font-size: 13px; }
-        th { background-color: #faf9f7; border-bottom: 2px solid #e8e3dc; color: #4a3022; position: sticky; top: 0; }
+        th { background-color: #faf9f7; border-bottom: 2px solid #e8e3dc; color: #4a3022; position: sticky; top: 0; z-index: 1;}
         .btn-acao { border: none; background: none; cursor: pointer; font-size: 16px; padding: 4px; border-radius: 4px; }
         .btn-acao:hover { background: #eee; }
         
@@ -91,19 +91,17 @@
         .historico-item .tipo-badge { background: #e8dcc4; color: #4a3022; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 8px; }
         .historico-item button.del-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 14px; }
 
-        /* Carrinho, PDV e Ficha Técnica */
         .tabela-carrinho { width: 100%; font-size: 12px; margin-bottom: 15px; }
         .tabela-carrinho th { background: #e8dcc4; padding: 5px; }
         .tabela-carrinho td { padding: 5px; border-bottom: 1px solid #eee; }
         
-        /* Workflow Badges */
         .badge { padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; color: white; display: inline-block; text-align: center; min-width: 80px;}
         .badge-orcamento { background-color: #95a5a6; }
         .badge-producao { background-color: #f39c12; }
         .badge-pronto { background-color: #3498db; }
         .badge-entregue { background-color: #27ae60; }
+        .badge-manutencao { background-color: #8e44ad; }
         
-        /* Recibo de Impressão */
         .folha-a4 { background: white; padding: 40px; width: 100%; max-width: 800px; margin: 0 auto; color: #333; font-family: 'Segoe UI', sans-serif; }
         .folha-a4-header { display: flex; justify-content: space-between; border-bottom: 3px solid #4a3022; padding-bottom: 15px; margin-bottom: 20px; }
         .folha-a4-header img { height: 80px; border-radius: 50%; }
@@ -145,15 +143,17 @@
         </div>
     </div>
 
-    <!-- NAVBAR ESTRUTURADA -->
+    <!-- NAVBAR ESTRUTURADA E AMPLIADA -->
     <div class="navbar">
         <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard</button>
         <button id="btnAbaComercial" class="aba-btn" onclick="mudarAba('comercial')">🛒 Comercial</button>
+        <button id="btnAbaCompras" class="aba-btn fin-req" onclick="mudarAba('compras')">📥 Compras</button>
         <button id="btnAbaFinanceiro" class="aba-btn fin-req" onclick="mudarAba('financeiro')">💸 Financeiro</button>
-        <button id="btnAbaProdutosFinais" class="aba-btn" onclick="mudarAba('produtosFinais')">🛍️ Produtos (Catálogo)</button>
-        <button id="btnAbaEstoque" class="aba-btn" onclick="mudarAba('estoque')">📦 Estoque (Insumos)</button>
+        <button id="btnAbaProdutosFinais" class="aba-btn" onclick="mudarAba('produtosFinais')">🛍️ Catálogo</button>
+        <button id="btnAbaEstoque" class="aba-btn" onclick="mudarAba('estoque')">📦 Estoque (MP)</button>
+        <button id="btnAbaPatrimonio" class="aba-btn admin-req" onclick="mudarAba('patrimonio')">🛠️ Patrimônio</button>
         <button id="btnAbaClientes" class="aba-btn" onclick="mudarAba('clientes')">👥 Clientes</button>
-        <button id="btnAbaFornecedores" class="aba-btn" onclick="mudarAba('fornecedores')">🚚 Fornecedores</button>
+        <button id="btnAbaFornecedores" class="aba-btn" onclick="mudarAba('fornecedores')">🚚 Fornec.</button>
         <button id="btnAbaGestao" class="aba-btn admin-req" style="display:none;" onclick="mudarAba('gestao')">⚙️ Gestão</button>
     </div>
 
@@ -176,7 +176,7 @@
                     <div class="dre-linha positivo"><span>(+) Receita Bruta de Vendas</span><span id="dreReceita">R$ 0,00</span></div>
                     <div class="dre-linha negativo"><span>(-) Devoluções / Cancelamentos</span><span id="dreDevolucao">R$ 0,00</span></div>
                     <div class="dre-linha destaque"><span>(=) Receita Líquida</span><span id="dreReceitaLiq">R$ 0,00</span></div>
-                    <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Custos Variáveis (Impostos, Tx, CMV)</span><span id="dreCustosVar">R$ 0,00</span></div>
+                    <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Custos Variáveis (Insumos, Impostos, Compras...)</span><span id="dreCustosVar">R$ 0,00</span></div>
                     <div class="dre-linha destaque" style="color: #2980b9;"><span>(=) Margem de Contribuição</span><span id="dreMargemCont">R$ 0,00</span></div>
                     <div class="dre-linha negativo" style="margin-top: 15px;"><span>(-) Despesas Fixas (Aluguel, Salário...)</span><span id="dreDespFixa">R$ 0,00</span></div>
                     <div class="dre-linha destaque" style="border-bottom-color: #4a3022;"><span>(=) Lucro Líquido Operacional</span><span id="dreLucro">R$ 0,00</span></div>
@@ -241,6 +241,56 @@
                         <table>
                             <thead><tr><th>Data</th><th>Cliente</th><th>Total (R$)</th><th style="text-align:center;">Status</th><th style="text-align: center;">Esteira Produtiva / PDF</th></tr></thead>
                             <tbody id="tbComercial"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO: COMPRAS (NOVO) -->
+        <div id="abaCompras" class="layout-flex aba-conteudo" style="display: none;">
+            <div class="painel-cadastro fin-req">
+                <h2>📥 Registrar Compra</h2>
+                <p style="font-size: 12px; color: #666; margin-top: -15px;">Alimenta o estoque (Matéria-prima) e lança despesa no Financeiro calculando o rateio.</p>
+                
+                <div class="form-group"><label>Insumo Adquirido:</label><select id="compraInsumo"><option value="">Selecione o insumo...</option></select></div>
+                <div class="form-group"><label>Fornecedor (Opcional):</label><select id="compraFornecedor"><option value="">Nenhum</option></select></div>
+                
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;"><label>Quantidade Comprada:</label><input type="number" id="compraQtd" step="0.01" value="1" oninput="calcularRateioCompra()"></div>
+                    <div class="form-group" style="flex: 1;"><label>Data da Compra:</label><input type="date" id="compraData"></div>
+                </div>
+                
+                <div style="background: #faf9f7; padding: 15px; border-radius: 6px; border: 1px solid #e8e3dc; margin-bottom: 15px;">
+                    <h4 style="margin: 0 0 10px 0; color: #d35400;">Composição do Custo</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label>Valor do Lote/Itens (R$):</label><input type="number" id="compraLote" step="0.01" value="0" oninput="calcularRateioCompra()"></div>
+                        <div class="form-group"><label>Frete (R$):</label><input type="number" id="compraFrete" step="0.01" value="0" oninput="calcularRateioCompra()"></div>
+                        <div class="form-group"><label>Impostos/Outros (R$):</label><input type="number" id="compraImposto" step="0.01" value="0" oninput="calcularRateioCompra()"></div>
+                    </div>
+                    <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 13px;"><span>Valor Total a Pagar:</span><strong id="lblCompraTotal" style="color:#e74c3c;">R$ 0,00</strong></div>
+                        <div style="display: flex; justify-content: space-between; font-size: 15px; margin-top: 5px;"><span>Novo Custo Unitário:</span><strong id="lblCompraCustoUnit" style="color:#27ae60;">R$ 0,00</strong></div>
+                    </div>
+                </div>
+                
+                <div class="form-group"><label>Conta P/ Lançamento Financeiro:</label><select id="compraConta"></select></div>
+
+                <button class="btn" style="background:#2980b9;" onclick="efetuarCompra()">Gravar Compra e Atualizar Estoque</button>
+            </div>
+            <div class="painel-conteudo">
+                <div class="painel-branco">
+                    <h2 style="margin-top:0;">📋 Histórico de Compras</h2>
+                    <div class="filtros-area">
+                        <div class="filtros-grid">
+                            <div><label>Buscar Insumo:</label><input type="text" id="fBuscaCompra" oninput="renderizarCompras()"></div>
+                            <div><label>Mês:</label><input type="month" id="fMesCompra" onchange="renderizarCompras()"></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Data</th><th>Insumo</th><th>Fornecedor</th><th>Qtd Adquirida</th><th>Custo Unit. Calculado</th><th>Total Pago</th></tr></thead>
+                            <tbody id="tbCompras"></tbody>
                         </table>
                     </div>
                 </div>
@@ -349,14 +399,14 @@
         <div id="abaEstoque" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro">
                 <h2 id="tituloCadProduto">📦 Novo Insumo/MP</h2>
-                <p style="font-size: 12px; color: #666; margin-top: -15px;">Cadastre aqui matérias-primas e itens para revenda direta.</p>
+                <p style="font-size: 12px; color: #666; margin-top: -15px;">A alimentação do saldo e alteração de custo é feita preferencialmente pela aba <strong>Compras</strong>.</p>
                 <input type="hidden" id="prodId">
                 <div class="form-group"><label>Nome do Insumo (Ex: Farinha kg):</label><input type="text" id="prodNome"></div>
                 <div class="form-group"><label>Categoria:</label><input type="text" id="prodCat"></div>
-                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Fornecedor:</label><select id="prodFornecedor"><option value="">Nenhum</option></select></div><div class="form-group" style="flex: 1;"><label>Marca:</label><input type="text" id="prodMarca"></div></div>
-                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Custo Unit. (R$):</label><input type="number" id="prodCusto" step="0.01"></div><div class="form-group" style="flex: 1;"><label>Preço Revenda (R$):</label><input type="number" id="prodVenda" step="0.01" placeholder="Se for revender..."></div></div>
-                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Qtd Atual:</label><input type="number" id="prodQtd" step="0.01"></div><div class="form-group" style="flex: 1;"><label>Estoque Mínimo:</label><input type="number" id="prodMin" step="0.01"></div></div>
-                <button class="btn" id="btnSalvarProd" style="margin-top: 10px;" onclick="adicionarProduto()">Salvar Insumo</button>
+                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Fornecedor Padrão:</label><select id="prodFornecedor"><option value="">Nenhum</option></select></div><div class="form-group" style="flex: 1;"><label>Marca:</label><input type="text" id="prodMarca"></div></div>
+                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Custo Unit. Manual (R$):</label><input type="number" id="prodCusto" step="0.01"></div><div class="form-group" style="flex: 1;"><label>Qtd Manual:</label><input type="number" id="prodQtd" step="0.01"></div></div>
+                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Estoque Mínimo:</label><input type="number" id="prodMin" step="0.01"></div></div>
+                <button class="btn" id="btnSalvarProd" style="margin-top: 10px;" onclick="adicionarProduto()">Salvar Cadastro Base</button>
                 <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormProduto()">Limpar</button>
             </div>
             <div class="painel-conteudo">
@@ -372,6 +422,50 @@
                         <table>
                             <thead><tr><th>Insumo</th><th>Marca</th><th>Fornecedor</th><th>Custo (R$)</th><th style="text-align: center;">Qtd Atual</th><th style="text-align: center;">Ações</th></tr></thead>
                             <tbody id="tbEstoque"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO: PATRIMÔNIO E EQUIPAMENTOS (NOVO) -->
+        <div id="abaPatrimonio" class="layout-flex aba-conteudo admin-req" style="display: none;">
+            <div class="painel-cadastro">
+                <h2 id="tituloCadPat">🛠️ Novo Equipamento</h2>
+                <input type="hidden" id="patId">
+                <div class="form-group"><label>Identificação / Nome:</label><input type="text" id="patIdent" placeholder="Ex: Forno Industrial"></div>
+                <div class="form-group"><label>Marca / Modelo:</label><input type="text" id="patMarca"></div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;"><label>Quantidade:</label><input type="number" id="patQtd" value="1"></div>
+                    <div class="form-group" style="flex: 1;"><label>Data de Compra:</label><input type="date" id="patData"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;"><label>Valor Total (R$):</label><input type="number" id="patValor" step="0.01"></div>
+                    <div class="form-group" style="flex: 1;"><label>Vida Útil Estimada:</label><input type="text" id="patVida" placeholder="Ex: 5 anos"></div>
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #eef2f5; padding: 10px; border-radius: 6px; border: 1px solid #ccd1d9; color: #2980b9;">
+                        <input type="checkbox" id="patLancarFin" style="width: auto; margin: 0;"> Gerar Despesa Automática no Financeiro
+                    </label>
+                </div>
+                <div class="form-group" id="divPatConta" style="display:none;"><label>Conta para Débito:</label><select id="patConta"></select></div>
+
+                <button class="btn" id="btnSalvarPat" style="background:#8e44ad; margin-top: 10px;" onclick="salvarEquipamento()">Gravar Patrimônio</button>
+                <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormPat()">Limpar</button>
+            </div>
+            <div class="painel-conteudo">
+                <div class="painel-branco">
+                    <h2 style="margin-top:0;">📋 Gestão de Patrimônio e Manutenções</h2>
+                    <div class="filtros-area">
+                        <div class="filtros-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div><label>Buscar Equipamento:</label><input type="text" id="fBuscaPat" oninput="renderizarPatrimonio()"></div>
+                            <div><label>Status:</label><select id="fStatusPat" onchange="renderizarPatrimonio()"><option value="Ativos">Ativos</option><option value="Baixados">Baixados / Sucata</option></select></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>ID / Equipamento</th><th>Marca</th><th>Qtd</th><th>Aquisição (Data/Valor)</th><th style="text-align:center;">Manutenções</th><th style="text-align: center;">Ações</th></tr></thead>
+                            <tbody id="tbPatrimonio"></tbody>
                         </table>
                     </div>
                 </div>
@@ -432,7 +526,7 @@
         </div>
 
         <!-- MÓDULO 6: GESTÃO E LOGS -->
-        <div id="abaGestao" class="painel-branco aba-conteudo" style="display: none;">
+        <div id="abaGestao" class="painel-branco aba-conteudo admin-req" style="display: none;">
             <h2>⚙️ Gestão de Equipe, Configurações e Logs</h2>
             <div class="admin-area" style="margin-bottom: 30px;">
                 <h3 style="color: #d35400; margin-top: 0;">👥 Cadastro de Pessoas e Acessos</h3>
@@ -467,7 +561,7 @@
     </div>
 </div>
 
-<!-- Modais -->
+<!-- Modais (CRM, Impressão e Manutenção) -->
 <div id="modalHistorico" class="modal-overlay">
     <div class="modal-box" style="max-width: 550px;">
         <h3 style="color: #4a3022; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">📝 Histórico do Cliente<button onclick="document.getElementById('modalHistorico').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
@@ -496,7 +590,22 @@
     </div>
 </div>
 
+<div id="modalManutencao" class="modal-overlay">
+    <div class="modal-box" style="max-width: 450px;">
+        <h3 style="color: #4a3022; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">🔧 Registrar Manutenção<button onclick="document.getElementById('modalManutencao').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
+        <p style="margin-top: -10px; color: #8e44ad; font-weight: bold; font-size: 14px;" id="manuIdent">Equipamento</p>
+        <input type="hidden" id="manuEquipId">
+        <div class="form-row"><div class="form-group" style="flex:1;"><label>Data:</label><input type="date" id="manuData"></div></div>
+        <div class="form-group"><label>Técnico / Empresa:</label><input type="text" id="manuQuem"></div>
+        <div class="form-group"><label>Valor (R$):</label><input type="number" id="manuValor" step="0.01"></div>
+        <div class="form-group" style="margin-top: 10px;"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox" id="manuLancarFin" style="width: auto; margin: 0;"> Lançar Despesa no Financeiro</label></div>
+        <div class="form-group" id="divManuConta" style="display:none;"><label>Conta para Débito:</label><select id="manuConta"></select></div>
+        <button class="btn" style="background:#8e44ad; margin-top:15px;" onclick="efetuarManutencao()">Salvar Manutenção</button>
+    </div>
+</div>
+
 <script>
+    // --- 1. CONFIGURAÇÃO E INICIALIZAÇÃO BLINDADA ---
     const firebaseConfig = { 
         apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI", 
         authDomain: "onca-prosa-erp.firebaseapp.com", 
@@ -513,16 +622,13 @@
     const auth = firebase.auth(); 
     
     let appSecundario;
-    try {
-        appSecundario = firebase.app("AppSecundario");
-    } catch (e) {
-        appSecundario = firebase.initializeApp(firebaseConfig, "AppSecundario");
-    }
+    try { appSecundario = firebase.app("AppSecundario"); } catch (e) { appSecundario = firebase.initializeApp(firebaseConfig, "AppSecundario"); }
 
-    let lancamentos = [], produtos = [], produtosFinais = [], clientes = [], fornecedores = [], historicoClientes = [], usuariosLista = [], vendas = [];
+    // --- 2. VARIÁVEIS GLOBAIS ---
+    let lancamentos = [], produtos = [], produtosFinais = [], clientes = [], fornecedores = [], historicoClientes = [], usuariosLista = [], vendas = [], compras = [], patrimonios = [];
     let contasLista = ["Caixa Principal", "Banco Inter", "Mercado Pago"]; 
     let statusLista = ["A Vencer", "Efetuada"]; 
-    let categorias = ["Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Aluguel", "Salários", "Internet", "Sistema", "Contador", "Outras Despesas Fixas"];
+    let categorias = ["Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Aluguel", "Salários", "Manutenção Equip.", "Internet", "Sistema", "Contador", "Outras Despesas Fixas"];
     
     let userAutenticado = null; let perfilUsuario = 'Vendedor'; 
     let carrinhoAtual = []; let fichaAtual = [];
@@ -536,9 +642,10 @@
             document.getElementById('telaLogin').style.display = 'none'; document.getElementById('appLogado').style.display = 'block'; userAutenticado = user;
             db.collection("usuarios").doc(user.uid).onSnapshot(doc => {
                 if (doc.exists) {
-                    let d = doc.data(); if(d.status === "Suspenso") { alert("Conta suspensa."); auth.signOut(); return; }
+                    let d = doc.data(); if(d.status === "Suspenso") { alert("Sua conta foi suspensa pelo Administrador."); auth.signOut(); return; }
                     perfilUsuario = d.perfil; document.getElementById('lblUsuario').innerText = d.nome || "Usuário"; document.getElementById('lblPerfil').innerText = perfilUsuario;
-                    document.getElementById("fMes").value = new Date().toISOString().substring(0,7); document.getElementById("dreMes").value = new Date().toISOString().substring(0,7); document.getElementById("fMesVenda").value = new Date().toISOString().substring(0,7);
+                    document.getElementById("fMes").value = new Date().toISOString().substring(0,7); document.getElementById("dreMes").value = new Date().toISOString().substring(0,7); document.getElementById("fMesVenda").value = new Date().toISOString().substring(0,7); document.getElementById("fMesCompra").value = new Date().toISOString().substring(0,7);
+                    document.getElementById("compraData").value = new Date().toISOString().substring(0,10); document.getElementById("patData").value = new Date().toISOString().substring(0,10);
                     aplicarPermissoes(); carregarListas(); iniciarOuvintesDeDados();
                 }
             });
@@ -553,24 +660,16 @@
     }
 
     function entrar() { 
-        let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, ''); 
-        const s = document.getElementById('senhaAuth').value; 
+        let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, ''); const s = document.getElementById('senhaAuth').value; 
         if(!cpf || !s) return alert("Preencha CPF e Senha"); 
-        
-        document.getElementById('loginMsg').innerText = "Autenticando..."; 
-        document.getElementById('loginMsg').style.color = "#4a3022";
-        
-        auth.signInWithEmailAndPassword(cpf + "@oncaprosa.local", s)
-            .catch(err => { 
-                console.error("Erro Firebase:", err.code, err.message); 
+        document.getElementById('loginMsg').innerText = "Autenticando..."; document.getElementById('loginMsg').style.color = "#4a3022";
+        auth.signInWithEmailAndPassword(cpf + "@oncaprosa.local", s).catch(err => { 
                 let msg = "Erro no acesso. CPF ou Senha incorretos.";
                 if(err.code === 'auth/user-not-found') msg = "Usuário não encontrado. O CPF está certo?";
                 if(err.code === 'auth/wrong-password') msg = "Senha incorreta.";
                 if(err.code === 'auth/network-request-failed') msg = "Sem conexão com a internet.";
-                if(err.code === 'auth/too-many-requests') msg = "Muitas tentativas. Aguarde um minuto.";
-                document.getElementById('loginMsg').innerText = msg; 
-                document.getElementById('loginMsg').style.color = "#e74c3c"; 
-            }); 
+                document.getElementById('loginMsg').innerText = msg; document.getElementById('loginMsg').style.color = "#e74c3c"; 
+        }); 
     }
 
     function registrarPrimeiroAdmin() { let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, ''); const s = document.getElementById('senhaAuth').value; if(cpf.length !== 11 || s.length < 6) return alert("CPF inválido ou senha curta."); auth.createUserWithEmailAndPassword(cpf + "@oncaprosa.local", s).then(cred => { db.collection("usuarios").doc(cred.user.uid).set({ cpf: cpf, perfil: "Administrador", status: "Ativo", nome: "Administrador Mestre" }); alert("Administrador criado!"); }).catch(err => alert("Erro: " + err.message)); }
@@ -578,21 +677,23 @@
 
     function mudarAba(abaId) {
         document.querySelectorAll('.aba-conteudo').forEach(el => el.style.display = 'none'); document.querySelectorAll('.aba-btn').forEach(el => el.classList.remove('aba-ativa'));
-        let isFlex = ['financeiro', 'estoque', 'produtosFinais', 'clientes', 'fornecedores', 'comercial'].includes(abaId);
+        let isFlex = ['financeiro', 'estoque', 'produtosFinais', 'clientes', 'fornecedores', 'comercial', 'compras', 'patrimonio'].includes(abaId);
         document.getElementById('aba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).style.display = (isFlex && window.innerWidth > 900) ? 'flex' : 'block';
         document.getElementById('btnAba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).classList.add('aba-ativa');
-        if(abaId === 'dashboard') gerarDRE(); if(abaId === 'financeiro') atualizarTelaFinanceiro(); if(abaId === 'estoque') renderizarEstoque(); if(abaId === 'produtosFinais') renderizarProdutosFinais(); if(abaId === 'clientes') renderizarClientes(); if(abaId === 'fornecedores') renderizarFornecedores(); if(abaId === 'comercial') renderizarComercial();
+        if(abaId === 'dashboard') gerarDRE(); if(abaId === 'financeiro') atualizarTelaFinanceiro(); if(abaId === 'estoque') renderizarEstoque(); if(abaId === 'produtosFinais') renderizarProdutosFinais(); if(abaId === 'clientes') renderizarClientes(); if(abaId === 'fornecedores') renderizarFornecedores(); if(abaId === 'comercial') renderizarComercial(); if(abaId === 'compras') renderizarCompras(); if(abaId === 'patrimonio') renderizarPatrimonio();
     }
 
     function iniciarOuvintesDeDados() {
         db.collection("config").doc("listas").onSnapshot(doc => { if (doc.exists) { let d = doc.data(); if(d.categorias) categorias = d.categorias; if(d.contasLista) contasLista = d.contasLista; } carregarListas(); });
         db.collection("lancamentos").onSnapshot(snap => { lancamentos = []; snap.forEach(doc => lancamentos.push(doc.data())); if(document.getElementById('abaFinanceiro').style.display !== 'none') atualizarTelaFinanceiro(); if(document.getElementById('abaDashboard').style.display !== 'none') gerarDRE(); });
-        db.collection("produtos").onSnapshot(snap => { produtos = []; snap.forEach(doc => produtos.push(doc.data())); carregarInsumosFichaTecnica(); if(document.getElementById('abaEstoque').style.display !== 'none') renderizarEstoque(); });
+        db.collection("produtos").onSnapshot(snap => { produtos = []; snap.forEach(doc => produtos.push(doc.data())); carregarInsumosFichaTecnica(); carregarInsumosCompras(); if(document.getElementById('abaEstoque').style.display !== 'none') renderizarEstoque(); });
         db.collection("produtos_finais").onSnapshot(snap => { produtosFinais = []; snap.forEach(doc => produtosFinais.push(doc.data())); carregarSelectsComercial(); if(document.getElementById('abaProdutosFinais').style.display !== 'none') renderizarProdutosFinais(); });
         db.collection("clientes").onSnapshot(snap => { clientes = []; snap.forEach(doc => clientes.push(doc.data())); carregarSelectsComercial(); if(document.getElementById('abaClientes').style.display !== 'none') renderizarClientes(); });
         db.collection("historico_clientes").onSnapshot(snap => { historicoClientes = []; snap.forEach(doc => historicoClientes.push(doc.data())); if(document.getElementById('modalHistorico').style.display === 'flex') { renderizarHistoricoModal(document.getElementById('histClienteId').value); } });
         db.collection("fornecedores").onSnapshot(snap => { fornecedores = []; snap.forEach(doc => fornecedores.push(doc.data())); carregarFornecedoresSelect(); if(document.getElementById('abaFornecedores').style.display !== 'none') renderizarFornecedores(); });
         db.collection("vendas").onSnapshot(snap => { vendas = []; snap.forEach(doc => vendas.push(doc.data())); if(document.getElementById('abaComercial').style.display !== 'none') renderizarComercial(); });
+        db.collection("compras").onSnapshot(snap => { compras = []; snap.forEach(doc => compras.push(doc.data())); if(document.getElementById('abaCompras').style.display !== 'none') renderizarCompras(); });
+        db.collection("patrimonio").onSnapshot(snap => { patrimonios = []; snap.forEach(doc => patrimonios.push(doc.data())); if(document.getElementById('abaPatrimonio').style.display !== 'none') renderizarPatrimonio(); });
 
         if(perfilUsuario === 'Administrador') {
             db.collection("usuarios").onSnapshot(snap => { usuariosLista = []; let html = ""; snap.forEach(doc => { let u = doc.data(); u.id = doc.id; usuariosLista.push(u); html += `<tr><td><strong>${u.nome}</strong></td><td>${u.cpf}</td><td><select onchange="alterarUser('${u.id}', 'perfil', this.value)"><option value="Vendedor" ${u.perfil==='Vendedor'?'selected':''}>Vendedor</option><option value="Financeiro" ${u.perfil==='Financeiro'?'selected':''}>Financeiro</option><option value="Administrador" ${u.perfil==='Administrador'?'selected':''}>Administrador</option></select></td><td><select onchange="alterarUser('${u.id}', 'status', this.value)"><option value="Ativo" ${u.status==='Ativo'?'selected':''}>Ativo</option><option value="Suspenso" ${u.status==='Suspenso'?'selected':''}>Suspenso</option></select></td><td><button class="btn-acao" style="color:red;" onclick="excluirUser('${u.id}')">🗑️</button></td></tr>`; }); document.getElementById('tabelaUsuarios').innerHTML = html; });
@@ -600,11 +701,177 @@
         }
     }
 
-    function carregarListas() { document.getElementById("cadCat").innerHTML = categorias.map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById("cadStatus").innerHTML = statusLista.map(s => `<option value="${s}">${s}</option>`).join(''); document.getElementById("cadConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById("fConta").innerHTML = '<option value="Todas">Todas</option>' + contasLista.map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById("listaCatConfig").innerHTML = categorias.map((c, i) => `<li>${c} <button onclick="remConfig('cat', ${i})">X</button></li>`).join(''); document.getElementById("listaContasConfig").innerHTML = contasLista.map((c, i) => `<li>${c} <button onclick="remConfig('conta', ${i})">X</button></li>`).join(''); }
+    function carregarListas() { document.getElementById("cadCat").innerHTML = categorias.map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById("cadStatus").innerHTML = statusLista.map(s => `<option value="${s}">${s}</option>`).join(''); document.getElementById("cadConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById("compraConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById("patConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById("manuConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById("fConta").innerHTML = '<option value="Todas">Todas</option>' + contasLista.map(c => `<option value="${c}">${c}</option>`).join(''); document.getElementById("listaCatConfig").innerHTML = categorias.map((c, i) => `<li>${c} <button onclick="remConfig('cat', ${i})">X</button></li>`).join(''); document.getElementById("listaContasConfig").innerHTML = contasLista.map((c, i) => `<li>${c} <button onclick="remConfig('conta', ${i})">X</button></li>`).join(''); }
     function formatarDinheiro(v) { return Number(v || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}); }
     function formatarDataSimples(d) { return d ? d.split('-').reverse().join('/') : ""; }
 
-    // Ficha Técnica
+    // ==========================================
+    // MÓDULO: COMPRAS 
+    // ==========================================
+    function carregarInsumosCompras() { let html = '<option value="">Selecione o insumo...</option>'; produtos.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(p => html += `<option value="${p.id}">${p.nome}</option>`); document.getElementById("compraInsumo").innerHTML = html; }
+    
+    function calcularRateioCompra() {
+        let qtd = parseFloat(document.getElementById("compraQtd").value) || 0;
+        let lote = parseFloat(document.getElementById("compraLote").value) || 0;
+        let frete = parseFloat(document.getElementById("compraFrete").value) || 0;
+        let imposto = parseFloat(document.getElementById("compraImposto").value) || 0;
+        
+        let total = lote + frete + imposto;
+        let unitario = qtd > 0 ? (total / qtd) : 0;
+        
+        document.getElementById("lblCompraTotal").innerText = formatarDinheiro(total);
+        document.getElementById("lblCompraCustoUnit").innerText = formatarDinheiro(unitario);
+        return { total: total, unitario: unitario, qtd: qtd };
+    }
+
+    function efetuarCompra() {
+        let insumoId = document.getElementById("compraInsumo").value;
+        let forn = document.getElementById("compraFornecedor").value;
+        let calc = calcularRateioCompra();
+        let dataC = document.getElementById("compraData").value;
+        let conta = document.getElementById("compraConta").value;
+
+        if(!insumoId || calc.qtd <= 0 || calc.total <= 0) return alert("Selecione um insumo válido, quantidade e informe os valores.");
+        if(!confirm(`Confirma o registro desta compra?\n\nO estoque será alimentado e uma DESPESA no valor de ${formatarDinheiro(calc.total)} será lançada no Financeiro.`)) return;
+
+        let batch = db.batch();
+        
+        // 1. Salvar histórico de compra
+        let compraId = Date.now().toString();
+        let insumoNome = produtos.find(x => x.id === insumoId).nome;
+        let objCompra = { id: compraId, insumoId: insumoId, insumoNome: insumoNome, fornecedor: forn, qtd: calc.qtd, valorLote: parseFloat(document.getElementById("compraLote").value)||0, frete: parseFloat(document.getElementById("compraFrete").value)||0, impostos: parseFloat(document.getElementById("compraImposto").value)||0, valorTotal: calc.total, custoUnitario: calc.unitario, data: dataC, contaPagamento: conta };
+        batch.set(db.collection("compras").doc(compraId), objCompra);
+
+        // 2. Atualizar Estoque do Insumo (Substitui o custo e soma a QTD)
+        let pAtual = produtos.find(x => x.id === insumoId);
+        batch.update(db.collection("produtos").doc(insumoId), { qtd: pAtual.qtd + calc.qtd, custo: calc.unitario });
+
+        // 3. Lançamento Financeiro Automático
+        let lancId = "COMPRA_" + compraId;
+        let lanc = { id: lancId, desc: `Compra Matéria-Prima: ${insumoNome} (Qtd: ${calc.qtd})`, categoria: "Insumos de Produção", conta: conta, valor: calc.total, data: dataC, tipo: "Débito", status: "Efetuada" };
+        batch.set(db.collection("lancamentos").doc(lancId), lanc);
+
+        batch.commit().then(() => {
+            registrarLog("COMPRAS", `Efetuou compra de ${calc.qtd}x ${insumoNome}. Estoque atualizado.`);
+            alert("Compra registrada, estoque alimentado e financeiro atualizado com sucesso!");
+            document.getElementById("compraInsumo").value = ""; document.getElementById("compraQtd").value = "1"; document.getElementById("compraLote").value = "0"; document.getElementById("compraFrete").value = "0"; document.getElementById("compraImposto").value = "0"; calcularRateioCompra();
+        });
+    }
+
+    function renderizarCompras() {
+        const tbody = document.getElementById("tbCompras"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaCompra").value.toLowerCase(); let mes = document.getElementById("fMesCompra").value;
+        let filtrados = compras.filter(c => c.insumoNome.toLowerCase().includes(busca) && c.data.startsWith(mes));
+        filtrados.sort((a,b) => b.data.localeCompare(a.data)).forEach(c => {
+            let tr = document.createElement("tr");
+            tr.innerHTML = `<td>${formatarDataSimples(c.data)}</td><td><strong>${c.insumoNome}</strong></td><td>${c.fornecedor||'-'}</td><td style="color:#2980b9; font-weight:bold;">${c.qtd}</td><td style="color:#27ae60;">${formatarDinheiro(c.custoUnitario)}</td><td style="color:#e74c3c; font-weight:bold;">${formatarDinheiro(c.valorTotal)}</td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // ==========================================
+    // MÓDULO: PATRIMÔNIO E EQUIPAMENTOS
+    // ==========================================
+    // Listener para mostrar/esconder conta financeira na hora de cadastrar
+    document.getElementById('patLancarFin').addEventListener('change', function() { document.getElementById('divPatConta').style.display = this.checked ? 'block' : 'none'; });
+    document.getElementById('manuLancarFin').addEventListener('change', function() { document.getElementById('divManuConta').style.display = this.checked ? 'block' : 'none'; });
+
+    function salvarEquipamento() {
+        let idEdit = document.getElementById("patId").value;
+        let ident = document.getElementById("patIdent").value.trim();
+        let marca = document.getElementById("patMarca").value.trim();
+        let qtd = parseInt(document.getElementById("patQtd").value) || 1;
+        let valor = parseFloat(document.getElementById("patValor").value) || 0;
+        let data = document.getElementById("patData").value;
+        let vida = document.getElementById("patVida").value.trim();
+        let lancarFin = document.getElementById("patLancarFin").checked;
+        let conta = document.getElementById("patConta").value;
+
+        if(!ident || !data) return alert("Preencha a identificação e data.");
+
+        let p = { identificacao: ident, marca: marca, qtd: qtd, valorCompra: valor, dataCompra: data, vidaUtil: vida, baixado: false, qtdManutencao: 0, valorTotalManutencao: 0 };
+        let batch = db.batch();
+
+        if(idEdit) {
+            p.id = idEdit; batch.update(db.collection("patrimonio").doc(idEdit), { identificacao: ident, marca: marca, qtd: qtd, valorCompra: valor, dataCompra: data, vidaUtil: vida });
+            registrarLog("PATRIMÔNIO", `Editou equipamento: ${ident}`);
+        } else {
+            p.id = Date.now().toString(); batch.set(db.collection("patrimonio").doc(p.id), p);
+            registrarLog("PATRIMÔNIO", `Cadastrou equipamento: ${ident} (Valor: ${formatarDinheiro(valor)})`);
+            
+            if(lancarFin && valor > 0) {
+                let lancId = "PAT_" + p.id;
+                let lanc = { id: lancId, desc: `Aquisição Equipamento: ${ident} (${marca})`, categoria: "Outras Despesas Fixas", conta: conta, valor: valor, data: data, tipo: "Débito", status: "Efetuada" };
+                batch.set(db.collection("lancamentos").doc(lancId), lanc);
+            }
+        }
+        
+        batch.commit().then(() => { alert("Patrimônio registrado!"); limparFormPat(); });
+    }
+
+    function limparFormPat() { document.getElementById("patId").value = ""; document.getElementById("patIdent").value = ""; document.getElementById("patMarca").value = ""; document.getElementById("patQtd").value = "1"; document.getElementById("patValor").value = ""; document.getElementById("patVida").value = ""; document.getElementById("patLancarFin").checked = false; document.getElementById('divPatConta').style.display = 'none'; document.getElementById("tituloCadPat").innerText = "🛠️ Novo Equipamento"; document.getElementById("btnSalvarPat").innerText = "Gravar Patrimônio"; }
+
+    function renderizarPatrimonio() {
+        const tbody = document.getElementById("tbPatrimonio"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaPat").value.toLowerCase(); let status = document.getElementById("fStatusPat").value;
+        let isBaixado = status === "Baixados";
+        let filtrados = patrimonios.filter(p => p.identificacao.toLowerCase().includes(busca) && (p.baixado === isBaixado));
+        
+        filtrados.sort((a,b) => b.dataCompra.localeCompare(a.dataCompra)).forEach(p => {
+            let tr = document.createElement("tr"); if(p.baixado) tr.style.opacity = "0.6";
+            
+            let htmlManu = `<span style="font-size:12px; color:#8e44ad;"><b>${p.qtdManutencao || 0}</b> vez(es) | <b>${formatarDinheiro(p.valorTotalManutencao)}</b></span>`;
+            let acoes = "";
+            if(!p.baixado) {
+                acoes = `<button class="btn-acao-topo" style="background:#8e44ad; font-size:11px; padding:4px;" onclick="abrirModalManutencao('${p.id}')">🔧 Manutenção</button>
+                         <button class="btn-acao" onclick="editarPat('${p.id}')">✏️</button>
+                         <button class="btn-acao" style="color:#d35400;" title="Dar Baixa" onclick="darBaixaPat('${p.id}')">⬇️</button>`;
+            } else {
+                acoes = `<span style="color:#e74c3c; font-weight:bold; font-size:11px;">Baixado em: ${formatarDataSimples(p.dataBaixa)}</span>`;
+            }
+
+            tr.innerHTML = `<td><strong>${p.identificacao}</strong></td><td>${p.marca||'-'}</td><td>${p.qtd}</td><td>${formatarDataSimples(p.dataCompra)}<br><small style="color:#e74c3c;">${formatarDinheiro(p.valorCompra)}</small></td><td style="text-align:center;">${htmlManu}</td><td style="text-align:center; display:flex; gap:5px; justify-content:center; align-items:center;">${acoes}</td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function editarPat(id) { let p = patrimonios.find(x => x.id === id); if(!p) return; document.getElementById("patId").value = p.id; document.getElementById("patIdent").value = p.identificacao; document.getElementById("patMarca").value = p.marca; document.getElementById("patQtd").value = p.qtd; document.getElementById("patValor").value = p.valorCompra; document.getElementById("patData").value = p.dataCompra; document.getElementById("patVida").value = p.vidaUtil; document.getElementById("patLancarFin").checked = false; document.getElementById('divPatConta').style.display = 'none'; document.getElementById("tituloCadPat").innerText = "✏️ Editando Equipamento"; document.getElementById("btnSalvarPat").innerText = "Salvar Alterações"; }
+    
+    function darBaixaPat(id) { 
+        if(confirm("ATENÇÃO: Deseja dar BAIXA neste equipamento? Ele será movido para o status de Sucata/Baixado.")) { 
+            db.collection("patrimonio").doc(id).update({ baixado: true, dataBaixa: new Date().toISOString().substring(0,10) }); 
+            registrarLog("PATRIMÔNIO", `Deu baixa no equipamento ID: ${id}`); 
+        } 
+    }
+
+    function abrirModalManutencao(id) {
+        let p = patrimonios.find(x => x.id === id); if(!p) return;
+        document.getElementById("manuEquipId").value = p.id; document.getElementById("manuIdent").innerText = p.identificacao; document.getElementById("manuData").value = new Date().toISOString().substring(0,10); document.getElementById("manuQuem").value = ""; document.getElementById("manuValor").value = ""; document.getElementById("manuLancarFin").checked = false; document.getElementById('divManuConta').style.display = 'none';
+        document.getElementById("modalManutencao").style.display = 'flex';
+    }
+
+    function efetuarManutencao() {
+        let id = document.getElementById("manuEquipId").value; let p = patrimonios.find(x => x.id === id); if(!p) return;
+        let data = document.getElementById("manuData").value; let quem = document.getElementById("manuQuem").value.trim(); let valor = parseFloat(document.getElementById("manuValor").value) || 0;
+        let lancar = document.getElementById("manuLancarFin").checked; let conta = document.getElementById("manuConta").value;
+        if(!data || !quem || valor <= 0) return alert("Preencha a data, o técnico e o valor corretamente.");
+
+        let batch = db.batch();
+        
+        // Atualiza patrimônio
+        let novoQtd = (p.qtdManutencao || 0) + 1;
+        let novoValorTotal = (p.valorTotalManutencao || 0) + valor;
+        batch.update(db.collection("patrimonio").doc(id), { dataManutencao: data, quemManutencao: quem, qtdManutencao: novoQtd, valorTotalManutencao: novoValorTotal });
+
+        if(lancar) {
+            let lancId = "MANU_" + Date.now().toString();
+            let lanc = { id: lancId, desc: `Manutenção Equip.: ${p.identificacao} (${quem})`, categoria: "Manutenção Equip.", conta: conta, valor: valor, data: data, tipo: "Débito", status: "Efetuada" };
+            batch.set(db.collection("lancamentos").doc(lancId), lanc);
+        }
+
+        batch.commit().then(() => { registrarLog("PATRIMÔNIO", `Registrou manutenção em ${p.identificacao} (R$ ${valor})`); alert("Manutenção salva!"); document.getElementById("modalManutencao").style.display = 'none'; });
+    }
+
+
+    // --- Ficha Técnica e Comercial e Outros mantidos integrais ---
     function carregarInsumosFichaTecnica() { let html = '<option value="">Selecione a matéria-prima...</option>'; produtos.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(p => html += `<option value="${p.id}">${p.nome} (Custo base: R$ ${p.custo.toFixed(2)})</option>`); document.getElementById("selInsumoFicha").innerHTML = html; }
     function adicionarInsumoFicha() { let insumoId = document.getElementById("selInsumoFicha").value; let qtd = parseFloat(document.getElementById("qtdInsumoFicha").value); if(!insumoId || isNaN(qtd) || qtd <= 0) return alert("Selecione um insumo e quantidade válida."); let insumo = produtos.find(x => x.id === insumoId); if(insumo) { fichaAtual.push({ insumoId: insumo.id, nome: insumo.nome, custoUnit: insumo.custo, qtd: qtd, custoTotal: insumo.custo * qtd }); atualizarTotaisFicha(); } }
     function removerInsumoFicha(index) { fichaAtual.splice(index, 1); atualizarTotaisFicha(); }
@@ -615,7 +882,6 @@
     function editarProdutoFinal(id) { let p = produtosFinais.find(x => x.id === id); if(!p) return; document.getElementById("prodFinalId").value = p.id; document.getElementById("prodFinalNome").value = p.nome; document.getElementById("prodFinalCat").value = p.cat; document.getElementById("prodFinalMargem").value = p.margem; fichaAtual = [...p.receita]; atualizarTotaisFicha(); document.getElementById("tituloCadProdutoFinal").innerText = "✏️ Editando Produto Final"; document.getElementById("btnSalvarProdFinal").innerText = "Salvar Alterações"; }
     function removerProdutoFinal(id) { if(confirm("Deseja excluir este Produto Final?")) { registrarLog("CATÁLOGO", `Excluiu produto final ID: ${id}`); db.collection("produtos_finais").doc(id).delete(); } }
 
-    // Comercial e Vendas
     function carregarSelectsComercial() { let htmlCli = '<option value="">Selecione um cliente...</option>'; clientes.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(c => htmlCli += `<option value="${c.id}">${c.nome}</option>`); document.getElementById("vendaCliente").innerHTML = htmlCli; let htmlProd = '<option value="">Selecione um produto final...</option>'; produtosFinais.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(p => htmlProd += `<option value="${p.id}">${p.nome} (Venda: R$ ${p.precoVenda.toFixed(2)})</option>`); document.getElementById("vendaProduto").innerHTML = htmlProd; }
     function adicionarItemCarrinho() { let prodId = document.getElementById("vendaProduto").value; let qtd = parseInt(document.getElementById("vendaQtd").value); if(!prodId || isNaN(qtd) || qtd <= 0) return alert("Selecione um produto e quantidade válida."); let p = produtosFinais.find(x => x.id === prodId); if(p) { carrinhoAtual.push({ prodId: p.id, nome: p.nome, preco: p.precoVenda, qtd: qtd, total: p.precoVenda * qtd }); atualizarTotaisCarrinho(); } }
     function removerItemCarrinho(index) { carrinhoAtual.splice(index, 1); atualizarTotaisCarrinho(); }
@@ -651,20 +917,7 @@
             if(confirm("Confirmar Entrega ao cliente?\n\nINTEGRAÇÃO AUTOMÁTICA: Este valor será lançado como RECEITA na aba Financeiro!")) { 
                 db.collection("vendas").doc(id).update({status: "Entregue"}); 
                 registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} Entregue ao cliente.`);
-                
-                // INTEGRAÇÃO FINANCEIRA AUTOMÁTICA
-                let lancId = Date.now().toString();
-                let lanc = {
-                    id: lancId,
-                    desc: `Venda Pedido #${v.id.substring(v.id.length-4)} - ${v.clienteNome}`,
-                    categoria: "Vendas de Produtos",
-                    conta: contasLista.length > 0 ? contasLista[0] : "Caixa Principal",
-                    valor: v.totalGeral,
-                    data: new Date().toISOString().substring(0,10),
-                    tipo: "Crédito",
-                    status: "Efetuada"
-                };
-                db.collection("lancamentos").doc(lancId).set(lanc);
+                let lancId = Date.now().toString(); let lanc = { id: lancId, desc: `Venda Pedido #${v.id.substring(v.id.length-4)} - ${v.clienteNome}`, categoria: "Vendas de Produtos", conta: contasLista.length > 0 ? contasLista[0] : "Caixa Principal", valor: v.totalGeral, data: new Date().toISOString().substring(0,10), tipo: "Crédito", status: "Efetuada" }; db.collection("lancamentos").doc(lancId).set(lanc);
                 registrarLog("FINANCEIRO", `Receita gerada automaticamente pela venda ${v.id.substring(v.id.length-4)}`);
                 alert("Entrega confirmada! Valor lançado automaticamente no Financeiro.");
             }
@@ -701,6 +954,9 @@
     function salvarHistorico() { let h = { id: Date.now().toString(), clienteId: document.getElementById('histClienteId').value, data: document.getElementById('histData').value, tipo: document.getElementById('histTipo').value, desc: document.getElementById('histDesc').value.trim() }; if(!h.data || !h.desc) return alert("Preencha a Data e a Descrição."); db.collection("historico_clientes").doc(h.id).set(h); document.getElementById('histDesc').value = ""; registrarLog("CRM", `Adicionou histórico ao cliente ${document.getElementById('histNomeCliente').innerText}`); }
     function renderizarHistoricoModal(clienteId) { let div = document.getElementById("listaHistorico"); div.innerHTML = ""; let filtrados = historicoClientes.filter(h => h.clienteId === clienteId).sort((a,b) => b.data.localeCompare(a.data)); if(filtrados.length === 0) { div.innerHTML = "<p style='color:#999; font-size:13px; text-align:center;'>Nenhuma atividade registrada.</p>"; return; } filtrados.forEach(h => { let item = document.createElement("div"); item.className = "historico-item"; item.innerHTML = `<span class="data-badge">${formatarDataSimples(h.data)}</span><span class="tipo-badge">${h.tipo}</span><p style="margin: 5px 0 0 0; color: #333;">${h.desc}</p><button class="del-btn" title="Apagar" onclick="removerHistorico('${h.id}')">🗑️</button>`; div.appendChild(item); }); }
     function removerHistorico(id) { if(confirm("Apagar este registro?")) db.collection("historico_clientes").doc(id).delete(); }
+    
+    // Função Carregar Insumos nas Compras
+    function carregarFornecedoresSelect() { let html = '<option value="">Nenhum</option>'; fornecedores.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(f => { html += `<option value="${f.nome}">${f.nome}</option>`; }); document.getElementById('prodFornecedor').innerHTML = html; document.getElementById('compraFornecedor').innerHTML = html; }
 
 </script>
 
