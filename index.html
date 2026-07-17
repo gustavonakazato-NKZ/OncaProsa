@@ -149,7 +149,7 @@
         </div>
     </div>
 
-    <!-- NAVBAR REORGANIZADA CONFORME SOLICITADO -->
+    <!-- NAVBAR REORGANIZADA -->
     <div class="navbar">
         <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard</button>
         <button id="btnAbaFinanceiro" class="aba-btn fin-req" onclick="mudarAba('financeiro')">💸 Financeiro</button>
@@ -556,7 +556,7 @@
             </div>
         </div>
 
-        <!-- MÓDULO 9: PATRIMÔNIO E EQUIPAMENTOS -->
+        <!-- MÓDULO 9: PATRIMÔNIO E EQUIPAMENTOS COM CORREÇÃO DE PARCELAMENTO -->
         <div id="abaPatrimonio" class="layout-flex aba-conteudo admin-req" style="display: none;">
             <div class="painel-cadastro">
                 <h2 id="tituloCadPat">🛠️ Novo Equipamento</h2>
@@ -569,12 +569,35 @@
                     <div class="form-group" style="margin: 0;"><label>Valor Total (R$):</label><input type="number" id="patValor" step="0.01"></div>
                     <div class="form-group" style="margin: 0;"><label>Vida Útil Estimada:</label><input type="text" id="patVida" placeholder="Ex: 5 anos"></div>
                 </div>
+                
+                <!-- CHECKBOX CORRIGIDO PARA LANÇAR FINANCEIRO -->
                 <div class="form-group" style="margin-top: 10px;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #eef2f5; padding: 10px; border-radius: 6px; border: 1px solid #ccd1d9; color: #2980b9;">
-                        <input type="checkbox" id="patLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divPatConta').style.display = this.checked ? 'block' : 'none'"> Lançar Despesa Automática
+                        <input type="checkbox" id="patLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divPatFin').style.display = this.checked ? 'block' : 'none'"> Lançar Despesa Automática
                     </label>
                 </div>
-                <div class="form-group" id="divPatConta" style="display:none;"><label>Conta para Débito:</label><select id="patConta"></select></div>
+                
+                <!-- PAINEL FINANCEIRO DE PATRIMONIO ADICIONADO -->
+                <div id="divPatFin" style="display:none; background: #faf9f7; padding: 15px; border-radius: 6px; border: 1px solid #e8e3dc; margin-bottom: 15px;">
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 1;"><label>Conta para Débito:</label><select id="patConta"></select></div>
+                        <div class="form-group" style="flex: 1;"><label>1º Vencimento:</label><input type="date" id="patVencimento"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 2; margin: 0;">
+                            <label>Pagamento / Frequência:</label>
+                            <select id="patFreq" onchange="document.getElementById('divPatQtdFreq').style.display = this.value !== 'Único' ? 'block' : 'none'">
+                                <option value="Único">Único (À vista)</option>
+                                <option value="Parcelado">Parcelado (Divide o valor)</option>
+                                <option value="Recorrente">Recorrente (Aluguel/Mensalidade)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="divPatQtdFreq" style="flex: 1; display: none; margin: 0;">
+                            <label>Nº Parc/Meses:</label>
+                            <input type="number" id="patQtdFreq" value="2" min="2">
+                        </div>
+                    </div>
+                </div>
 
                 <button class="btn" id="btnSalvarPat" style="background:#8e44ad; margin-top: 10px;" onclick="salvarEquipamento()">Gravar Patrimônio</button>
                 <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormPat()">Limpar</button>
@@ -795,21 +818,6 @@
     </div>
 </div>
 
-<!-- Modal: Manutenção de Equipamentos -->
-<div id="modalManutencao" class="modal-overlay">
-    <div class="modal-box" style="max-width: 450px;">
-        <h3 style="color: #4a3022; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">🔧 Registrar Manutenção<button onclick="document.getElementById('modalManutencao').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
-        <p style="margin-top: -10px; color: #8e44ad; font-weight: bold; font-size: 14px;" id="manuIdent">Equipamento</p>
-        <input type="hidden" id="manuEquipId">
-        <div class="form-row"><div class="form-group" style="flex:1;"><label>Data:</label><input type="date" id="manuData"></div></div>
-        <div class="form-group"><label>Técnico / Empresa:</label><input type="text" id="manuQuem"></div>
-        <div class="form-group"><label>Valor (R$):</label><input type="number" id="manuValor" step="0.01"></div>
-        <div class="form-group" style="margin-top: 10px;"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox" id="manuLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divManuConta').style.display = this.checked ? 'block' : 'none'"> Lançar Despesa no Financeiro</label></div>
-        <div class="form-group" id="divManuConta" style="display:none;"><label>Conta para Débito:</label><select id="manuConta"></select></div>
-        <button class="btn" style="background:#8e44ad; margin-top:15px;" onclick="efetuarManutencao()">Salvar Manutenção</button>
-    </div>
-</div>
-
 <script>
     const firebaseConfig = { 
         apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI", 
@@ -851,7 +859,12 @@
                     perfilUsuario = d.perfil; document.getElementById('lblUsuario').innerText = d.nome || "Usuário"; document.getElementById('lblPerfil').innerText = perfilUsuario;
                     document.getElementById("fMes").value = new Date().toISOString().substring(0,7); document.getElementById("dreMes").value = new Date().toISOString().substring(0,7); document.getElementById("fMesVenda").value = new Date().toISOString().substring(0,7); document.getElementById("fMesCompra").value = new Date().toISOString().substring(0,7);
                     let dataHoje = new Date().toISOString().substring(0,10);
-                    document.getElementById("compraData").value = dataHoje; document.getElementById("compraVencimento").value = dataHoje; document.getElementById("patData").value = dataHoje; document.getElementById("perdaData").value = dataHoje; document.getElementById("cadData").value = dataHoje;
+                    
+                    // PREENCHE AS DATAS DO PATRIMÔNIO AO CARREGAR O SISTEMA
+                    document.getElementById("compraData").value = dataHoje; document.getElementById("compraVencimento").value = dataHoje; 
+                    document.getElementById("patData").value = dataHoje; document.getElementById("patVencimento").value = dataHoje; 
+                    document.getElementById("perdaData").value = dataHoje; document.getElementById("cadData").value = dataHoje;
+                    
                     aplicarPermissoes(); carregarListas(); iniciarOuvintesDeDados();
                 }
             });
@@ -1080,11 +1093,10 @@
     function removerCliente(id) { if(confirm("Excluir cliente?")) { registrarLog("CLIENTES", `Excluiu cliente ID: ${id}`); db.collection("clientes").doc(id).delete(); } }
 
     // ==========================================
-    // MÓDULO PATRIMÔNIO (CORRIGIDO)
+    // MÓDULO PATRIMÔNIO COM RECORRÊNCIA E PARCELAMENTO
     // ==========================================
-    document.getElementById('patLancarFin').addEventListener('change', function() { document.getElementById('divPatConta').style.display = this.checked ? 'block' : 'none'; });
-    document.getElementById('manuLancarFin').addEventListener('change', function() { document.getElementById('divManuConta').style.display = this.checked ? 'block' : 'none'; });
-
+    document.getElementById('patLancarFin').addEventListener('change', function() { document.getElementById('divPatFin').style.display = this.checked ? 'block' : 'none'; });
+    
     function salvarEquipamento() {
         let idEdit = document.getElementById("patId").value;
         let ident = document.getElementById("patIdent").value.trim();
@@ -1093,10 +1105,14 @@
         let valor = parseFloat(document.getElementById("patValor").value) || 0;
         let data = document.getElementById("patData").value;
         let vida = document.getElementById("patVida").value.trim();
+        
         let lancarFin = document.getElementById("patLancarFin").checked;
         let conta = document.getElementById("patConta").value;
+        let venc = document.getElementById("patVencimento").value;
+        let freq = document.getElementById("patFreq") ? document.getElementById("patFreq").value : "Único";
+        let qtdFreq = parseInt(document.getElementById("patQtdFreq") ? document.getElementById("patQtdFreq").value : 1) || 1;
 
-        if(!ident || !data) return alert("Preencha a identificação e data.");
+        if(!ident || !data) return alert("Preencha a identificação e a data de compra do patrimônio.");
 
         let p = { identificacao: ident, marca: marca, qtd: qtd, valorCompra: valor, dataCompra: data, vidaUtil: vida, baixado: false, qtdManutencao: 0, valorTotalManutencao: 0 };
         let batch = db.batch();
@@ -1109,16 +1125,47 @@
             registrarLog("PATRIMÔNIO", `Cadastrou equipamento: ${ident} (Valor: ${formatarDinheiro(valor)})`);
             
             if(lancarFin && valor > 0) {
-                let lancId = "PAT_" + p.id;
-                let lanc = { id: lancId, desc: `Aquisição Equipamento: ${ident} (${marca})`, categoria: "Outras Despesas Fixas", conta: conta, valor: valor, data: data, tipo: "Débito", status: "Efetuada" };
-                batch.set(db.collection("lancamentos").doc(lancId), lanc);
+                if(!venc) return alert("Informe a data do 1º Vencimento.");
+                
+                let valBase = valor;
+                let valParcela = freq === 'Parcelado' ? (valBase / qtdFreq) : valBase;
+                let dataBase = new Date(venc + "T12:00:00Z");
+
+                for(let i = 1; i <= qtdFreq; i++) {
+                    let d = new Date(dataBase); d.setMonth(d.getMonth() + (i - 1));
+                    let strData = d.toISOString().substring(0,10);
+                    
+                    let descLanc = `Aquisição Equip.: ${ident} (${marca})`;
+                    if(freq === 'Parcelado') descLanc += ` (${i}/${qtdFreq})`;
+                    if(freq === 'Recorrente' && qtdFreq > 1) descLanc += ` (Ref. ${i}/${qtdFreq})`;
+
+                    let lancId = "PAT_" + p.id + "_" + i;
+                    let lanc = { id: lancId, desc: descLanc, categoria: "Outras Despesas Fixas", conta: conta, valor: valParcela, data: strData, tipo: "Débito", status: "A Vencer", isRecorrente: (freq === 'Recorrente'), parcelaAtual: i, parcelaTotal: qtdFreq };
+                    batch.set(db.collection("lancamentos").doc(lancId), lanc);
+                }
             }
         }
         
         batch.commit().then(() => { alert("Patrimônio registrado!"); limparFormPat(); });
     }
 
-    function limparFormPat() { document.getElementById("patId").value = ""; document.getElementById("patIdent").value = ""; document.getElementById("patMarca").value = ""; document.getElementById("patQtd").value = "1"; document.getElementById("patValor").value = ""; document.getElementById("patVida").value = ""; document.getElementById("patLancarFin").checked = false; document.getElementById('divPatConta').style.display = 'none'; document.getElementById("tituloCadPat").innerText = "🛠️ Novo Equipamento"; document.getElementById("btnSalvarPat").innerText = "Gravar Patrimônio"; }
+    function limparFormPat() { 
+        document.getElementById("patId").value = ""; 
+        document.getElementById("patIdent").value = ""; 
+        document.getElementById("patMarca").value = ""; 
+        document.getElementById("patQtd").value = "1"; 
+        document.getElementById("patValor").value = ""; 
+        document.getElementById("patVida").value = ""; 
+        document.getElementById("patLancarFin").checked = false; 
+        document.getElementById('divPatFin').style.display = 'none'; 
+        if(document.getElementById("patFreq")) {
+            document.getElementById("patFreq").value = "Único";
+            document.getElementById("divPatQtdFreq").style.display = "none";
+            document.getElementById("patVencimento").value = new Date().toISOString().substring(0,10);
+        }
+        document.getElementById("tituloCadPat").innerText = "🛠️ Novo Equipamento"; 
+        document.getElementById("btnSalvarPat").innerText = "Gravar Patrimônio"; 
+    }
 
     function renderizarPatrimonio() {
         const tbody = document.getElementById("tbPatrimonio"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaPat").value.toLowerCase(); let status = document.getElementById("fStatusPat").value;
@@ -1143,7 +1190,7 @@
         });
     }
 
-    function editarPat(id) { let p = patrimonios.find(x => x.id === id); if(!p) return; document.getElementById("patId").value = p.id; document.getElementById("patIdent").value = p.identificacao; document.getElementById("patMarca").value = p.marca; document.getElementById("patQtd").value = p.qtd; document.getElementById("patValor").value = p.valorCompra; document.getElementById("patData").value = p.dataCompra; document.getElementById("patVida").value = p.vidaUtil; document.getElementById("patLancarFin").checked = false; document.getElementById('divPatConta').style.display = 'none'; document.getElementById("tituloCadPat").innerText = "✏️ Editando Equipamento"; document.getElementById("btnSalvarPat").innerText = "Salvar Alterações"; }
+    function editarPat(id) { let p = patrimonios.find(x => x.id === id); if(!p) return; document.getElementById("patId").value = p.id; document.getElementById("patIdent").value = p.identificacao; document.getElementById("patMarca").value = p.marca; document.getElementById("patQtd").value = p.qtd; document.getElementById("patValor").value = p.valorCompra; document.getElementById("patData").value = p.dataCompra; document.getElementById("patVida").value = p.vidaUtil; document.getElementById("patLancarFin").checked = false; document.getElementById('divPatFin').style.display = 'none'; document.getElementById("tituloCadPat").innerText = "✏️ Editando Equipamento"; document.getElementById("btnSalvarPat").innerText = "Salvar Alterações"; }
     
     function darBaixaPat(id) { 
         if(confirm("ATENÇÃO: Deseja dar BAIXA neste equipamento? Ele será movido para o status de Sucata/Baixado.")) { 
