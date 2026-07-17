@@ -391,15 +391,11 @@
                 <h2 id="tituloCadCliente">👥 Novo Cliente</h2>
                 <input type="hidden" id="cliId">
                 <div class="form-group"><label>Nome do Cliente:</label><input type="text" id="cliNome"></div>
-                
                 <div class="form-group"><label>WhatsApp/Tel:</label><input type="text" id="cliTel" placeholder="(XX) 9XXXX-XXXX"></div>
                 <div class="form-group"><label>Nascimento:</label><input type="date" id="cliNasc"></div>
-                
                 <div class="form-group"><label>E-mail:</label><input type="email" id="cliEmail"></div>
-                
                 <div class="form-group"><label>CEP:</label><input type="text" id="cliCep" placeholder="00000-000"></div>
                 <div class="form-group"><label>Endereço Completo:</label><input type="text" id="cliEnd" placeholder="Rua, Número, Bairro, Cidade"></div>
-                
                 <div class="form-group"><label>Observações / Gostos:</label><input type="text" id="cliObs" placeholder="Ex: Prefere entregas na parte da manhã"></div>
                 
                 <div class="form-group"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fdf5f4; padding: 10px; border-radius: 6px; border: 1px solid #e8e3dc;"><input type="checkbox" id="cliPromo" style="width: auto; margin: 0;" checked> Autoriza envio de promoções</label></div>
@@ -407,13 +403,10 @@
                 <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormCliente()">Limpar</button>
             </div>
             <div class="painel-conteudo">
-                
-                <!-- BOX DE ANIVERSARIANTES DO MÊS -->
                 <div id="boxAniversariantes" class="box-aniversariantes">
                     <h4>🎂 Aniversariantes deste mês</h4>
                     <div id="listaAniversariantes" style="font-size: 13px; color: #004d40;"></div>
                 </div>
-
                 <div class="painel-branco">
                     <h2 style="margin-top:0;">📋 Carteira de Clientes</h2>
                     <div class="filtros-area"><div class="filtros-grid" style="grid-template-columns: 1fr;"><div><label>Buscar Cliente:</label><input type="text" id="fBuscaCli" oninput="renderizarClientes()" placeholder="Nome, telefone, e-mail ou CEP..."></div></div></div>
@@ -456,7 +449,7 @@
                 
                 <div class="form-group" style="margin-top: 10px;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #eef2f5; padding: 10px; border-radius: 6px; border: 1px solid #ccd1d9; color: #2980b9;">
-                        <input type="checkbox" id="compraLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divCompraFin').style.display = this.checked ? 'block' : 'none'"> Gerar Lançamento Financeiro
+                        <input type="checkbox" id="compraLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divCompraFin').style.display = this.checked ? 'block' : 'none'"> Gerar Lançamento Financeiro Automático
                     </label>
                 </div>
 
@@ -597,8 +590,8 @@
             </div>
         </div>
 
-        <!-- MÓDULO 9: PATRIMÔNIO E EQUIPAMENTOS -->
-        <div id="abaPatrimonio" class="layout-flex aba-conteudo admin-req" style="display: none;">
+        <!-- MÓDULO 9: PATRIMÔNIO (CORRIGIDO) -->
+        <div id="abaPatrimonio" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro">
                 <h2 id="tituloCadPat">🛠️ Novo Equipamento</h2>
                 <input type="hidden" id="patId">
@@ -626,7 +619,7 @@
                             <select id="patFreq" onchange="document.getElementById('divPatQtdFreq').style.display = this.value !== 'Único' ? 'block' : 'none'">
                                 <option value="Único">Único (À vista)</option>
                                 <option value="Parcelado">Parcelado (Divide)</option>
-                                <option value="Recorrente">Recorrente</option>
+                                <option value="Recorrente">Recorrente (Aluguel)</option>
                             </select>
                         </div>
                     </div>
@@ -661,7 +654,7 @@
         </div>
 
         <!-- MÓDULO 10: GESTÃO E LOGS -->
-        <div id="abaGestao" class="painel-branco aba-conteudo admin-req" style="display: none;">
+        <div id="abaGestao" class="painel-branco aba-conteudo" style="display: none;">
             
             <div class="admin-area" style="margin-bottom: 30px; background: #e3f2fd; border-color: #b2ebf2;">
                 <h3 style="color: #00695c; margin-top: 0;">📊 Central de Relatórios Analíticos</h3>
@@ -907,9 +900,11 @@
                     perfilUsuario = d.perfil; document.getElementById('lblUsuario').innerText = d.nome || "Usuário"; document.getElementById('lblPerfil').innerText = perfilUsuario;
                     document.getElementById("fMes").value = new Date().toISOString().substring(0,7); document.getElementById("dreMes").value = new Date().toISOString().substring(0,7); document.getElementById("fMesVenda").value = new Date().toISOString().substring(0,7); document.getElementById("fMesCompra").value = new Date().toISOString().substring(0,7);
                     let dataHoje = new Date().toISOString().substring(0,10);
+                    
                     document.getElementById("compraData").value = dataHoje; document.getElementById("compraVencimento").value = dataHoje; 
                     document.getElementById("patData").value = dataHoje; document.getElementById("patVencimento").value = dataHoje; 
                     document.getElementById("perdaData").value = dataHoje; document.getElementById("cadData").value = dataHoje;
+                    
                     aplicarPermissoes(); carregarListas(); iniciarOuvintesDeDados();
                 }
             });
@@ -917,7 +912,9 @@
     });
 
     function aplicarPermissoes() {
-        document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = 'none');
+        // CORREÇÃO: Removemos a classe admin-req e fin-req das TABS PRINCIPAIS no HTML.
+        // O código abaixo controla a exibição apenas dos BOTÕES do menu para evitar o vazamento na tela inicial.
+        document.querySelectorAll('.navbar .admin-req, .navbar .fin-req, td.fin-req, th.fin-req').forEach(el => el.style.display = 'none');
         if (perfilUsuario === 'Administrador') { document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = ''); } 
         else if (perfilUsuario === 'Financeiro') { document.querySelectorAll('.fin-req').forEach(el => el.style.display = ''); }
         document.getElementById('btnAbaGestao').style.display = perfilUsuario !== 'Administrador' ? 'none' : 'block';
@@ -981,17 +978,11 @@
     function formatarDinheiro(v) { return Number(v || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}); }
     function formatarDataSimples(d) { return d ? d.split('-').reverse().join('/') : ""; }
 
-    // ==========================================
-    // MÓDULO GESTÃO (CONFIGURAÇÕES GERAIS)
-    // ==========================================
     function salvarConfigNaNuvem() { db.collection("config").doc("listas").set({ categorias: categorias, contasLista: contasLista, formasPagamento: formasPagamento }); }
     function addConfig(t) { if (t === 'cat') { let v = document.getElementById("novaCatInput").value.trim(); if(v && !categorias.includes(v)) { categorias.push(v); document.getElementById("novaCatInput").value=""; } } if (t === 'conta') { let v = document.getElementById("novaContaInput").value.trim(); if(v && !contasLista.includes(v)) { contasLista.push(v); document.getElementById("novaContaInput").value=""; } } salvarConfigNaNuvem(); }
     function remConfig(t, i) { if(t === 'cat') categorias.splice(i,1); if(t === 'conta') contasLista.splice(i,1); if(t === 'forma') formasPagamento.splice(i,1); salvarConfigNaNuvem(); }
     function addFormaPagamento() { let nome = document.getElementById("novaFormaNome").value.trim(); let taxa = parseFloat(document.getElementById("novaFormaTaxa").value) || 0; if(!nome) return alert("Informe o nome da forma de pagamento."); formasPagamento.push({ nome: nome, taxa: taxa }); document.getElementById("novaFormaNome").value = ""; document.getElementById("novaFormaTaxa").value = "0"; salvarConfigNaNuvem(); registrarLog("CONFIG", `Adicionou Forma de Pagto: ${nome} (${taxa}%)`); }
 
-    // ==========================================
-    // MÓDULO FINANCEIRO (PARCELAMENTO E PARCIAL)
-    // ==========================================
     function adicionarLancamento() {
         let idEdit = document.getElementById("editId").value;
         let l = { desc: document.getElementById("cadDesc").value, categoria: document.getElementById("cadCat").value, conta: document.getElementById("cadConta").value, valor: parseFloat(document.getElementById("cadValor").value), data: document.getElementById("cadData").value, tipo: document.getElementById("cadTipo").value, status: document.getElementById("cadStatus").value };
@@ -1066,13 +1057,9 @@
     function limparFormulario() { document.getElementById("editId").value = ""; document.getElementById("cadDesc").value = ""; document.getElementById("cadValor").value = ""; document.getElementById("cadData").value = new Date().toISOString().substring(0,10); document.getElementById("tituloCadastro").innerText = "💸 Novo Lançamento"; document.querySelector("#painelCadastro .btn").innerText = "Registrar"; if(document.getElementById("cadFreq")) { document.getElementById("boxFreqFinanceiro").style.display = "block"; document.getElementById("cadFreq").value = "Único"; document.getElementById("divQtdFreq").style.display = "none"; } }
     function removerLanc(id) { if(confirm("Tem certeza?")) { registrarLog("FINANCEIRO", `Excluiu lançamento ID: ${id}`); db.collection("lancamentos").doc(id.toString()).delete(); } }
     
-    // ==========================================
-    // GERAÇÃO DE KPIs, DASHBOARD E DRE (ATUALIZADO V9.1)
-    // ==========================================
     function gerarDRE() { 
         let m = document.getElementById("dreMes").value; 
         
-        // 1. DADOS GERAIS (ALL-TIME)
         let tEntGeral = 0, tSaiGeral = 0;
         let historicoLucrosMeses = {};
         
@@ -1080,7 +1067,6 @@
             if(l.tipo === "Crédito") tEntGeral += l.valor;
             if(l.tipo === "Débito") tSaiGeral += l.valor;
             
-            // Usado para acumular o Giro de meses positivos passados
             if(l.data) {
                 let mesLanc = l.data.substring(0,7);
                 if(!historicoLucrosMeses[mesLanc]) historicoLucrosMeses[mesLanc] = 0;
@@ -1094,13 +1080,11 @@
         document.getElementById("resGeralSaldo").innerText = formatarDinheiro(tEntGeral - tSaiGeral);
         document.getElementById("resGeralSaldo").style.color = (tEntGeral - tSaiGeral) >= 0 ? "#4a3022" : "#e74c3c";
 
-        // Calcula Fundo de Giro Historico Alocado
         let acumuladoGiro = 0;
         Object.values(historicoLucrosMeses).forEach(lucroMes => {
             if(lucroMes > 0) acumuladoGiro += (lucroMes * 0.30);
         });
 
-        // 2. DADOS DO MÊS SELECIONADO (DRE & KPIs)
         let rec = 0, dev = 0, cVar = 0, cFix = 0; 
         let tEnt = 0, tSai = 0; 
         let despMarketing = 0;
@@ -1126,21 +1110,18 @@
             } 
         }); 
 
-        // Update Mini Cards do Mes
         document.getElementById("resDashEntradas").innerText = formatarDinheiro(tEnt); 
         document.getElementById("resDashSaidas").innerText = formatarDinheiro(tSai); 
         document.getElementById("resDashSaldo").innerText = formatarDinheiro(tEnt - tSai); 
         document.getElementById("resDashSaldo").style.color = (tEnt - tSai) >= 0 ? "#4a3022" : "#e74c3c"; 
 
-        // Cálculos DRE e KPIs Básicos
         let faturamento = rec;
         let recL = rec - dev;
         let lucroBruto = faturamento - custoVendaReal;
         let mC = recL - cVar; 
-        let ebitda = mC - cFix; // Simplificacao para PME
+        let ebitda = mC - cFix; 
         let lucro = ebitda; 
 
-        // KPIs Avançados
         let margemLucro = faturamento > 0 ? (lucro / faturamento) * 100 : 0;
         let markupMedio = custoVendaReal > 0 ? ((faturamento - custoVendaReal) / custoVendaReal) * 100 : 0;
         
@@ -1151,23 +1132,19 @@
         let indiceMC = faturamento > 0 ? (mC / faturamento) : 0;
         if(indiceMC > 0) breakEven = cFix / indiceMC;
 
-        let burnRate = cFix; // Queima de caixa fixo
+        let burnRate = cFix; 
 
-        // CAC e ROI (Marketing)
-        // Aproximacao de novos clientes que compraram pela 1x no mes
         let novosClientesNoMes = 0;
         clientes.forEach(c => {
             if(c.dataCadastro && c.dataCadastro.startsWith(m)) novosClientesNoMes++;
-            // Fallback se não tiver dataCadastro: verificar se a primeira compra foi neste mes
             else {
-                let vCli = vendas.filter(v => v.clienteId === c.id).sort((a,b)=>a.dataCriacao.localeCompare(b.dataCriacao));
-                if(vCli.length > 0 && vCli[0].dataCriacao.startsWith(m)) novosClientesNoMes++;
+                let vCli = vendas.filter(v => v.clienteId === c.id).sort((a,b)=>(a.dataCriacao||"").localeCompare(b.dataCriacao||""));
+                if(vCli.length > 0 && (vCli[0].dataCriacao||"").startsWith(m)) novosClientesNoMes++;
             }
         });
         let cac = novosClientesNoMes > 0 ? despMarketing / novosClientesNoMes : 0;
-        let roi = despMarketing > 0 ? ((lucroBruto - despMarketing) / despMarketing) * 100 : 0; // ROI simplificado do mkt
+        let roi = despMarketing > 0 ? ((lucroBruto - despMarketing) / despMarketing) * 100 : 0; 
 
-        // LTV e Churn (Geral/Histórico)
         let totalClientesCompradores = 0;
         let clientesInativos = 0;
         let somaFrequencia = 0;
@@ -1185,12 +1162,11 @@
             }
         });
 
-        let ticketGeral = totalClientesCompradores > 0 ? (tEntGeral / vendas.length) : 0; // Aproximação
+        let ticketGeral = totalClientesCompradores > 0 ? (tEntGeral / vendas.length) : 0; 
         let freqMedia = totalClientesCompradores > 0 ? (somaFrequencia / totalClientesCompradores) : 0;
         let ltv = ticketGeral * freqMedia;
         let churnRate = totalClientesCompradores > 0 ? (clientesInativos / totalClientesCompradores) * 100 : 0;
 
-        // Atualizar Tela KPIs
         document.getElementById("kpiFaturamento").innerText = formatarDinheiro(faturamento);
         document.getElementById("kpiCMV").innerText = formatarDinheiro(custoVendaReal);
         document.getElementById("kpiLucroBruto").innerText = formatarDinheiro(lucroBruto);
@@ -1213,7 +1189,6 @@
         document.getElementById("kpiROI").innerText = roi.toFixed(1) + "%";
         document.getElementById("kpiCapitalGiro").innerText = formatarDinheiro(acumuladoGiro);
 
-        // Atualizar DRE e Distribuição
         document.getElementById("dreReceita").innerText = formatarDinheiro(rec); 
         document.getElementById("dreCustosVar").innerText = formatarDinheiro(cVar); 
         document.getElementById("dreMargemCont").innerText = formatarDinheiro(mC); 
@@ -1569,7 +1544,7 @@
 
 
     // ==========================================
-    // MÓDULO CENTRAL DE RELATÓRIOS
+    // MÓDULO CENTRAL DE RELATÓRIOS (NOVO)
     // ==========================================
     
     function compilarDadosRelatorio(tipo) {
@@ -1650,6 +1625,7 @@
                 }
                 dados.push([c.nome, c.tel||'-', qtdPed, formatarDinheiro(totalGasto), formatarDataSimples(ultCompra), dias]);
             });
+            // Ordenar por quem gastou mais
             dados.sort((a,b) => parseFloat(b[3].replace(/[R$\s\.]/g,'').replace(',','.')) - parseFloat(a[3].replace(/[R$\s\.]/g,'').replace(',','.')));
         }
         else if (tipo === "7") {
@@ -1659,6 +1635,7 @@
                 let qtd = compras.filter(c => c.fornecedor === f.nome).length;
                 dados.push([f.nome, f.contato||'-', `${f.notaProd}/5`, `${f.notaEnt}/5`, qtd]);
             });
+            // Ordenar pelos que mais vendem pra nós
             dados.sort((a,b) => b[4] - a[4]);
         }
         else if (tipo === "8") {
@@ -1674,6 +1651,7 @@
             Object.keys(meses).forEach(m => {
                 dados.push([m, meses[m].q, formatarDinheiro(meses[m].v)]);
             });
+            // Sort por mes (mais recente) - Como é string MM/YYYY precisaria logica custom, mas o foreach puxa cronologico.
         }
         else if (tipo === "9") {
             titulo = "Vendas Reais e Taxa de Conversão (Mês a Mês)";
@@ -1722,9 +1700,10 @@
         let val = document.getElementById("selRelatorioGestao").value;
         let r = compilarDadosRelatorio(val);
         
+        // Monta a Matriz do Excel
         let matriz = [];
         matriz.push([r.titulo]);
-        matriz.push([]); 
+        matriz.push([]); // Espaço
         matriz.push(r.cabecalho);
         r.dados.forEach(d => matriz.push(d));
         if(r.rodape) { matriz.push([]); matriz.push([r.rodape]); }
@@ -1756,16 +1735,16 @@
         document.getElementById("relRodapePdf").innerText = r.rodape || "";
         
         let elemento = document.getElementById('areaRelatorioPDF');
-        elemento.style.display = "block"; 
+        elemento.style.display = "block"; // Mostra rapido pra printar
         
         html2pdf().set({ 
             margin: 10, 
             filename: `OncaProsa_Relatorio_${val}.pdf`, 
             image: { type: 'jpeg', quality: 0.98 }, 
             html2canvas: { scale: 2, useCORS: true }, 
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } 
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } // Paisagem pra caber tudo
         }).from(elemento).save().then(() => {
-            elemento.style.display = "none"; 
+            elemento.style.display = "none"; // Oculta dnv
             registrarLog("GESTÃO", `Exportou relatório ${r.titulo} em PDF.`);
         });
     }
