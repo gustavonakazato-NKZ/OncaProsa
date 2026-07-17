@@ -58,7 +58,7 @@
         .filtros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; align-items: end; }
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 20px; }
         
-        /* CORREÇÃO DO ENCAVALAMENTO: A largura mínima agora só se aplica nas tabelas de listagem grandes */
+        /* CORREÇÃO DO ENCAVALAMENTO */
         table { width: 100%; border-collapse: collapse; }
         .table-responsive table { min-width: 800px; } 
         
@@ -498,41 +498,6 @@
 </div>
 
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI", authDomain: "onca-prosa-erp.firebaseapp.com", projectId: "onca-prosa-erp", storageBucket: "onca-prosa-erp.firebasestorage.app", messagingSenderId: "1096171294924", appId: "1:1096171294924:web:9362f03a99a6d31139b269" };
-    firebase.initializeApp(firebaseConfig); const db = firebase.firestore(); const auth = firebase.auth(); const appSecundario = firebase.initializeApp(firebaseConfig, "AppSecundario");
-
-    let lancamentos = [], produtos = [], produtosFinais = [], clientes = [], fornecedores = [], historicoClientes = [], usuariosLista = [], vendas = [];
-    let contasLista = ["Caixa Principal", "Banco Inter", "Mercado Pago"]; let statusLista = ["A Vencer", "Efetuada"]; let categorias = ["Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Aluguel", "Salários", "Internet", "Sistema", "Contador", "Outras Despesas Fixas"];
-    
-    let userAutenticado = null; let perfilUsuario = 'Vendedor'; 
-    let carrinhoAtual = []; let fichaAtual = [];
-
-    function registrarLog(acao, detalhes) { if(!userAutenticado) return; let nomeLog = document.getElementById('lblUsuario').innerText || "Usuário Desconhecido"; db.collection("logs").add({ dataHora: new Date().toISOString(), usuario: nomeLog, acao: acao, detalhes: detalhes }).catch(e => console.error(e)); }
-
-    db.collection("usuarios").limit(1).get().then(snap => { if(snap.empty) { document.getElementById('btnRegistrarPrimeiro').style.display = 'block'; document.getElementById('loginMsg').innerText = "Banco de dados zerado. Crie o Administrador Mestre."; document.getElementById('loginMsg').style.color = "#27ae60"; } });
-
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            document.getElementById('telaLogin').style.display = 'none'; document.getElementById('appLogado').style.display = 'block'; userAutenticado = user;
-            db.collection("usuarios").doc(user.uid).onSnapshot(doc => {
-                if (doc.exists) {
-                    let d = doc.data(); if(d.status === "Suspenso") { alert("Conta suspensa."); auth.signOut(); return; }
-                    perfilUsuario = d.perfil; document.getElementById('lblUsuario').innerText = d.nome || "Usuário"; document.getElementById('lblPerfil').innerText = perfilUsuario;
-                    document.getElementById("fMes").value = new Date().toISOString().substring(0,7); document.getElementById("dreMes").value = new Date().toISOString().substring(0,7); document.getElementById("fMesVenda").value = new Date().toISOString().substring(0,7);
-                    aplicarPermissoes(); carregarListas(); iniciarOuvintesDeDados();
-                }
-            });
-        } else { document.getElementById('telaLogin').style.display = 'flex'; document.getElementById('appLogado').style.display = 'none'; userAutenticado = null; }
-    });
-
-    function aplicarPermissoes() {
-        document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = 'none');
-        if (perfilUsuario === 'Administrador') { document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = ''); } 
-        else if (perfilUsuario === 'Financeiro') { document.querySelectorAll('.fin-req').forEach(el => el.style.display = ''); }
-        document.getElementById('btnAbaGestao').style.display = perfilUsuario !== 'Administrador' ? 'none' : 'block';
-    }
-
-    <script>
     // --- 1. CONFIGURAÇÃO E INICIALIZAÇÃO BLINDADA ---
     const firebaseConfig = { 
         apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI", 
@@ -628,11 +593,10 @@
         
         auth.signInWithEmailAndPassword(cpf + "@oncaprosa.local", s)
             .catch(err => { 
-                console.error("Erro Firebase:", err.code, err.message); // Imprime no console (F12) o erro real
+                console.error("Erro Firebase:", err.code, err.message); 
                 
                 let msg = "Erro no acesso. CPF ou Senha incorretos.";
                 
-                // Tradutor de erros para facilitar a nossa vida
                 if(err.code === 'auth/user-not-found') msg = "Usuário não encontrado. O CPF está certo?";
                 if(err.code === 'auth/wrong-password') msg = "Senha incorreta.";
                 if(err.code === 'auth/network-request-failed') msg = "Sem conexão com a internet.";
@@ -642,6 +606,14 @@
                 document.getElementById('loginMsg').style.color = "#e74c3c"; 
             }); 
     }
+
+    function aplicarPermissoes() {
+        document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = 'none');
+        if (perfilUsuario === 'Administrador') { document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = ''); } 
+        else if (perfilUsuario === 'Financeiro') { document.querySelectorAll('.fin-req').forEach(el => el.style.display = ''); }
+        document.getElementById('btnAbaGestao').style.display = perfilUsuario !== 'Administrador' ? 'none' : 'block';
+    }
+
     function registrarPrimeiroAdmin() { let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, ''); const s = document.getElementById('senhaAuth').value; if(cpf.length !== 11 || s.length < 6) return alert("CPF inválido ou senha curta."); auth.createUserWithEmailAndPassword(cpf + "@oncaprosa.local", s).then(cred => { db.collection("usuarios").doc(cred.user.uid).set({ cpf: cpf, perfil: "Administrador", status: "Ativo", nome: "Administrador Mestre" }); alert("Administrador criado!"); }).catch(err => alert("Erro: " + err.message)); }
     function sair() { registrarLog("LOGIN", "Usuário saiu do sistema."); auth.signOut(); location.reload(); }
 
@@ -707,9 +679,7 @@
     function avancarStatusVenda(id) {
         let v = vendas.find(x => x.id === id); if(!v) return;
         if(v.status === "Orçamento") {
-            if(confirm(`Converter este Orçamento em PEDIDO DE PRODUÇÃO?
-
-Isto analisará a FICHA TÉCNICA e dará BAIXA AUTOMÁTICA dos insumos no Estoque.`)) {
+            if(confirm(`Converter este Orçamento em PEDIDO DE PRODUÇÃO?\n\nIsto analisará a FICHA TÉCNICA e dará BAIXA AUTOMÁTICA dos insumos no Estoque.`)) {
                 let batch = db.batch(); let deducoes = {};
                 v.itens.forEach(itemVenda => { let pFinal = produtosFinais.find(pf => pf.id === itemVenda.prodId); if(pFinal && pFinal.receita) { pFinal.receita.forEach(ingrediente => { let qtdDeduzir = ingrediente.qtd * itemVenda.qtd; if(!deducoes[ingrediente.insumoId]) deducoes[ingrediente.insumoId] = 0; deducoes[ingrediente.insumoId] += qtdDeduzir; }); } });
                 Object.keys(deducoes).forEach(insumoId => { let pEstoque = produtos.find(x => x.id === insumoId); if(pEstoque) { let prodRef = db.collection("produtos").doc(insumoId); batch.update(prodRef, { qtd: pEstoque.qtd - deducoes[insumoId] }); } });
@@ -719,9 +689,7 @@ Isto analisará a FICHA TÉCNICA e dará BAIXA AUTOMÁTICA dos insumos no Estoqu
         } else if (v.status === "Em Produção") {
             if(confirm("Marcar pedido como Pronto?")) { db.collection("vendas").doc(id).update({status: "Pronto"}); registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} marcado como Pronto.`); }
         } else if (v.status === "Pronto") {
-            if(confirm("Confirmar Entrega ao cliente?
-
-INTEGRAÇÃO AUTOMÁTICA: Este valor será lançado como RECEITA na aba Financeiro!")) { 
+            if(confirm("Confirmar Entrega ao cliente?\n\nINTEGRAÇÃO AUTOMÁTICA: Este valor será lançado como RECEITA na aba Financeiro!")) { 
                 db.collection("vendas").doc(id).update({status: "Entregue"}); 
                 registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} Entregue ao cliente.`);
                 
@@ -748,8 +716,6 @@ INTEGRAÇÃO AUTOMÁTICA: Este valor será lançado como RECEITA na aba Financei
     function abrirModalImpressao(id) { let v = vendas.find(x => x.id === id); if(!v) return; document.getElementById("printTipoDoc").innerText = v.status === "Orçamento" ? "ORÇAMENTO" : "PEDIDO"; document.getElementById("printId").innerText = v.id.substring(v.id.length - 6); document.getElementById("printData").innerText = formatarDataSimples(v.dataCriacao); document.getElementById("printCliNome").innerText = v.clienteNome; document.getElementById("printCliTel").innerText = v.clienteTel || "Não informado"; const tbody = document.getElementById("printTbItens"); tbody.innerHTML = ""; v.itens.forEach(item => { let tr = document.createElement("tr"); tr.innerHTML = `<td>${item.qtd}</td><td>${item.nome}</td><td>${formatarDinheiro(item.preco)}</td><td>${formatarDinheiro(item.total)}</td>`; tbody.appendChild(tr); }); document.getElementById("printSubtotal").innerText = formatarDinheiro(v.subtotal); document.getElementById("printDesconto").innerText = formatarDinheiro(v.desconto); document.getElementById("printTotalGeral").innerText = formatarDinheiro(v.totalGeral); document.getElementById("modalImpressao").style.display = "flex"; }
     function gerarPDFOrcamento() { const elemento = document.getElementById('areaImpressaoA4'); let nomeDoc = document.getElementById("printTipoDoc").innerText; let idDoc = document.getElementById("printId").innerText; html2pdf().set({ margin: 10, filename: `${nomeDoc}_OncaProsa_${idDoc}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(elemento).save(); }
 
-    // Demais funcoes de cadastro e financeiro omitidas por economia de espaco na string, mas seguem o fluxo (ja declaradas nas vars globais).
-    // Funções auxiliares...
     function adicionarLancamento() { let idEdit = document.getElementById("editId").value; let l = { desc: document.getElementById("cadDesc").value, categoria: document.getElementById("cadCat").value, conta: document.getElementById("cadConta").value, valor: parseFloat(document.getElementById("cadValor").value), data: document.getElementById("cadData").value, tipo: document.getElementById("cadTipo").value, status: document.getElementById("cadStatus").value }; if(!l.desc || !l.data || isNaN(l.valor)) return alert("Preencha corretamente."); if(idEdit) { l.id = idEdit; db.collection("lancamentos").doc(idEdit).update(l); registrarLog("FINANCEIRO", `Editou: ${l.desc} (R$ ${l.valor})`); } else { l.id = Date.now().toString(); db.collection("lancamentos").doc(l.id).set(l); registrarLog("FINANCEIRO", `Cadastrou: ${l.desc} (R$ ${l.valor})`); } limparFormulario(); }
     function removerLanc(id) { if(confirm("Tem certeza?")) { registrarLog("FINANCEIRO", `Excluiu lançamento ID: ${id}`); db.collection("lancamentos").doc(id.toString()).delete(); } }
     function adicionarProduto() { let id = document.getElementById("prodId").value; let p = { nome: document.getElementById("prodNome").value.trim(), cat: document.getElementById("prodCat").value.trim() || "Geral", fornecedor: document.getElementById("prodFornecedor").value, marca: document.getElementById("prodMarca").value.trim(), custo: parseFloat(document.getElementById("prodCusto").value) || 0, venda: parseFloat(document.getElementById("prodVenda").value) || 0, qtd: parseFloat(document.getElementById("prodQtd").value) || 0, min: parseFloat(document.getElementById("prodMin").value) || 0 }; if(!p.nome) return alert("Preencha o nome."); if(id) { db.collection("produtos").doc(id).update(p); registrarLog("ESTOQUE", `Editou insumo: ${p.nome}`); } else { p.id = Date.now().toString(); db.collection("produtos").doc(p.id).set(p); registrarLog("ESTOQUE", `Cadastrou insumo: ${p.nome}`); } limparFormProduto(); }
