@@ -149,6 +149,7 @@
         </div>
     </div>
 
+    <!-- NAVBAR REORGANIZADA CONFORME SOLICITADO -->
     <div class="navbar">
         <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard</button>
         <button id="btnAbaFinanceiro" class="aba-btn fin-req" onclick="mudarAba('financeiro')">💸 Financeiro</button>
@@ -345,17 +346,15 @@
                 <input type="hidden" id="cliId">
                 <div class="form-group"><label>Nome do Cliente:</label><input type="text" id="cliNome"></div>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-                    <div class="form-group" style="margin: 0;"><label>WhatsApp/Tel:</label><input type="text" id="cliTel" placeholder="(XX) 9XXXX-XXXX"></div>
-                    <div class="form-group" style="margin: 0;"><label>Nascimento:</label><input type="date" id="cliNasc"></div>
-                </div>
-
+                <!-- Ajustado: Telefone e Nascimento em linhas separadas -->
+                <div class="form-group"><label>WhatsApp/Tel:</label><input type="text" id="cliTel" placeholder="(XX) 9XXXX-XXXX"></div>
+                <div class="form-group"><label>Nascimento:</label><input type="date" id="cliNasc"></div>
+                
                 <div class="form-group"><label>E-mail:</label><input type="email" id="cliEmail"></div>
                 
-                <div style="display: grid; grid-template-columns: 80px 1fr; gap: 10px; margin-bottom: 12px;">
-                    <div class="form-group" style="margin: 0;"><label>CEP:</label><input type="text" id="cliCep" placeholder="00000-000"></div>
-                    <div class="form-group" style="margin: 0;"><label>Endereço Completo:</label><input type="text" id="cliEnd" placeholder="Rua, Número, Bairro, Cidade"></div>
-                </div>
+                <!-- Ajustado: CEP e Endereço em linhas separadas -->
+                <div class="form-group"><label>CEP:</label><input type="text" id="cliCep" placeholder="00000-000"></div>
+                <div class="form-group"><label>Endereço Completo:</label><input type="text" id="cliEnd" placeholder="Rua, Número, Bairro, Cidade"></div>
                 
                 <div class="form-group"><label>Observações / Gostos:</label><input type="text" id="cliObs" placeholder="Ex: Prefere entregas na parte da manhã"></div>
                 
@@ -365,7 +364,6 @@
             </div>
             <div class="painel-conteudo">
                 
-                <!-- BOX DE ANIVERSARIANTES DO MÊS -->
                 <div id="boxAniversariantes" class="box-aniversariantes">
                     <h4>🎂 Aniversariantes deste mês</h4>
                     <div id="listaAniversariantes" style="font-size: 13px; color: #004d40;"></div>
@@ -413,7 +411,7 @@
                 
                 <div class="form-group" style="margin-top: 10px;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #eef2f5; padding: 10px; border-radius: 6px; border: 1px solid #ccd1d9; color: #2980b9;">
-                        <input type="checkbox" id="compraLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divCompraFin').style.display = this.checked ? 'block' : 'none'"> Gerar Lançamento Financeiro Automático
+                        <input type="checkbox" id="compraLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divCompraFin').style.display = this.checked ? 'block' : 'none'"> Gerar Lançamento Financeiro
                     </label>
                 </div>
 
@@ -554,7 +552,7 @@
             </div>
         </div>
 
-        <!-- MÓDULO 9: PATRIMÔNIO (CORRIGIDO) -->
+        <!-- MÓDULO 9: PATRIMÔNIO -->
         <div id="abaPatrimonio" class="layout-flex aba-conteudo admin-req" style="display: none;">
             <div class="painel-cadastro">
                 <h2 id="tituloCadPat">🛠️ Novo Equipamento</h2>
@@ -574,7 +572,7 @@
                     </label>
                 </div>
                 
-                <!-- PAINEL FINANCEIRO DE PATRIMONIO CORRIGIDO NO LAYOUT -->
+                <!-- PAINEL FINANCEIRO DE PATRIMONIO CORRIGIDO -->
                 <div id="divPatFin" style="display:none; background: #faf9f7; padding: 15px; border-radius: 6px; border: 1px solid #e8e3dc; margin-bottom: 15px;">
                     <div class="form-group" style="width: 100%; margin-bottom: 10px;"><label>Conta para Débito:</label><select id="patConta"></select></div>
                     <div class="form-row">
@@ -780,6 +778,21 @@
     </div>
 </div>
 
+<!-- Modal: Manutenção de Equipamentos -->
+<div id="modalManutencao" class="modal-overlay">
+    <div class="modal-box" style="max-width: 450px;">
+        <h3 style="color: #4a3022; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">🔧 Registrar Manutenção<button onclick="document.getElementById('modalManutencao').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
+        <p style="margin-top: -10px; color: #8e44ad; font-weight: bold; font-size: 14px;" id="manuIdent">Equipamento</p>
+        <input type="hidden" id="manuEquipId">
+        <div class="form-row"><div class="form-group" style="flex:1;"><label>Data:</label><input type="date" id="manuData"></div></div>
+        <div class="form-group"><label>Técnico / Empresa:</label><input type="text" id="manuQuem"></div>
+        <div class="form-group"><label>Valor (R$):</label><input type="number" id="manuValor" step="0.01"></div>
+        <div class="form-group" style="margin-top: 10px;"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox" id="manuLancarFin" style="width: auto; margin: 0;" onchange="document.getElementById('divManuConta').style.display = this.checked ? 'block' : 'none'"> Lançar Despesa no Financeiro</label></div>
+        <div class="form-group" id="divManuConta" style="display:none;"><label>Conta para Débito:</label><select id="manuConta"></select></div>
+        <button class="btn" style="background:#8e44ad; margin-top:15px;" onclick="efetuarManutencao()">Salvar Manutenção</button>
+    </div>
+</div>
+
 <script>
     const firebaseConfig = { 
         apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI", 
@@ -933,7 +946,7 @@
     
     function atualizarTelaFinanceiro() { 
         const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = ""; let fBusca = document.getElementById("fBusca").value.toLowerCase(); let fMes = document.getElementById("fMes").value; let fTipo = document.getElementById("fTipo").value; let fConta = document.getElementById("fConta").value; 
-        let filtrados = lancamentos.filter(l => (l.desc || "").toLowerCase().includes(fBusca) && l.data.startsWith(fMes) && (fTipo==="Todos" || l.tipo===fTipo) && (fConta==="Todas" || l.conta===fConta)).sort((a,b)=>a.data.localeCompare(b.data)); 
+        let filtrados = lancamentos.filter(l => (l.desc || "").toLowerCase().includes(fBusca) && (l.data || "").startsWith(fMes) && (fTipo==="Todos" || l.tipo===fTipo) && (fConta==="Todas" || l.conta===fConta)).sort((a,b)=> (a.data || "").localeCompare(b.data || "")); 
         filtrados.forEach(l => { 
             let tr = document.createElement("tr"); 
             let htmlParcial = l.status === "A Vencer" ? `<button class="btn-acao-topo" style="background:#27ae60; font-size:10px; padding:2px 5px; margin-left:5px;" title="Pagamento Parcial" onclick="abrirModalParcial('${l.id}')">💸 Parc.</button>` : "";
@@ -945,13 +958,13 @@
     function mudarStatusLanc(id, novoStatus) { 
         let l = lancamentos.find(x => x.id === id);
         if(novoStatus === 'Efetuada' && l && l.isRecorrente && l.parcelaAtual === l.parcelaTotal) {
-            if(confirm(`Este é o último lançamento da despesa recorrente "${l.desc.split(' (Ref')[0]}".\n\nDeseja renovar esta recorrência automaticamente por mais ${l.parcelaTotal} meses?`)) { renovarRecorrencia(l); }
+            if(confirm(`Este é o último lançamento da despesa recorrente "${(l.desc || "").split(' (Ref')[0]}".\n\nDeseja renovar esta recorrência automaticamente por mais ${l.parcelaTotal} meses?`)) { renovarRecorrencia(l); }
         }
         db.collection("lancamentos").doc(id).update({status: novoStatus}); registrarLog("FINANCEIRO", `Mudou status do lançamento ${id} para ${novoStatus}`); 
     }
 
     function renovarRecorrencia(lOriginal) {
-        let batch = db.batch(); let dataBase = new Date(lOriginal.data + "T12:00:00Z"); let descBase = lOriginal.desc.split(' (Ref')[0];
+        let batch = db.batch(); let dataBase = new Date(lOriginal.data + "T12:00:00Z"); let descBase = (lOriginal.desc || "").split(' (Ref')[0];
         for(let i = 1; i <= lOriginal.parcelaTotal; i++) {
             let d = new Date(dataBase); d.setMonth(d.getMonth() + i); 
             let novoL = {...lOriginal}; novoL.id = Date.now().toString() + i + Math.floor(Math.random()*1000); novoL.data = d.toISOString().substring(0,10); novoL.status = "A Vencer"; novoL.parcelaAtual = i; novoL.desc = `${descBase} (Ref. ${i}/${lOriginal.parcelaTotal})`;
@@ -966,14 +979,14 @@
         if(!pago || pago <= 0 || pago >= l.valor) return alert("O valor pago deve ser maior que zero e menor que o total."); if(!dataRestante) return alert("Informe a nova data de vencimento para o saldo restante.");
         let restante = l.valor - pago; let batch = db.batch();
         batch.update(db.collection("lancamentos").doc(id), { valor: pago, status: "Efetuada", desc: l.desc + " (Pago Parcial)" });
-        let idNovo = "PARC_" + Date.now().toString(); let novoL = {...l}; novoL.id = idNovo; novoL.valor = restante; novoL.data = dataRestante; novoL.status = "A Vencer"; novoL.desc = l.desc.split(' (Pago')[0] + " (Saldo Restante)"; batch.set(db.collection("lancamentos").doc(idNovo), novoL);
+        let idNovo = "PARC_" + Date.now().toString(); let novoL = {...l}; novoL.id = idNovo; novoL.valor = restante; novoL.data = dataRestante; novoL.status = "A Vencer"; novoL.desc = (l.desc || "").split(' (Pago')[0] + " (Saldo Restante)"; batch.set(db.collection("lancamentos").doc(idNovo), novoL);
         batch.commit().then(() => { registrarLog("FINANCEIRO", `Pagamento parcial. Despesa: ${l.desc}. Pago: R$ ${pago}. Restante jogado para ${formatarDataSimples(dataRestante)}`); alert("Pagamento parcial registrado. O saldo restante foi lançado para a nova data!"); document.getElementById("modalParcial").style.display = 'none'; });
     }
 
     function editarLanc(id) { let l = lancamentos.find(x => x.id === id); if(!l) return; document.getElementById("editId").value = l.id; document.getElementById("cadDesc").value = l.desc; document.getElementById("cadCat").value = l.categoria; document.getElementById("cadConta").value = l.conta || contasLista[0]; document.getElementById("cadValor").value = l.valor; document.getElementById("cadData").value = l.data; document.getElementById("cadTipo").value = l.tipo; document.getElementById("cadStatus").value = l.status; document.getElementById("tituloCadastro").innerText = "✏️ Editar Lançamento"; document.querySelector("#painelCadastro .btn").innerText = "Salvar Alterações"; if(document.getElementById("cadFreq")) document.getElementById("boxFreqFinanceiro").style.display = "none"; }
     function limparFormulario() { document.getElementById("editId").value = ""; document.getElementById("cadDesc").value = ""; document.getElementById("cadValor").value = ""; document.getElementById("cadData").value = new Date().toISOString().substring(0,10); document.getElementById("tituloCadastro").innerText = "💸 Novo Lançamento"; document.querySelector("#painelCadastro .btn").innerText = "Registrar"; if(document.getElementById("cadFreq")) { document.getElementById("boxFreqFinanceiro").style.display = "block"; document.getElementById("cadFreq").value = "Único"; document.getElementById("divQtdFreq").style.display = "none"; } }
     function removerLanc(id) { if(confirm("Tem certeza?")) { registrarLog("FINANCEIRO", `Excluiu lançamento ID: ${id}`); db.collection("lancamentos").doc(id.toString()).delete(); } }
-    function gerarDRE() { let m = document.getElementById("dreMes").value; let rec = 0, dev = 0, cVar = 0, cFix = 0; let tEnt = 0, tSai = 0; let lancMes = lancamentos.filter(l => l.data.startsWith(m)); lancMes.forEach(l => { if(l.tipo === "Crédito") tEnt += l.valor; else if(l.tipo === "Débito") tSai += l.valor; if(l.status.toLowerCase().includes("efetuada")) { if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor; else if(l.categoria.includes("Devolu")) dev += l.valor; else if(["Impostos de Venda", "Taxas de Pagamento", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Perdas e Avarias"].includes(l.categoria)) cVar += l.valor; else cFix += l.valor; } }); document.getElementById("resDashEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; document.getElementById("resDashSaidas").innerText = `R$ ${tSai.toFixed(2)}`; document.getElementById("resDashSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`; document.getElementById("resDashSaldo").style.color = (tEnt-tSai) >= 0 ? "#4a3022" : "#e74c3c"; let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix; document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`; if (lucro > 0) { let capGiro = lucro * 0.30; let reserva = lucro * 0.20; let manu = lucro * 0.10; let reinv = lucro * 0.10; let cresc = lucro * 0.10; let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucro - totDed; let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50; document.getElementById("dstGiro").innerText = `R$ ${capGiro.toFixed(2)}`; document.getElementById("dstReserva").innerText = `R$ ${reserva.toFixed(2)}`; document.getElementById("dstManu").innerText = `R$ ${manu.toFixed(2)}`; document.getElementById("dstReinv").innerText = `R$ ${reinv.toFixed(2)}`; document.getElementById("dstCresc").innerText = `R$ ${cresc.toFixed(2)}`; document.getElementById("dstDeducao").innerText = `R$ ${totDed.toFixed(2)}`; document.getElementById("dstSaldo").innerText = `R$ ${saldo.toFixed(2)}`; document.getElementById("dstSocios").innerText = `R$ ${valSocios.toFixed(2)}`; document.getElementById("dstCaixa").innerText = `R$ ${valCaixa.toFixed(2)}`; } else { ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = "R$ 0.00"); } }
+    function gerarDRE() { let m = document.getElementById("dreMes").value; let rec = 0, dev = 0, cVar = 0, cFix = 0; let tEnt = 0, tSai = 0; let lancMes = lancamentos.filter(l => (l.data || "").startsWith(m)); lancMes.forEach(l => { if(l.tipo === "Crédito") tEnt += l.valor; else if(l.tipo === "Débito") tSai += l.valor; if((l.status || "").toLowerCase().includes("efetuada")) { if((l.categoria || "").includes("Venda") || (l.categoria || "").includes("Serviço")) rec += l.valor; else if((l.categoria || "").includes("Devolu")) dev += l.valor; else if(["Impostos de Venda", "Taxas de Pagamento", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Perdas e Avarias"].includes(l.categoria)) cVar += l.valor; else cFix += l.valor; } }); document.getElementById("resDashEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; document.getElementById("resDashSaidas").innerText = `R$ ${tSai.toFixed(2)}`; document.getElementById("resDashSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`; document.getElementById("resDashSaldo").style.color = (tEnt-tSai) >= 0 ? "#4a3022" : "#e74c3c"; let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix; document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`; if (lucro > 0) { let capGiro = lucro * 0.30; let reserva = lucro * 0.20; let manu = lucro * 0.10; let reinv = lucro * 0.10; let cresc = lucro * 0.10; let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucro - totDed; let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50; document.getElementById("dstGiro").innerText = `R$ ${capGiro.toFixed(2)}`; document.getElementById("dstReserva").innerText = `R$ ${reserva.toFixed(2)}`; document.getElementById("dstManu").innerText = `R$ ${manu.toFixed(2)}`; document.getElementById("dstReinv").innerText = `R$ ${reinv.toFixed(2)}`; document.getElementById("dstCresc").innerText = `R$ ${cresc.toFixed(2)}`; document.getElementById("dstDeducao").innerText = `R$ ${totDed.toFixed(2)}`; document.getElementById("dstSaldo").innerText = `R$ ${saldo.toFixed(2)}`; document.getElementById("dstSocios").innerText = `R$ ${valSocios.toFixed(2)}`; document.getElementById("dstCaixa").innerText = `R$ ${valCaixa.toFixed(2)}`; } else { ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = "R$ 0.00"); } }
 
     function abrirModalPerda(id, tipo) { let item = tipo === 'insumo' ? produtos.find(x => x.id === id) : produtosFinais.find(x => x.id === id); if (!item) return; let custo = tipo === 'insumo' ? item.custo : item.custo; document.getElementById("perdaItemId").value = id; document.getElementById("perdaTipo").value = tipo; document.getElementById("perdaItemNome").value = item.nome; document.getElementById("perdaCustoUnit").value = custo; document.getElementById("perdaQtd").value = ""; document.getElementById("perdaData").value = new Date().toISOString().substring(0,10); document.getElementById("perdaValorTotal").innerText = "R$ 0,00"; document.getElementById("modalPerda").style.display = "flex"; }
     function calcularTotalPerda() { let custoUnit = parseFloat(document.getElementById("perdaCustoUnit").value) || 0; let qtd = parseFloat(document.getElementById("perdaQtd").value) || 0; document.getElementById("perdaValorTotal").innerText = formatarDinheiro(custoUnit * qtd); }
@@ -1004,7 +1017,7 @@
         let busca = document.getElementById("fBuscaCli").value.toLowerCase(); 
         let filtrados = clientes.filter(c => (c.nome || "").toLowerCase().includes(busca) || (c.tel || "").toLowerCase().includes(busca) || (c.email || "").toLowerCase().includes(busca) || (c.cep || "").toLowerCase().includes(busca)); 
         
-        filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(c => { 
+        filtrados.sort((a,b) => (a.nome || "").localeCompare(b.nome || "")).forEach(c => { 
             let tr = document.createElement("tr"); 
             let promoHtml = c.promo ? '<span style="color:#27ae60;font-weight:bold;">Sim</span>' : '<span style="color:#e74c3c;">Não</span>'; 
             let nasc = c.nasc ? formatarDataSimples(c.nasc) : "-";
@@ -1088,6 +1101,7 @@
                 }
             }
         }
+        
         batch.commit().then(() => { alert("Patrimônio registrado!"); limparFormPat(); });
     }
 
@@ -1114,15 +1128,19 @@
         let isBaixado = status === "Baixados";
         let filtrados = patrimonios.filter(p => (p.identificacao || "").toLowerCase().includes(busca) && (p.baixado === isBaixado));
         
-        filtrados.sort((a,b) => b.dataCompra.localeCompare(a.dataCompra)).forEach(p => {
+        filtrados.sort((a,b) => (b.dataCompra || "").localeCompare(a.dataCompra || "")).forEach(p => {
             let tr = document.createElement("tr"); if(p.baixado) tr.style.opacity = "0.6";
+            
             let htmlManu = `<span style="font-size:12px; color:#8e44ad;"><b>${p.qtdManutencao || 0}</b> vez(es) | <b>${formatarDinheiro(p.valorTotalManutencao)}</b></span>`;
             let acoes = "";
             if(!p.baixado) {
                 acoes = `<button class="btn-acao-topo" style="background:#8e44ad; font-size:11px; padding:4px;" onclick="abrirModalManutencao('${p.id}')">🔧 Manutenção</button>
                          <button class="btn-acao" onclick="editarPat('${p.id}')">✏️</button>
                          <button class="btn-acao" style="color:#d35400;" title="Dar Baixa" onclick="darBaixaPat('${p.id}')">⬇️</button>`;
-            } else { acoes = `<span style="color:#e74c3c; font-weight:bold; font-size:11px;">Baixado em: ${formatarDataSimples(p.dataBaixa)}</span>`; }
+            } else {
+                acoes = `<span style="color:#e74c3c; font-weight:bold; font-size:11px;">Baixado em: ${formatarDataSimples(p.dataBaixa)}</span>`;
+            }
+
             tr.innerHTML = `<td><strong>${p.identificacao}</strong></td><td>${p.marca||'-'}</td><td>${p.qtd}</td><td>${formatarDataSimples(p.dataCompra)}<br><small style="color:#e74c3c;">${formatarDinheiro(p.valorCompra)}</small></td><td style="text-align:center;">${htmlManu}</td><td style="text-align:center; display:flex; gap:5px; justify-content:center; align-items:center;">${acoes}</td>`;
             tbody.appendChild(tr);
         });
@@ -1130,18 +1148,37 @@
 
     function editarPat(id) { let p = patrimonios.find(x => x.id === id); if(!p) return; document.getElementById("patId").value = p.id; document.getElementById("patIdent").value = p.identificacao; document.getElementById("patMarca").value = p.marca; document.getElementById("patQtd").value = p.qtd; document.getElementById("patValor").value = p.valorCompra; document.getElementById("patData").value = p.dataCompra; document.getElementById("patVida").value = p.vidaUtil; document.getElementById("patLancarFin").checked = false; document.getElementById('divPatFin').style.display = 'none'; document.getElementById("tituloCadPat").innerText = "✏️ Editando Equipamento"; document.getElementById("btnSalvarPat").innerText = "Salvar Alterações"; }
     
-    function darBaixaPat(id) { if(confirm("ATENÇÃO: Deseja dar BAIXA neste equipamento? Ele será movido para o status de Sucata/Baixado.")) { db.collection("patrimonio").doc(id).update({ baixado: true, dataBaixa: new Date().toISOString().substring(0,10) }); registrarLog("PATRIMÔNIO", `Deu baixa no equipamento ID: ${id}`); } }
+    function darBaixaPat(id) { 
+        if(confirm("ATENÇÃO: Deseja dar BAIXA neste equipamento? Ele será movido para o status de Sucata/Baixado.")) { 
+            db.collection("patrimonio").doc(id).update({ baixado: true, dataBaixa: new Date().toISOString().substring(0,10) }); 
+            registrarLog("PATRIMÔNIO", `Deu baixa no equipamento ID: ${id}`); 
+        } 
+    }
 
-    function abrirModalManutencao(id) { let p = patrimonios.find(x => x.id === id); if(!p) return; document.getElementById("manuEquipId").value = p.id; document.getElementById("manuIdent").innerText = p.identificacao; document.getElementById("manuData").value = new Date().toISOString().substring(0,10); document.getElementById("manuQuem").value = ""; document.getElementById("manuValor").value = ""; document.getElementById("manuLancarFin").checked = false; document.getElementById('divManuConta').style.display = 'none'; document.getElementById("modalManutencao").style.display = 'flex'; }
+    function abrirModalManutencao(id) {
+        let p = patrimonios.find(x => x.id === id); if(!p) return;
+        document.getElementById("manuEquipId").value = p.id; document.getElementById("manuIdent").innerText = p.identificacao; document.getElementById("manuData").value = new Date().toISOString().substring(0,10); document.getElementById("manuQuem").value = ""; document.getElementById("manuValor").value = ""; document.getElementById("manuLancarFin").checked = false; document.getElementById('divManuConta').style.display = 'none';
+        document.getElementById("modalManutencao").style.display = 'flex';
+    }
 
     function efetuarManutencao() {
         let id = document.getElementById("manuEquipId").value; let p = patrimonios.find(x => x.id === id); if(!p) return;
         let data = document.getElementById("manuData").value; let quem = document.getElementById("manuQuem").value.trim(); let valor = parseFloat(document.getElementById("manuValor").value) || 0;
         let lancar = document.getElementById("manuLancarFin").checked; let conta = document.getElementById("manuConta").value;
         if(!data || !quem || valor <= 0) return alert("Preencha a data, o técnico e o valor corretamente.");
-        let batch = db.batch(); let novoQtd = (p.qtdManutencao || 0) + 1; let novoValorTotal = (p.valorTotalManutencao || 0) + valor;
+
+        let batch = db.batch();
+        
+        let novoQtd = (p.qtdManutencao || 0) + 1;
+        let novoValorTotal = (p.valorTotalManutencao || 0) + valor;
         batch.update(db.collection("patrimonio").doc(id), { dataManutencao: data, quemManutencao: quem, qtdManutencao: novoQtd, valorTotalManutencao: novoValorTotal });
-        if(lancar) { let lancId = "MANU_" + Date.now().toString(); let lanc = { id: lancId, desc: `Manutenção Equip.: ${p.identificacao} (${quem})`, categoria: "Manutenção Equip.", conta: conta, valor: valor, data: data, tipo: "Débito", status: "Efetuada" }; batch.set(db.collection("lancamentos").doc(lancId), lanc); }
+
+        if(lancar) {
+            let lancId = "MANU_" + Date.now().toString();
+            let lanc = { id: lancId, desc: `Manutenção Equip.: ${p.identificacao} (${quem})`, categoria: "Manutenção Equip.", conta: conta, valor: valor, data: data, tipo: "Débito", status: "Efetuada" };
+            batch.set(db.collection("lancamentos").doc(lancId), lanc);
+        }
+
         batch.commit().then(() => { registrarLog("PATRIMÔNIO", `Registrou manutenção em ${p.identificacao} (R$ ${valor})`); alert("Manutenção salva!"); document.getElementById("modalManutencao").style.display = 'none'; });
     }
 
@@ -1191,7 +1228,7 @@
         } else if (v.status === "Pronto") { abrirModalConcluirVenda(id); }
     }
 
-    function carregarSelectsComercial() { let htmlCli = '<option value="">Selecione um cliente...</option>'; clientes.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(c => htmlCli += `<option value="${c.id}">${c.nome}</option>`); document.getElementById("vendaCliente").innerHTML = htmlCli; let htmlProd = '<option value="">Selecione um produto final...</option>'; produtosFinais.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(p => htmlProd += `<option value="${p.id}">${p.nome} (Venda: R$ ${p.precoVenda.toFixed(2)})</option>`); document.getElementById("vendaProduto").innerHTML = htmlProd; }
+    function carregarSelectsComercial() { let htmlCli = '<option value="">Selecione um cliente...</option>'; clientes.sort((a,b)=>(a.nome || "").localeCompare(b.nome || "")).forEach(c => htmlCli += `<option value="${c.id}">${c.nome}</option>`); document.getElementById("vendaCliente").innerHTML = htmlCli; let htmlProd = '<option value="">Selecione um produto final...</option>'; produtosFinais.sort((a,b)=>(a.nome || "").localeCompare(b.nome || "")).forEach(p => htmlProd += `<option value="${p.id}">${p.nome} (Venda: R$ ${p.precoVenda.toFixed(2)})</option>`); document.getElementById("vendaProduto").innerHTML = htmlProd; }
     function adicionarItemCarrinho() { let prodId = document.getElementById("vendaProduto").value; let qtd = parseInt(document.getElementById("vendaQtd").value); if(!prodId || isNaN(qtd) || qtd <= 0) return alert("Selecione um produto e quantidade válida."); let p = produtosFinais.find(x => x.id === prodId); if(p) { carrinhoAtual.push({ prodId: p.id, nome: p.nome, preco: p.precoVenda, qtd: qtd, total: p.precoVenda * qtd }); atualizarTotaisCarrinho(); } }
     function removerItemCarrinho(index) { carrinhoAtual.splice(index, 1); atualizarTotaisCarrinho(); }
     
@@ -1223,8 +1260,8 @@
     function renderizarComercial() {
         const tbody = document.getElementById("tbComercial"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaVenda").value.toLowerCase(); let status = document.getElementById("fStatusVenda").value; let mes = document.getElementById("fMesVenda").value;
         let qtdOrc = 0, qtdProd = 0, qtdPronto = 0, qtdEnt = 0;
-        let filtrados = vendas.filter(v => { if(v.status === "Orçamento") qtdOrc++; if(v.status === "Em Produção") qtdProd++; if(v.status === "Pronto") qtdPronto++; if(v.status === "Entregue") qtdEnt++; let matchBusca = (v.clienteNome || "").toLowerCase().includes(busca); let matchStatus = status === "Todos" || v.status === status; let matchMes = v.dataCriacao.startsWith(mes); return matchBusca && matchStatus && matchMes; });
-        filtrados.sort((a,b) => b.dataCriacao.localeCompare(a.dataCriacao)).forEach(v => {
+        let filtrados = vendas.filter(v => { if(v.status === "Orçamento") qtdOrc++; if(v.status === "Em Produção") qtdProd++; if(v.status === "Pronto") qtdPronto++; if(v.status === "Entregue") qtdEnt++; let matchBusca = (v.clienteNome || "").toLowerCase().includes(busca); let matchStatus = status === "Todos" || v.status === status; let matchMes = (v.dataCriacao || "").startsWith(mes); return matchBusca && matchStatus && matchMes; });
+        filtrados.sort((a,b) => (b.dataCriacao || "").localeCompare(a.dataCriacao || "")).forEach(v => {
             let tr = document.createElement("tr"); let corBadge = v.status === "Orçamento" ? "badge-orcamento" : (v.status === "Em Produção" ? "badge-producao" : (v.status === "Pronto" ? "badge-pronto" : "badge-entregue"));
             let btnAvancar = ""; if(v.status === "Orçamento") btnAvancar = `<button class="btn-acao-topo" style="background:#f39c12; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Converter em Pedido</button>`; else if(v.status === "Em Produção") btnAvancar = `<button class="btn-acao-topo" style="background:#3498db; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Marcar como Pronto</button>`; else if(v.status === "Pronto") btnAvancar = `<button class="btn-acao-topo" style="background:#27ae60; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Lançar Pagto e Entregar</button>`; else btnAvancar = `<span style="color:#27ae60; font-size:12px; font-weight:bold;">Finalizado</span>`;
             tr.innerHTML = `<td>${formatarDataSimples(v.dataCriacao)}</td><td><strong>${v.clienteNome}</strong></td><td><strong style="color:#27ae60;">${formatarDinheiro(v.totalGeral)}</strong></td><td style="text-align:center;"><span class="badge ${corBadge}">${v.status}</span></td><td style="text-align:center; display:flex; flex-direction:column; gap:5px; align-items:center;">${btnAvancar}<div><button class="btn-acao" title="Imprimir / PDF / WhatsApp" onclick="abrirModalImpressao('${v.id}')">🖨️</button><button class="btn-acao" style="color:red;" onclick="removerVenda('${v.id}')">🗑️</button></div></td>`; tbody.appendChild(tr);
