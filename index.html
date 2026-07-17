@@ -17,7 +17,7 @@
         
         .login-box { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 10px 30px rgba(74, 48, 34, 0.1); width: 100%; max-width: 380px; text-align: center; box-sizing: border-box; border-top: 5px solid #c8827a; }
         .login-box h2 { color: #4a3022; margin-top: 0; font-size: 22px; }
-        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e1e5eb; border-radius: 6px; box-sizing: border-box; font-size: 15px; background: #faf9f7; }
+        .login-box input, .login-box select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e1e5eb; border-radius: 6px; box-sizing: border-box; font-size: 15px; background: #faf9f7; }
         .login-box button { width: 100%; padding: 14px; background: #c8827a; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 10px; font-size: 16px; transition: 0.3s; }
         .login-box button:hover { background: #b26e67; }
         .btn-secundario { background: #4a3022 !important; }
@@ -25,8 +25,8 @@
         #loginMsg { color: #e74c3c; font-size: 14px; margin-bottom: 10px; min-height: 15px; font-weight: bold; }
         
         .header-top { background: #352218; color: #fcf8f2; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-wrap: wrap; gap: 10px; }
-        .navbar { background-color: #4a3022; padding: 15px 20px; display: flex; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; }
-        .aba-btn { background: none; border: none; color: #e8dcc4; font-size: 14px; font-weight: bold; cursor: pointer; padding: 8px 12px; border-radius: 6px; transition: 0.3s; flex: 1; min-width: 120px; text-align: center; }
+        .navbar { background-color: #4a3022; padding: 10px 20px; display: flex; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; }
+        .aba-btn { background: none; border: none; color: #e8dcc4; font-size: 13px; font-weight: bold; cursor: pointer; padding: 8px 12px; border-radius: 6px; transition: 0.3s; flex: 1; min-width: 100px; text-align: center; }
         .aba-btn:hover { color: white; background-color: #634331; }
         .aba-ativa { color: white; background-color: #c8827a; }
         .aba-ativa:hover { background-color: #b26e67; }
@@ -86,7 +86,7 @@
 
 <div id="telaLogin">
     <div class="titulo-empresa">
-        <img src="Logo-oncaprosa.jpeg" alt="Logo Onça Prosa">
+        <img src="Logo-oncaprosa.jpeg" alt="Logo Onça Prosa" onerror="this.style.display='none'">
         <div class="menor">ERP Gerencial</div>
     </div>
     <div class="login-box">
@@ -102,7 +102,7 @@
 <div id="appLogado" style="display: none;">
     <div class="header-top">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <img src="Logo-oncaprosa.jpeg" alt="Logo Onça Prosa" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #e8dcc4; background: white;">
+            <img src="Logo-oncaprosa.jpeg" alt="Logo" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #e8dcc4; background: white;" onerror="this.style.display='none'">
             <span>👤 Usuário: <b id="lblUsuario"></b> (<span id="lblPerfil"></span>)</span>
         </div>
         <div style="display: flex; align-items: center; gap: 15px;">
@@ -114,8 +114,10 @@
     <!-- NAVBAR ESTRUTURADA -->
     <div class="navbar">
         <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard</button>
-        <button id="btnAbaFinanceiro" class="aba-btn" onclick="mudarAba('financeiro')">💸 Financeiro</button>
+        <button id="btnAbaFinanceiro" class="aba-btn fin-req" onclick="mudarAba('financeiro')">💸 Financeiro</button>
         <button id="btnAbaEstoque" class="aba-btn" onclick="mudarAba('estoque')">📦 Estoque</button>
+        <button id="btnAbaClientes" class="aba-btn" onclick="mudarAba('clientes')">👥 Clientes</button>
+        <button id="btnAbaFornecedores" class="aba-btn" onclick="mudarAba('fornecedores')">🚚 Fornecedores</button>
         <button id="btnAbaGestao" class="aba-btn admin-req" style="display:none;" onclick="mudarAba('gestao')">⚙️ Gestão</button>
     </div>
 
@@ -126,19 +128,14 @@
         <!-- ========================================== -->
         <div id="abaDashboard" class="aba-conteudo">
             <h2 style="color: #4a3022; border-bottom: 2px solid #e8e3dc; padding-bottom: 10px;">📊 Visão Geral e Indicadores</h2>
-            
             <div class="filtros-area" style="display: flex; gap: 15px; max-width: 300px; margin-bottom: 20px;">
                 <div style="flex: 1;"><label>Mês de Referência:</label><input type="month" id="dreMes" onchange="gerarDRE()"></div>
             </div>
-
-            <!-- Resumo Financeiro Rápido -->
             <div class="resumo-container">
                 <div class="card" style="border-color: #27ae60;"><h4>Entradas (Mês)</h4><p style="color: #27ae60;" id="resDashEntradas">R$ 0,00</p></div>
                 <div class="card" style="border-color: #e74c3c;"><h4>Saídas (Mês)</h4><p style="color: #e74c3c;" id="resDashSaidas">R$ 0,00</p></div>
                 <div class="card" style="border-color: #c8827a;"><h4>Saldo (Mês)</h4><p id="resDashSaldo" style="color:#4a3022;">R$ 0,00</p></div>
             </div>
-
-            <!-- DRE e Rateio -->
             <div class="dre-container">
                 <div class="dre-box">
                     <h3 style="color: #c8827a; margin-top:0;">Demonstração de Resultados (DRE)</h3>
@@ -214,11 +211,15 @@
         <!-- MÓDULO 3: ESTOQUE                          -->
         <!-- ========================================== -->
         <div id="abaEstoque" class="layout-flex aba-conteudo" style="display: none;">
-            <div class="painel-cadastro fin-req">
+            <div class="painel-cadastro">
                 <h2 id="tituloCadProduto">📦 Novo Produto</h2>
                 <input type="hidden" id="prodId">
                 <div class="form-group"><label>Nome do Produto / Insumo:</label><input type="text" id="prodNome"></div>
                 <div class="form-group"><label>Categoria:</label><input type="text" id="prodCat"></div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;"><label>Fornecedor:</label><select id="prodFornecedor"><option value="">Nenhum</option></select></div>
+                    <div class="form-group" style="flex: 1;"><label>Marca:</label><input type="text" id="prodMarca"></div>
+                </div>
                 <div class="form-row">
                     <div class="form-group" style="flex: 1;"><label>Custo (R$):</label><input type="number" id="prodCusto" step="0.01"></div>
                     <div class="form-group" style="flex: 1;"><label>Preço (R$):</label><input type="number" id="prodVenda" step="0.01"></div>
@@ -241,7 +242,7 @@
                     </div>
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>Produto</th><th>Categoria</th><th>Custo (R$)</th><th>Preço (R$)</th><th style="text-align: center;">Qtd Atual</th><th class="fin-req" style="text-align: center;">Ações</th></tr></thead>
+                            <thead><tr><th>Produto</th><th>Categoria / Marca</th><th>Fornecedor</th><th>Custo (R$)</th><th>Preço (R$)</th><th style="text-align: center;">Qtd Atual</th><th style="text-align: center;">Ações</th></tr></thead>
                             <tbody id="tbEstoque"></tbody>
                         </table>
                     </div>
@@ -250,15 +251,89 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- MÓDULO 4: GESTÃO (Apenas Admin)            -->
+        <!-- MÓDULO 4: CLIENTES (CRM)                   -->
         <!-- ========================================== -->
-        <div id="abaGestao" class="painel-branco aba-conteudo admin-req" style="display: none;">
+        <div id="abaClientes" class="layout-flex aba-conteudo" style="display: none;">
+            <div class="painel-cadastro">
+                <h2 id="tituloCadCliente">👥 Novo Cliente</h2>
+                <input type="hidden" id="cliId">
+                <div class="form-group"><label>Nome do Cliente:</label><input type="text" id="cliNome"></div>
+                <div class="form-group"><label>WhatsApp / Telefone:</label><input type="text" id="cliTel" placeholder="(XX) 9XXXX-XXXX"></div>
+                <div class="form-group"><label>E-mail:</label><input type="email" id="cliEmail"></div>
+                <div class="form-group"><label>Endereço / Observações:</label><input type="text" id="cliEnd"></div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fdf5f4; padding: 10px; border-radius: 6px; border: 1px solid #e8e3dc;">
+                        <input type="checkbox" id="cliPromo" style="width: auto; margin: 0;" checked> 
+                        Autoriza envio de promoções e contato
+                    </label>
+                </div>
+                <button class="btn" id="btnSalvarCli" style="margin-top: 10px;" onclick="adicionarCliente()">Salvar Cliente</button>
+                <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormCliente()">Limpar</button>
+            </div>
+            <div class="painel-conteudo">
+                <div class="painel-branco">
+                    <h2 style="margin-top:0;">📋 Carteira de Clientes</h2>
+                    <div class="filtros-area">
+                        <div class="filtros-grid" style="grid-template-columns: 1fr;">
+                            <div><label>Buscar Cliente:</label><input type="text" id="fBuscaCli" oninput="renderizarClientes()" placeholder="Nome, telefone ou e-mail..."></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Nome</th><th>Contato (WhatsApp/Email)</th><th>Endereço / Obs</th><th style="text-align: center;">Aceita Promoções?</th><th style="text-align: center;">Ações</th></tr></thead>
+                            <tbody id="tbClientes"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MÓDULO 5: FORNECEDORES                     -->
+        <!-- ========================================== -->
+        <div id="abaFornecedores" class="layout-flex aba-conteudo" style="display: none;">
+            <div class="painel-cadastro">
+                <h2 id="tituloCadFornecedor">🚚 Novo Fornecedor</h2>
+                <input type="hidden" id="fornId">
+                <div class="form-group"><label>Nome da Empresa:</label><input type="text" id="fornNome"></div>
+                <div class="form-group"><label>Contato Principal (Tel/Nome):</label><input type="text" id="fornContato"></div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;"><label>Nota Produto (1 a 5):</label><input type="number" id="fornNotaProd" min="1" max="5" value="5"></div>
+                    <div class="form-group" style="flex: 1;"><label>Nota Entrega (1 a 5):</label><input type="number" id="fornNotaEnt" min="1" max="5" value="5"></div>
+                </div>
+                <div class="form-group"><label>Observações:</label><input type="text" id="fornObs" placeholder="Ex: Entrega só de terça"></div>
+                
+                <button class="btn" id="btnSalvarForn" style="margin-top: 10px;" onclick="adicionarFornecedor()">Salvar Fornecedor</button>
+                <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormFornecedor()">Limpar</button>
+            </div>
+            <div class="painel-conteudo">
+                <div class="painel-branco">
+                    <h2 style="margin-top:0;">📋 Gestão de Fornecedores</h2>
+                    <div class="filtros-area">
+                        <div class="filtros-grid" style="grid-template-columns: 1fr;">
+                            <div><label>Buscar Fornecedor:</label><input type="text" id="fBuscaForn" oninput="renderizarFornecedores()" placeholder="Nome ou contato..."></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Empresa</th><th>Contato</th><th style="text-align: center;">Qualid. Produto</th><th style="text-align: center;">Qualid. Entrega</th><th>Observações</th><th style="text-align: center;">Ações</th></tr></thead>
+                            <tbody id="tbFornecedores"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MÓDULO 6: GESTÃO (Apenas Admin)            -->
+        <!-- ========================================== -->
+        <!-- AQUI FOI CORRIGIDO O BUG: removido o "admin-req" da classe principal da DIV, mantendo o controle puramente visual pelas abas -->
+        <div id="abaGestao" class="painel-branco aba-conteudo" style="display: none;">
             <h2>⚙️ Gestão de Equipe e Configurações</h2>
             
-            <!-- Gestão de Usuários -->
             <div class="admin-area" style="margin-bottom: 30px;">
                 <h3 style="color: #d35400; margin-top: 0;">👥 Cadastro de Pessoas e Acessos</h3>
-                <p style="font-size: 14px; margin-top: -10px; margin-bottom: 20px;">Adicione novos membros da equipe e defina o nível de permissão de cada um.</p>
+                <p style="font-size: 14px; margin-top: -10px; margin-bottom: 20px;">Adicione membros da equipe. <strong style="color: #e74c3c;">Nota:</strong> Para desativar/excluir o acesso de alguém, mude o Status para "Suspenso".</p>
                 
                 <div style="background: white; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
                     <div style="display:flex; gap:10px; align-items: flex-end; flex-wrap: wrap;">
@@ -268,7 +343,7 @@
                         <div style="flex: 2; min-width: 120px;">
                             <label>Categoria de Acesso:</label>
                             <select id="novoUserPerfil">
-                                <option value="Observador">Observador (Apenas Leitura)</option>
+                                <option value="Vendedor">Vendedor (Vendas/Clientes)</option>
                                 <option value="Financeiro">Financeiro (Lança Dados)</option>
                                 <option value="Administrador">Administrador (Total)</option>
                             </select>
@@ -279,13 +354,12 @@
 
                 <div class="table-responsive">
                     <table style="background: white;">
-                        <thead><tr><th>Nome</th><th>CPF</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead>
+                        <thead><tr><th>Nome</th><th>CPF</th><th>Perfil</th><th>Status de Acesso</th><th>Ações</th></tr></thead>
                         <tbody id="tabelaUsuarios"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Gestão de Categorias e Contas -->
             <div class="config-grid">
                 <div style="background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
                     <h3 style="margin-top: 0;">📁 Categorias Financeiras</h3>
@@ -311,7 +385,6 @@
 </div>
 
 <script>
-    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
       apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI",
       authDomain: "onca-prosa-erp.firebaseapp.com",
@@ -321,25 +394,24 @@
       appId: "1:1096171294924:web:9362f03a99a6d31139b269"
     };
     
-    // App Principal
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const auth = firebase.auth();
-    
-    // App Secundário (Usado SOMENTE para o Admin criar usuários sem ser deslogado)
     const appSecundario = firebase.initializeApp(firebaseConfig, "AppSecundario");
 
     let lancamentos = [];
     let produtos = []; 
+    let clientes = [];
+    let fornecedores = [];
     let usuariosLista = [];
     let contasLista = ["Caixa Principal", "Banco Inter", "Mercado Pago"];
     let statusLista = ["A Vencer", "Efetuada"];
     let categorias = ["Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Aluguel", "Salários", "Internet", "Sistema", "Contador", "Outras Despesas Fixas"];
 
     let userAutenticado = null;
-    let perfilUsuario = 'Observador'; 
+    let perfilUsuario = 'Vendedor'; 
 
-    // VERIFICA SE O BANCO ESTÁ VAZIO PARA CRIAR O PRIMEIRO ADMIN
+    // VERIFICA SE O BANCO ESTÁ VAZIO
     db.collection("usuarios").limit(1).get().then(snap => {
         if(snap.empty) {
             document.getElementById('btnRegistrarPrimeiro').style.display = 'block';
@@ -356,7 +428,7 @@
                 if (doc.exists) {
                     let d = doc.data();
                     if(d.status === "Suspenso") {
-                        alert("Sua conta foi suspensa.");
+                        alert("Sua conta foi suspensa ou inativada pelo Administrador.");
                         auth.signOut();
                         return;
                     }
@@ -379,12 +451,11 @@
     });
 
     function aplicarPermissoes() {
+        // Inicialmente escondemos abas exclusivas
         document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = 'none');
+        
         if (perfilUsuario === 'Administrador') {
             document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = '');
-            if(window.innerWidth > 900) {
-                document.getElementById('abaFinanceiro').style.display = document.getElementById('abaFinanceiro').classList.contains('aba-ativa') ? 'flex' : 'none';
-            }
         } else if (perfilUsuario === 'Financeiro') {
             document.querySelectorAll('.fin-req').forEach(el => el.style.display = '');
         }
@@ -429,7 +500,7 @@
         document.querySelectorAll('.aba-conteudo').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.aba-btn').forEach(el => el.classList.remove('aba-ativa'));
         
-        let isFlex = abaId === 'financeiro' || abaId === 'estoque';
+        let isFlex = ['financeiro', 'estoque', 'clientes', 'fornecedores'].includes(abaId);
         document.getElementById('aba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).style.display = (isFlex && window.innerWidth > 900) ? 'flex' : 'block';
         
         document.getElementById('btnAba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).classList.add('aba-ativa');
@@ -437,11 +508,12 @@
         if(abaId === 'dashboard') gerarDRE();
         if(abaId === 'financeiro') atualizarTelaFinanceiro();
         if(abaId === 'estoque') renderizarEstoque();
+        if(abaId === 'clientes') renderizarClientes();
+        if(abaId === 'fornecedores') renderizarFornecedores();
     }
 
     // --- CARGA DE DADOS DO BANCO ---
     function iniciarOuvintesDeDados() {
-        // Configurações (Categorias e Contas)
         db.collection("config").doc("listas").onSnapshot(doc => {
             if (doc.exists) {
                 let d = doc.data();
@@ -451,20 +523,28 @@
             carregarListas();
         });
 
-        // Lançamentos
         db.collection("lancamentos").onSnapshot(snap => {
             lancamentos = []; snap.forEach(doc => lancamentos.push(doc.data()));
             if(document.getElementById('abaFinanceiro').style.display !== 'none') atualizarTelaFinanceiro();
             if(document.getElementById('abaDashboard').style.display !== 'none') gerarDRE();
         });
 
-        // Produtos
         db.collection("produtos").onSnapshot(snap => {
             produtos = []; snap.forEach(doc => produtos.push(doc.data()));
             if(document.getElementById('abaEstoque').style.display !== 'none') renderizarEstoque();
         });
 
-        // Usuários (Apenas Admin vê a lista)
+        db.collection("clientes").onSnapshot(snap => {
+            clientes = []; snap.forEach(doc => clientes.push(doc.data()));
+            if(document.getElementById('abaClientes').style.display !== 'none') renderizarClientes();
+        });
+
+        db.collection("fornecedores").onSnapshot(snap => {
+            fornecedores = []; snap.forEach(doc => fornecedores.push(doc.data()));
+            carregarFornecedoresSelect(); // Atualiza o select do estoque
+            if(document.getElementById('abaFornecedores').style.display !== 'none') renderizarFornecedores();
+        });
+
         if(perfilUsuario === 'Administrador') {
             db.collection("usuarios").onSnapshot(snap => {
                 usuariosLista = [];
@@ -474,8 +554,8 @@
                     u.id = doc.id;
                     usuariosLista.push(u);
                     
-                    let selectPerfil = `<select onchange="alterarUser('${u.id}', 'perfil', this.value)"><option value="Observador" ${u.perfil==='Observador'?'selected':''}>Observador</option><option value="Financeiro" ${u.perfil==='Financeiro'?'selected':''}>Financeiro</option><option value="Administrador" ${u.perfil==='Administrador'?'selected':''}>Administrador</option></select>`;
-                    let selectStatus = `<select onchange="alterarUser('${u.id}', 'status', this.value)"><option value="Ativo" ${u.status==='Ativo'?'selected':''}>Ativo</option><option value="Suspenso" ${u.status==='Suspenso'?'selected':''}>Suspenso</option></select>`;
+                    let selectPerfil = `<select onchange="alterarUser('${u.id}', 'perfil', this.value)"><option value="Vendedor" ${u.perfil==='Vendedor'?'selected':''}>Vendedor</option><option value="Financeiro" ${u.perfil==='Financeiro'?'selected':''}>Financeiro</option><option value="Administrador" ${u.perfil==='Administrador'?'selected':''}>Administrador</option></select>`;
+                    let selectStatus = `<select onchange="alterarUser('${u.id}', 'status', this.value)" style="${u.status==='Suspenso'?'background:#ffdddd;':''}"><option value="Ativo" ${u.status==='Ativo'?'selected':''}>Ativo</option><option value="Suspenso" ${u.status==='Suspenso'?'selected':''}>Suspenso (Desativado)</option></select>`;
                     
                     html += `<tr><td><strong>${u.nome}</strong></td><td>${u.cpf}</td><td>${selectPerfil}</td><td>${selectStatus}</td><td><button class="btn-acao" style="color:red;" onclick="excluirUser('${u.id}')">🗑️</button></td></tr>`;
                 });
@@ -485,15 +565,20 @@
     }
 
     function carregarListas() {
-        // Dropdowns do Financeiro
         document.getElementById("cadCat").innerHTML = categorias.map(c => `<option value="${c}">${c}</option>`).join('');
         document.getElementById("cadStatus").innerHTML = statusLista.map(s => `<option value="${s}">${s}</option>`).join('');
         document.getElementById("cadConta").innerHTML = contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
         document.getElementById("fConta").innerHTML = '<option value="Todas">Todas</option>' + contasLista.map(c => `<option value="${c}">${c}</option>`).join('');
-        
-        // Listas da aba Gestão
         document.getElementById("listaCatConfig").innerHTML = categorias.map((c, i) => `<li>${c} <button onclick="remConfig('cat', ${i})">X</button></li>`).join('');
         document.getElementById("listaContasConfig").innerHTML = contasLista.map((c, i) => `<li>${c} <button onclick="remConfig('conta', ${i})">X</button></li>`).join('');
+    }
+
+    function carregarFornecedoresSelect() {
+        let html = '<option value="">Nenhum</option>';
+        fornecedores.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(f => {
+            html += `<option value="${f.nome}">${f.nome}</option>`;
+        });
+        document.getElementById('prodFornecedor').innerHTML = html;
     }
 
     // --- ABA GESTÃO (USUÁRIOS E CONFIGURAÇÕES) ---
@@ -504,13 +589,11 @@
         const p = document.getElementById('novoUserPerfil').value;
 
         if(!nome || cpf.length !== 11 || s.length < 6) return alert("Preencha o Nome, CPF válido (11 números) e Senha (min 6 caracteres).");
-
         const emailFake = cpf + "@oncaprosa.local";
         
-        // Usa o app secundário para não deslogar o Admin atual!
         appSecundario.auth().createUserWithEmailAndPassword(emailFake, s).then(cred => {
             db.collection("usuarios").doc(cred.user.uid).set({ nome: nome, cpf: cpf, perfil: p, status: "Ativo" });
-            appSecundario.auth().signOut(); // Sai do app secundário
+            appSecundario.auth().signOut();
             alert(`Usuário ${nome} criado com sucesso!`);
             document.getElementById('novoUserNome').value = ""; document.getElementById('novoUserCpf').value = ""; document.getElementById('novoUserSenha').value = "";
         }).catch(err => alert("Erro ao criar usuário: " + err.message));
@@ -520,17 +603,10 @@
         let obj = {}; obj[campo] = valor;
         db.collection("usuarios").doc(id).update(obj);
     }
-
     function excluirUser(id) {
-        if(confirm("Tem certeza que deseja excluir este acesso?")) {
-            db.collection("usuarios").doc(id).delete();
-        }
+        if(confirm("Tem certeza que deseja excluir este acesso?")) db.collection("usuarios").doc(id).delete();
     }
-
-    function salvarConfigNaNuvem() {
-        db.collection("config").doc("listas").set({ categorias: categorias, contasLista: contasLista });
-    }
-
+    function salvarConfigNaNuvem() { db.collection("config").doc("listas").set({ categorias: categorias, contasLista: contasLista }); }
     function addConfig(t) {
         let idInp = t === 'cat' ? "novaCatInput" : "novaContaInput";
         let inp = document.getElementById(idInp); let v = inp.value.trim();
@@ -540,148 +616,88 @@
             inp.value = ""; salvarConfigNaNuvem();
         }
     }
-
     function remConfig(t, i) {
-        if(t === 'cat') categorias.splice(i,1);
-        if(t === 'conta') contasLista.splice(i,1);
+        if(t === 'cat') categorias.splice(i,1); if(t === 'conta') contasLista.splice(i,1);
         salvarConfigNaNuvem();
     }
 
-    // --- ABA FINANCEIRO (ENTRADAS E SAÍDAS) ---
-    function formatarData(d) { return d ? d.split('-').reverse().join('/') : ""; }
-    
-    function atualizarTelaFinanceiro() {
-        const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = "";
-        let fBusca = document.getElementById("fBusca").value.toLowerCase();
-        let fMes = document.getElementById("fMes").value;
-        let fTipo = document.getElementById("fTipo").value;
-        let fConta = document.getElementById("fConta").value;
-
-        let filtrados = lancamentos.filter(l => 
-            l.desc.toLowerCase().includes(fBusca) && 
-            l.data.startsWith(fMes) && 
-            (fTipo==="Todos" || l.tipo===fTipo) &&
-            (fConta==="Todas" || l.conta===fConta)
-        ).sort((a,b)=>a.data.localeCompare(b.data));
-
-        filtrados.forEach(l => {
-            let tr = document.createElement("tr"); 
-            tr.innerHTML = `
-                <td>${formatarData(l.data)}</td>
-                <td><strong>${l.desc}</strong><br><small>🏦 ${l.conta || 'Geral'}</small></td>
-                <td>${l.categoria}</td>
-                <td style="color:${l.tipo==='Débito'?'#e74c3c':'#27ae60'}; font-weight:bold;">R$ ${l.valor.toFixed(2)}</td>
-                <td>${l.tipo}</td>
-                <td><select onchange="mudarStatusLanc('${l.id}', this.value)" style="padding:4px; font-size:12px; border-radius:4px;" ${perfilUsuario === 'Observador' ? 'disabled' : ''}><option value="A Vencer" ${l.status==='A Vencer'?'selected':''}>A Vencer</option><option value="Efetuada" ${l.status==='Efetuada'?'selected':''}>Efetuada</option></select></td>
-                <td class="fin-req" style="text-align:center;">
-                    <button class="btn-acao" title="Editar" onclick="editarLanc('${l.id}')">✏️</button>
-                    <button class="btn-acao" title="Excluir" style="color:red;" onclick="removerLanc('${l.id}')">🗑️</button>
-                </td>`; 
+    // --- ABA CLIENTES (CRM) ---
+    function adicionarCliente() {
+        let id = document.getElementById("cliId").value;
+        let c = {
+            nome: document.getElementById("cliNome").value.trim(),
+            tel: document.getElementById("cliTel").value.trim(),
+            email: document.getElementById("cliEmail").value.trim(),
+            end: document.getElementById("cliEnd").value.trim(),
+            promo: document.getElementById("cliPromo").checked
+        };
+        if(!c.nome) return alert("Preencha o nome do cliente.");
+        if(id) { db.collection("clientes").doc(id).update(c); } 
+        else { c.id = Date.now().toString(); db.collection("clientes").doc(c.id).set(c); }
+        limparFormCliente();
+    }
+    function limparFormCliente() {
+        document.querySelectorAll('#abaClientes input[type="text"], #abaClientes input[type="email"], #abaClientes input[type="hidden"]').forEach(i => i.value = '');
+        document.getElementById("cliPromo").checked = true;
+        document.getElementById("tituloCadCliente").innerText = "👥 Novo Cliente";
+        document.getElementById("btnSalvarCli").innerText = "Salvar Cliente";
+    }
+    function renderizarClientes() {
+        const tbody = document.getElementById("tbClientes"); tbody.innerHTML = "";
+        let busca = document.getElementById("fBuscaCli").value.toLowerCase();
+        let filtrados = clientes.filter(c => c.nome.toLowerCase().includes(busca) || c.tel.toLowerCase().includes(busca) || c.email.toLowerCase().includes(busca));
+        filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(c => {
+            let tr = document.createElement("tr");
+            let promoHtml = c.promo ? '<span style="color:#27ae60;font-weight:bold;">Sim</span>' : '<span style="color:#e74c3c;">Não</span>';
+            tr.innerHTML = `<td><strong>${c.nome}</strong></td><td>${c.tel}<br><small>${c.email}</small></td><td>${c.end}</td><td style="text-align:center;">${promoHtml}</td><td style="text-align:center;"><button class="btn-acao" onclick="editarCliente('${c.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerCliente('${c.id}')">🗑️</button></td>`;
             tbody.appendChild(tr);
         });
-        if(perfilUsuario === 'Observador') document.querySelectorAll('.fin-req').forEach(el => el.style.display = 'none');
     }
-
-    function mudarStatusLanc(id, novoStatus) {
-        db.collection("lancamentos").doc(id).update({status: novoStatus});
+    function editarCliente(id) {
+        let c = clientes.find(x => x.id === id); if(!c) return;
+        document.getElementById("cliId").value = c.id; document.getElementById("cliNome").value = c.nome; document.getElementById("cliTel").value = c.tel; document.getElementById("cliEmail").value = c.email; document.getElementById("cliEnd").value = c.end; document.getElementById("cliPromo").checked = c.promo;
+        document.getElementById("tituloCadCliente").innerText = "✏️ Editando Cliente"; document.getElementById("btnSalvarCli").innerText = "Salvar Alterações";
     }
+    function removerCliente(id) { if(confirm("Excluir cliente?")) db.collection("clientes").doc(id).delete(); }
 
-    function adicionarLancamento() {
-        let idEdit = document.getElementById("editId").value;
-        let l = { 
-            desc: document.getElementById("cadDesc").value, 
-            categoria: document.getElementById("cadCat").value, 
-            conta: document.getElementById("cadConta").value, 
-            valor: parseFloat(document.getElementById("cadValor").value), 
-            data: document.getElementById("cadData").value, 
-            tipo: document.getElementById("cadTipo").value, 
-            status: document.getElementById("cadStatus").value 
+    // --- ABA FORNECEDORES ---
+    function adicionarFornecedor() {
+        let id = document.getElementById("fornId").value;
+        let f = {
+            nome: document.getElementById("fornNome").value.trim(),
+            contato: document.getElementById("fornContato").value.trim(),
+            notaProd: parseInt(document.getElementById("fornNotaProd").value) || 5,
+            notaEnt: parseInt(document.getElementById("fornNotaEnt").value) || 5,
+            obs: document.getElementById("fornObs").value.trim()
         };
-        if(!l.desc || !l.data || isNaN(l.valor)) return alert("Preencha Descrição, Valor e Data corretamente.");
-        
-        if(idEdit) {
-            l.id = idEdit;
-            db.collection("lancamentos").doc(idEdit).update(l);
-        } else {
-            l.id = Date.now().toString();
-            db.collection("lancamentos").doc(l.id).set(l); 
-        }
-        limparFormulario();
+        if(!f.nome) return alert("Preencha o nome do fornecedor.");
+        if(id) { db.collection("fornecedores").doc(id).update(f); } 
+        else { f.id = Date.now().toString(); db.collection("fornecedores").doc(f.id).set(f); }
+        limparFormFornecedor();
     }
-
-    function editarLanc(id) {
-        let l = lancamentos.find(x => x.id === id); if(!l) return;
-        document.getElementById("editId").value = l.id;
-        document.getElementById("cadDesc").value = l.desc;
-        document.getElementById("cadCat").value = l.categoria;
-        document.getElementById("cadConta").value = l.conta || contasLista[0];
-        document.getElementById("cadValor").value = l.valor;
-        document.getElementById("cadData").value = l.data;
-        document.getElementById("cadTipo").value = l.tipo;
-        document.getElementById("cadStatus").value = l.status;
-        document.getElementById("tituloCadastro").innerText = "✏️ Editar Lançamento";
-        document.querySelector("#painelCadastro .btn").innerText = "Salvar Alterações";
+    function limparFormFornecedor() {
+        document.querySelectorAll('#abaFornecedores input[type="text"], #abaFornecedores input[type="hidden"]').forEach(i => i.value = '');
+        document.getElementById("fornNotaProd").value = 5; document.getElementById("fornNotaEnt").value = 5;
+        document.getElementById("tituloCadFornecedor").innerText = "🚚 Novo Fornecedor"; document.getElementById("btnSalvarForn").innerText = "Salvar Fornecedor";
     }
-
-    function limparFormulario() { 
-        document.getElementById("editId").value = "";
-        document.getElementById("cadDesc").value = ""; 
-        document.getElementById("cadValor").value = ""; 
-        document.getElementById("cadData").value = ""; 
-        document.getElementById("tituloCadastro").innerText = "💸 Novo Lançamento";
-        document.querySelector("#painelCadastro .btn").innerText = "Registrar";
-    }
-
-    function removerLanc(id) { 
-        if(confirm("Tem certeza que deseja excluir este lançamento?")) db.collection("lancamentos").doc(id.toString()).delete(); 
-    }
-
-    // --- ABA DASHBOARD (DRE E RESUMOS) ---
-    function gerarDRE() {
-        let m = document.getElementById("dreMes").value; 
-        let rec = 0, dev = 0, cVar = 0, cFix = 0;
-        let tEnt = 0, tSai = 0;
-
-        let lancMes = lancamentos.filter(l => l.data.startsWith(m));
-
-        lancMes.forEach(l => {
-            if(l.tipo === "Crédito") tEnt += l.valor;
-            else if(l.tipo === "Débito") tSai += l.valor;
-
-            if(l.status.toLowerCase().includes("efetuada")) {
-                if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor;
-                else if(l.categoria.includes("Devolu")) dev += l.valor;
-                else if(["Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção"].includes(l.categoria)) cVar += l.valor;
-                else cFix += l.valor;
-            }
+    function renderizarFornecedores() {
+        const tbody = document.getElementById("tbFornecedores"); tbody.innerHTML = "";
+        let busca = document.getElementById("fBuscaForn").value.toLowerCase();
+        let filtrados = fornecedores.filter(f => f.nome.toLowerCase().includes(busca) || f.contato.toLowerCase().includes(busca));
+        filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(f => {
+            let tr = document.createElement("tr");
+            let corProd = f.notaProd >= 4 ? '#27ae60' : (f.notaProd == 3 ? '#f39c12' : '#e74c3c');
+            let corEnt = f.notaEnt >= 4 ? '#27ae60' : (f.notaEnt == 3 ? '#f39c12' : '#e74c3c');
+            tr.innerHTML = `<td><strong>${f.nome}</strong></td><td>${f.contato}</td><td style="text-align:center; font-weight:bold; color:${corProd}">${f.notaProd} / 5</td><td style="text-align:center; font-weight:bold; color:${corEnt}">${f.notaEnt} / 5</td><td>${f.obs}</td><td style="text-align:center;"><button class="btn-acao" onclick="editarFornecedor('${f.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerFornecedor('${f.id}')">🗑️</button></td>`;
+            tbody.appendChild(tr);
         });
-
-        document.getElementById("resDashEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; 
-        document.getElementById("resDashSaidas").innerText = `R$ ${tSai.toFixed(2)}`; 
-        document.getElementById("resDashSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`;
-        document.getElementById("resDashSaldo").style.color = (tEnt-tSai) >= 0 ? "#4a3022" : "#e74c3c";
-
-        let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix;
-        document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; 
-        document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; 
-        document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; 
-        document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; 
-        document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`;
-
-        if (lucro > 0) {
-            let capGiro = lucro * 0.30; let reserva = lucro * 0.20; let manu = lucro * 0.10; let reinv = lucro * 0.10; let cresc = lucro * 0.10;
-            let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucro - totDed; 
-            let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50;
-
-            document.getElementById("dstGiro").innerText = `R$ ${capGiro.toFixed(2)}`; document.getElementById("dstReserva").innerText = `R$ ${reserva.toFixed(2)}`;
-            document.getElementById("dstManu").innerText = `R$ ${manu.toFixed(2)}`; document.getElementById("dstReinv").innerText = `R$ ${reinv.toFixed(2)}`;
-            document.getElementById("dstCresc").innerText = `R$ ${cresc.toFixed(2)}`; document.getElementById("dstDeducao").innerText = `R$ ${totDed.toFixed(2)}`;
-            document.getElementById("dstSaldo").innerText = `R$ ${saldo.toFixed(2)}`; document.getElementById("dstSocios").innerText = `R$ ${valSocios.toFixed(2)}`;
-            document.getElementById("dstCaixa").innerText = `R$ ${valCaixa.toFixed(2)}`;
-        } else {
-            ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = "R$ 0.00");
-        }
     }
+    function editarFornecedor(id) {
+        let f = fornecedores.find(x => x.id === id); if(!f) return;
+        document.getElementById("fornId").value = f.id; document.getElementById("fornNome").value = f.nome; document.getElementById("fornContato").value = f.contato; document.getElementById("fornNotaProd").value = f.notaProd; document.getElementById("fornNotaEnt").value = f.notaEnt; document.getElementById("fornObs").value = f.obs;
+        document.getElementById("tituloCadFornecedor").innerText = "✏️ Editando Fornecedor"; document.getElementById("btnSalvarForn").innerText = "Salvar Alterações";
+    }
+    function removerFornecedor(id) { if(confirm("Excluir fornecedor?")) db.collection("fornecedores").doc(id).delete(); }
 
     // --- ABA ESTOQUE ---
     function adicionarProduto() {
@@ -689,6 +705,8 @@
         let p = {
             nome: document.getElementById("prodNome").value.trim(),
             cat: document.getElementById("prodCat").value.trim() || "Geral",
+            fornecedor: document.getElementById("prodFornecedor").value,
+            marca: document.getElementById("prodMarca").value.trim(),
             custo: parseFloat(document.getElementById("prodCusto").value) || 0,
             venda: parseFloat(document.getElementById("prodVenda").value) || 0,
             qtd: parseFloat(document.getElementById("prodQtd").value) || 0,
@@ -701,6 +719,7 @@
     }
     function limparFormProduto() {
         document.querySelectorAll('#abaEstoque input').forEach(i => i.value = '');
+        document.getElementById("prodFornecedor").value = '';
         document.getElementById("tituloCadProduto").innerText = "📦 Novo Produto";
         document.getElementById("btnSalvarProd").innerText = "Salvar Produto";
     }
@@ -710,18 +729,65 @@
         let filtrados = produtos.filter(p => p.nome.toLowerCase().includes(busca) && (filtro === "Todos" || p.qtd <= p.min));
         filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(p => {
             let isBaixo = p.qtd <= p.min; let tr = document.createElement("tr"); if(isBaixo) tr.style.backgroundColor = '#fff3cd';
-            tr.innerHTML = `<td><strong>${p.nome}</strong></td><td>${p.cat}</td><td>R$ ${p.custo.toFixed(2)}</td><td>R$ ${p.venda.toFixed(2)}</td><td style="color:${isBaixo?'#e74c3c':'#27ae60'}; font-weight:bold; text-align:center;">${isBaixo?'⚠️ ':''}${p.qtd}</td><td class="fin-req" style="text-align:center;"><button class="btn-acao" onclick="editarProduto('${p.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerProduto('${p.id}')">🗑️</button></td>`;
+            tr.innerHTML = `<td><strong>${p.nome}</strong></td><td>${p.cat}<br><small style="color:#98947c;">${p.marca||''}</small></td><td>${p.fornecedor||'-'}</td><td>R$ ${p.custo.toFixed(2)}</td><td>R$ ${p.venda.toFixed(2)}</td><td style="color:${isBaixo?'#e74c3c':'#27ae60'}; font-weight:bold; text-align:center;">${isBaixo?'⚠️ ':''}${p.qtd}</td><td style="text-align:center;"><button class="btn-acao" onclick="editarProduto('${p.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerProduto('${p.id}')">🗑️</button></td>`;
             tbody.appendChild(tr);
         });
-        if(perfilUsuario === 'Observador') document.querySelectorAll('.fin-req').forEach(el => el.style.display = 'none');
     }
     function editarProduto(id) {
         let p = produtos.find(x => x.id === id); if(!p) return;
-        document.getElementById("prodId").value = p.id; document.getElementById("prodNome").value = p.nome; document.getElementById("prodCat").value = p.cat; document.getElementById("prodCusto").value = p.custo; document.getElementById("prodVenda").value = p.venda; document.getElementById("prodQtd").value = p.qtd; document.getElementById("prodMin").value = p.min;
+        document.getElementById("prodId").value = p.id; document.getElementById("prodNome").value = p.nome; document.getElementById("prodCat").value = p.cat; document.getElementById("prodFornecedor").value = p.fornecedor || ""; document.getElementById("prodMarca").value = p.marca || ""; document.getElementById("prodCusto").value = p.custo; document.getElementById("prodVenda").value = p.venda; document.getElementById("prodQtd").value = p.qtd; document.getElementById("prodMin").value = p.min;
         document.getElementById("tituloCadProduto").innerText = "✏️ Editando Produto"; document.getElementById("btnSalvarProd").innerText = "Salvar Alterações";
     }
     function removerProduto(id) { if(confirm("Excluir produto?")) db.collection("produtos").doc(id).delete(); }
 
+    // --- ABA FINANCEIRO E DASHBOARD (RESUMIDAS) ---
+    function formatarData(d) { return d ? d.split('-').reverse().join('/') : ""; }
+    function atualizarTelaFinanceiro() {
+        const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = "";
+        let fBusca = document.getElementById("fBusca").value.toLowerCase(); let fMes = document.getElementById("fMes").value; let fTipo = document.getElementById("fTipo").value; let fConta = document.getElementById("fConta").value;
+        let filtrados = lancamentos.filter(l => l.desc.toLowerCase().includes(fBusca) && l.data.startsWith(fMes) && (fTipo==="Todos" || l.tipo===fTipo) && (fConta==="Todas" || l.conta===fConta)).sort((a,b)=>a.data.localeCompare(b.data));
+        filtrados.forEach(l => {
+            let tr = document.createElement("tr"); 
+            tr.innerHTML = `<td>${formatarData(l.data)}</td><td><strong>${l.desc}</strong><br><small>🏦 ${l.conta || 'Geral'}</small></td><td>${l.categoria}</td><td style="color:${l.tipo==='Débito'?'#e74c3c':'#27ae60'}; font-weight:bold;">R$ ${l.valor.toFixed(2)}</td><td>${l.tipo}</td><td><select onchange="mudarStatusLanc('${l.id}', this.value)" style="padding:4px; font-size:12px; border-radius:4px;"><option value="A Vencer" ${l.status==='A Vencer'?'selected':''}>A Vencer</option><option value="Efetuada" ${l.status==='Efetuada'?'selected':''}>Efetuada</option></select></td><td class="fin-req" style="text-align:center;"><button class="btn-acao" onclick="editarLanc('${l.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerLanc('${l.id}')">🗑️</button></td>`; 
+            tbody.appendChild(tr);
+        });
+    }
+    function mudarStatusLanc(id, novoStatus) { db.collection("lancamentos").doc(id).update({status: novoStatus}); }
+    function adicionarLancamento() {
+        let idEdit = document.getElementById("editId").value;
+        let l = { desc: document.getElementById("cadDesc").value, categoria: document.getElementById("cadCat").value, conta: document.getElementById("cadConta").value, valor: parseFloat(document.getElementById("cadValor").value), data: document.getElementById("cadData").value, tipo: document.getElementById("cadTipo").value, status: document.getElementById("cadStatus").value };
+        if(!l.desc || !l.data || isNaN(l.valor)) return alert("Preencha Descrição, Valor e Data corretamente.");
+        if(idEdit) { l.id = idEdit; db.collection("lancamentos").doc(idEdit).update(l); } else { l.id = Date.now().toString(); db.collection("lancamentos").doc(l.id).set(l); }
+        limparFormulario();
+    }
+    function editarLanc(id) {
+        let l = lancamentos.find(x => x.id === id); if(!l) return;
+        document.getElementById("editId").value = l.id; document.getElementById("cadDesc").value = l.desc; document.getElementById("cadCat").value = l.categoria; document.getElementById("cadConta").value = l.conta || contasLista[0]; document.getElementById("cadValor").value = l.valor; document.getElementById("cadData").value = l.data; document.getElementById("cadTipo").value = l.tipo; document.getElementById("cadStatus").value = l.status;
+        document.getElementById("tituloCadastro").innerText = "✏️ Editar Lançamento"; document.querySelector("#painelCadastro .btn").innerText = "Salvar Alterações";
+    }
+    function limparFormulario() { document.getElementById("editId").value = ""; document.getElementById("cadDesc").value = ""; document.getElementById("cadValor").value = ""; document.getElementById("cadData").value = ""; document.getElementById("tituloCadastro").innerText = "💸 Novo Lançamento"; document.querySelector("#painelCadastro .btn").innerText = "Registrar"; }
+    function removerLanc(id) { if(confirm("Tem certeza?")) db.collection("lancamentos").doc(id.toString()).delete(); }
+
+    function gerarDRE() {
+        let m = document.getElementById("dreMes").value; let rec = 0, dev = 0, cVar = 0, cFix = 0; let tEnt = 0, tSai = 0;
+        let lancMes = lancamentos.filter(l => l.data.startsWith(m));
+        lancMes.forEach(l => {
+            if(l.tipo === "Crédito") tEnt += l.valor; else if(l.tipo === "Débito") tSai += l.valor;
+            if(l.status.toLowerCase().includes("efetuada")) {
+                if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor; else if(l.categoria.includes("Devolu")) dev += l.valor; else if(["Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção"].includes(l.categoria)) cVar += l.valor; else cFix += l.valor;
+            }
+        });
+        document.getElementById("resDashEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; document.getElementById("resDashSaidas").innerText = `R$ ${tSai.toFixed(2)}`; document.getElementById("resDashSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`; document.getElementById("resDashSaldo").style.color = (tEnt-tSai) >= 0 ? "#4a3022" : "#e74c3c";
+        let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix;
+        document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`;
+        if (lucro > 0) {
+            let capGiro = lucro * 0.30; let reserva = lucro * 0.20; let manu = lucro * 0.10; let reinv = lucro * 0.10; let cresc = lucro * 0.10;
+            let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucro - totDed; let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50;
+            document.getElementById("dstGiro").innerText = `R$ ${capGiro.toFixed(2)}`; document.getElementById("dstReserva").innerText = `R$ ${reserva.toFixed(2)}`; document.getElementById("dstManu").innerText = `R$ ${manu.toFixed(2)}`; document.getElementById("dstReinv").innerText = `R$ ${reinv.toFixed(2)}`; document.getElementById("dstCresc").innerText = `R$ ${cresc.toFixed(2)}`; document.getElementById("dstDeducao").innerText = `R$ ${totDed.toFixed(2)}`; document.getElementById("dstSaldo").innerText = `R$ ${saldo.toFixed(2)}`; document.getElementById("dstSocios").innerText = `R$ ${valSocios.toFixed(2)}`; document.getElementById("dstCaixa").innerText = `R$ ${valCaixa.toFixed(2)}`;
+        } else {
+            ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = "R$ 0.00");
+        }
+    }
 </script>
 
 </body>
