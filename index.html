@@ -45,7 +45,6 @@
         
         .btn { display: block; width: 100%; background-color: #c8827a; color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
         .btn:hover { background-color: #b26e67; }
-        .btn-editando { background-color: #f39c12; }
         .btn-limpar { background-color: #98947c; }
         .btn-acao-topo { background: #98947c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.3s; }
         .btn-acao-topo:hover { background: #7c7965; }
@@ -89,7 +88,7 @@
         .historico-item .tipo-badge { background: #e8dcc4; color: #4a3022; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 8px; }
         .historico-item button.del-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 14px; }
 
-        /* Carrinho e PDV */
+        /* Carrinho, PDV e Ficha Técnica */
         .tabela-carrinho { width: 100%; font-size: 12px; margin-bottom: 15px; }
         .tabela-carrinho th { background: #e8dcc4; padding: 5px; }
         .tabela-carrinho td { padding: 5px; border-bottom: 1px solid #eee; }
@@ -148,7 +147,8 @@
         <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard</button>
         <button id="btnAbaComercial" class="aba-btn" onclick="mudarAba('comercial')">🛒 Comercial</button>
         <button id="btnAbaFinanceiro" class="aba-btn fin-req" onclick="mudarAba('financeiro')">💸 Financeiro</button>
-        <button id="btnAbaEstoque" class="aba-btn" onclick="mudarAba('estoque')">📦 Estoque</button>
+        <button id="btnAbaProdutosFinais" class="aba-btn" onclick="mudarAba('produtosFinais')">🛍️ Produtos (Catálogo)</button>
+        <button id="btnAbaEstoque" class="aba-btn" onclick="mudarAba('estoque')">📦 Estoque (Insumos)</button>
         <button id="btnAbaClientes" class="aba-btn" onclick="mudarAba('clientes')">👥 Clientes</button>
         <button id="btnAbaFornecedores" class="aba-btn" onclick="mudarAba('fornecedores')">🚚 Fornecedores</button>
         <button id="btnAbaGestao" class="aba-btn admin-req" style="display:none;" onclick="mudarAba('gestao')">⚙️ Gestão</button>
@@ -156,7 +156,9 @@
 
     <div class="container-principal">
         
-        <!-- MÓDULO 1: DASHBOARD -->
+        <!-- ========================================== -->
+        <!-- MÓDULO 1: DASHBOARD                        -->
+        <!-- ========================================== -->
         <div id="abaDashboard" class="aba-conteudo">
             <h2 style="color: #4a3022; border-bottom: 2px solid #e8e3dc; padding-bottom: 10px;">📊 Visão Geral e Indicadores</h2>
             <div class="filtros-area" style="display: flex; gap: 15px; max-width: 300px; margin-bottom: 20px;">
@@ -193,19 +195,24 @@
             </div>
         </div>
 
-        <!-- MÓDULO 1.5: COMERCIAL E VENDAS -->
+        <!-- ========================================== -->
+        <!-- MÓDULO 1.5: COMERCIAL E VENDAS             -->
+        <!-- ========================================== -->
         <div id="abaComercial" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro">
                 <h2 id="tituloCadVenda">🛒 Criar Orçamento</h2>
                 <div class="form-group"><label>Cliente:</label><select id="vendaCliente"><option value="">Selecione um cliente...</option></select></div>
-                <div style="background: #faf9f7; padding: 10px; border-radius: 6px; border: 1px solid #e8e3dc; margin-bottom: 15px;">
-                    <label style="color:#c8827a;">Adicionar Item:</label>
-                    <select id="vendaProduto" style="margin-bottom: 5px;"><option value="">Selecione um produto...</option></select>
-                    <div style="display: flex; gap: 5px;">
-                        <input type="number" id="vendaQtd" placeholder="Qtd" min="1" value="1" style="width: 70px;">
-                        <button class="btn-acao-topo" style="background:#4a3022; flex: 1; margin:0;" onclick="adicionarItemCarrinho()">+ Incluir</button>
+                
+                <!-- AQUI FOI CORRIGIDO O ENCAVALAMENTO -->
+                <div style="background: #faf9f7; padding: 15px; border-radius: 6px; border: 1px solid #e8e3dc; margin-bottom: 15px;">
+                    <label style="color:#c8827a; display:block; margin-bottom:8px;">Adicionar Produto Final ao Pedido:</label>
+                    <select id="vendaProduto" style="margin-bottom: 10px; width: 100%; box-sizing: border-box;"><option value="">Selecione um produto final...</option></select>
+                    <div style="display: grid; grid-template-columns: 80px 1fr; gap: 10px; align-items: center;">
+                        <input type="number" id="vendaQtd" placeholder="Qtd" min="1" value="1" style="width: 100%; margin: 0; box-sizing: border-box;">
+                        <button class="btn" style="margin: 0; padding: 8px; font-size: 13px; background:#4a3022;" onclick="adicionarItemCarrinho()">+ Incluir Item</button>
                     </div>
                 </div>
+
                 <table class="tabela-carrinho">
                     <thead><tr><th>Item</th><th>Qtd</th><th>Preço</th><th>X</th></tr></thead>
                     <tbody id="tbCarrinho"></tbody>
@@ -219,11 +226,11 @@
             </div>
             <div class="painel-conteudo">
                 <div class="resumo-container" style="margin-bottom: 15px;">
-                    <div class="card" style="border-color: #95a5a6; padding: 10px;"><h4>Orçamentos Gerados</h4><p style="color: #95a5a6; font-size:18px;" id="resComercialOrc">0</p></div>
+                    <div class="card" style="border-color: #95a5a6; padding: 10px;"><h4>Orçamentos</h4><p style="color: #95a5a6; font-size:18px;" id="resComercialOrc">0</p></div>
                     <div class="card" style="border-color: #f39c12; padding: 10px;"><h4>Na Produção</h4><p style="color: #f39c12; font-size:18px;" id="resComercialProd">0</p></div>
-                    <div class="card" style="border-color: #3498db; padding: 10px;"><h4>Prontos p/ Envio</h4><p style="color: #3498db; font-size:18px;" id="resComercialPronto">0</p></div>
-                    <div class="card" style="border-color: #27ae60; padding: 10px;"><h4>Vendas Entregues</h4><p style="color: #27ae60; font-size:18px;" id="resComercialEnt">0</p></div>
-                    <div class="card" style="background:#4a3022; color:white; border-color: #4a3022; padding: 10px;"><h4 style="color:#e8dcc4;">Taxa de Conversão</h4><p style="color: white; font-size:18px;" id="resComercialTaxa">0%</p></div>
+                    <div class="card" style="border-color: #3498db; padding: 10px;"><h4>Prontos</h4><p style="color: #3498db; font-size:18px;" id="resComercialPronto">0</p></div>
+                    <div class="card" style="border-color: #27ae60; padding: 10px;"><h4>Entregues</h4><p style="color: #27ae60; font-size:18px;" id="resComercialEnt">0</p></div>
+                    <div class="card" style="background:#4a3022; color:white; border-color: #4a3022; padding: 10px;"><h4 style="color:#e8dcc4;">Conversão</h4><p style="color: white; font-size:18px;" id="resComercialTaxa">0%</p></div>
                 </div>
                 <div class="painel-branco">
                     <h2 style="margin-top:0;">📋 Pedidos e Orçamentos</h2>
@@ -244,7 +251,9 @@
             </div>
         </div>
 
-        <!-- MÓDULO 2: FINANCEIRO -->
+        <!-- ========================================== -->
+        <!-- MÓDULO 2: FINANCEIRO                       -->
+        <!-- ========================================== -->
         <div id="abaFinanceiro" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro fin-req" id="painelCadastro">
                 <h2 id="tituloCadastro">💸 Novo Lançamento</h2>
@@ -280,31 +289,98 @@
             </div>
         </div>
 
-        <!-- MÓDULO 3: ESTOQUE -->
+        <!-- ========================================== -->
+        <!-- MÓDULO 2.5: PRODUTOS FINAIS (FICHA TÉCNICA)-->
+        <!-- ========================================== -->
+        <div id="abaProdutosFinais" class="layout-flex aba-conteudo" style="display: none;">
+            <div class="painel-cadastro">
+                <h2 id="tituloCadProdutoFinal">🛍️ Novo Produto Final</h2>
+                <input type="hidden" id="prodFinalId">
+                <div class="form-group"><label>Nome do Produto (Ex: Bolo de Pote):</label><input type="text" id="prodFinalNome"></div>
+                <div class="form-group"><label>Categoria do Produto:</label><input type="text" id="prodFinalCat" placeholder="Ex: Doces"></div>
+                
+                <div style="background: #faf9f7; padding: 15px; border-radius: 6px; border: 1px solid #e8e3dc; margin-bottom: 15px;">
+                    <label style="color:#d35400; display:block; margin-bottom:8px;">Ficha Técnica (Insumos Usados):</label>
+                    <select id="selInsumoFicha" style="margin-bottom: 10px; width: 100%;"><option value="">Selecione a matéria-prima...</option></select>
+                    <div style="display: grid; grid-template-columns: 90px 1fr; gap: 10px; align-items: center;">
+                        <input type="number" id="qtdInsumoFicha" placeholder="Qtd" min="0.01" step="0.01" value="1" style="width: 100%; margin: 0;">
+                        <button class="btn" style="margin: 0; padding: 8px; font-size: 12px; background:#d35400;" onclick="adicionarInsumoFicha()">+ Add Receita</button>
+                    </div>
+                </div>
+
+                <table class="tabela-carrinho" style="margin-bottom: 10px;">
+                    <thead><tr><th>Insumo</th><th>Qtd</th><th>Custo(R$)</th><th>X</th></tr></thead>
+                    <tbody id="tbFichaTecnica"></tbody>
+                </table>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Custo Total (R$):</label>
+                        <input type="text" id="prodFinalCusto" readonly style="background:#eef2f5; font-weight:bold; color:#e74c3c;">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Margem de Lucro (%):</label>
+                        <input type="number" id="prodFinalMargem" value="100" oninput="atualizarTotaisFicha()">
+                    </div>
+                </div>
+                
+                <div style="text-align: right; font-size: 16px; font-weight: bold; color: #4a3022; margin-bottom: 15px;">
+                    Preço de Venda: <span id="prodFinalPreco" style="color: #27ae60; font-size: 22px;">R$ 0,00</span>
+                </div>
+
+                <button class="btn" id="btnSalvarProdFinal" onclick="salvarProdutoFinal()">Salvar Produto Final</button>
+                <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormProdutoFinal()">Limpar Tudo</button>
+            </div>
+            
+            <div class="painel-conteudo">
+                <div class="painel-branco">
+                    <h2 style="margin-top:0;">📋 Catálogo de Produtos e Fichas Técnicas</h2>
+                    <p style="font-size: 13px; color: #666; margin-top: -15px; margin-bottom: 20px;">
+                        Estes são os produtos que aparecerão na aba "Comercial" para venda ao cliente. O custo é calculado automaticamente com base nos insumos em estoque.
+                    </p>
+                    <div class="filtros-area">
+                        <div class="filtros-grid" style="grid-template-columns: 1fr;">
+                            <div><label>Buscar Produto Final:</label><input type="text" id="fBuscaProdFinal" oninput="renderizarProdutosFinais()"></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Produto Final</th><th>Categoria</th><th>Custo Base (R$)</th><th>Margem (%)</th><th>Preço de Venda (R$)</th><th style="text-align: center;">Ações</th></tr></thead>
+                            <tbody id="tbProdutosFinais"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MÓDULO 3: ESTOQUE DE INSUMOS               -->
+        <!-- ========================================== -->
         <div id="abaEstoque" class="layout-flex aba-conteudo" style="display: none;">
             <div class="painel-cadastro">
-                <h2 id="tituloCadProduto">📦 Novo Produto</h2>
+                <h2 id="tituloCadProduto">📦 Novo Insumo/MP</h2>
+                <p style="font-size: 12px; color: #666; margin-top: -15px;">Cadastre aqui matérias-primas e itens para revenda direta.</p>
                 <input type="hidden" id="prodId">
-                <div class="form-group"><label>Nome do Produto / Insumo:</label><input type="text" id="prodNome"></div>
+                <div class="form-group"><label>Nome do Insumo (Ex: Farinha kg):</label><input type="text" id="prodNome"></div>
                 <div class="form-group"><label>Categoria:</label><input type="text" id="prodCat"></div>
                 <div class="form-row"><div class="form-group" style="flex: 1;"><label>Fornecedor:</label><select id="prodFornecedor"><option value="">Nenhum</option></select></div><div class="form-group" style="flex: 1;"><label>Marca:</label><input type="text" id="prodMarca"></div></div>
-                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Custo (R$):</label><input type="number" id="prodCusto" step="0.01"></div><div class="form-group" style="flex: 1;"><label>Preço (R$):</label><input type="number" id="prodVenda" step="0.01"></div></div>
-                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Qtd Atual:</label><input type="number" id="prodQtd" step="0.01"></div><div class="form-group" style="flex: 1;"><label>Qtd Mínima:</label><input type="number" id="prodMin" step="0.01"></div></div>
-                <button class="btn" id="btnSalvarProd" style="margin-top: 10px;" onclick="adicionarProduto()">Salvar Produto</button>
+                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Custo Unit. (R$):</label><input type="number" id="prodCusto" step="0.01"></div><div class="form-group" style="flex: 1;"><label>Preço Revenda (R$):</label><input type="number" id="prodVenda" step="0.01" placeholder="Se for revender..."></div></div>
+                <div class="form-row"><div class="form-group" style="flex: 1;"><label>Qtd Atual:</label><input type="number" id="prodQtd" step="0.01"></div><div class="form-group" style="flex: 1;"><label>Estoque Mínimo:</label><input type="number" id="prodMin" step="0.01"></div></div>
+                <button class="btn" id="btnSalvarProd" style="margin-top: 10px;" onclick="adicionarProduto()">Salvar Insumo</button>
                 <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormProduto()">Limpar</button>
             </div>
             <div class="painel-conteudo">
                 <div class="painel-branco">
-                    <h2 style="margin-top:0;">📋 Gestão de Estoque</h2>
+                    <h2 style="margin-top:0;">📋 Estoque de Matéria-Prima (Insumos)</h2>
                     <div class="filtros-area">
                         <div class="filtros-grid" style="grid-template-columns: 1fr 1fr;">
-                            <div><label>Buscar Produto:</label><input type="text" id="fBuscaProd" oninput="renderizarEstoque()"></div>
+                            <div><label>Buscar Insumo:</label><input type="text" id="fBuscaProd" oninput="renderizarEstoque()"></div>
                             <div><label>Filtro:</label><select id="fStatusProd" onchange="renderizarEstoque()"><option value="Todos">Mostrar Todos</option><option value="Baixo">⚠️ Apenas Estoque Baixo</option></select></div>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>Produto</th><th>Categoria / Marca</th><th>Fornecedor</th><th>Custo (R$)</th><th>Preço (R$)</th><th style="text-align: center;">Qtd Atual</th><th style="text-align: center;">Ações</th></tr></thead>
+                            <thead><tr><th>Insumo</th><th>Marca</th><th>Fornecedor</th><th>Custo (R$)</th><th style="text-align: center;">Qtd Atual</th><th style="text-align: center;">Ações</th></tr></thead>
                             <tbody id="tbEstoque"></tbody>
                         </table>
                     </div>
@@ -321,11 +397,7 @@
                 <div class="form-group"><label>WhatsApp / Telefone:</label><input type="text" id="cliTel" placeholder="(XX) 9XXXX-XXXX"></div>
                 <div class="form-group"><label>E-mail:</label><input type="email" id="cliEmail"></div>
                 <div class="form-group"><label>Endereço / Observações:</label><input type="text" id="cliEnd"></div>
-                <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fdf5f4; padding: 10px; border-radius: 6px; border: 1px solid #e8e3dc;">
-                        <input type="checkbox" id="cliPromo" style="width: auto; margin: 0;" checked> Autoriza envio de promoções
-                    </label>
-                </div>
+                <div class="form-group"><label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fdf5f4; padding: 10px; border-radius: 6px; border: 1px solid #e8e3dc;"><input type="checkbox" id="cliPromo" style="width: auto; margin: 0;" checked> Autoriza envio de promoções</label></div>
                 <button class="btn" id="btnSalvarCli" style="margin-top: 10px;" onclick="adicionarCliente()">Salvar Cliente</button>
                 <button class="btn btn-limpar" style="margin-top: 10px;" onclick="limparFormCliente()">Limpar</button>
             </div>
@@ -369,10 +441,9 @@
             </div>
         </div>
 
-        <!-- MÓDULO 6: GESTÃO E LOGS (Apenas Admin) -->
+        <!-- MÓDULO 6: GESTÃO E LOGS -->
         <div id="abaGestao" class="painel-branco aba-conteudo" style="display: none;">
             <h2>⚙️ Gestão de Equipe, Configurações e Logs</h2>
-            
             <div class="admin-area" style="margin-bottom: 30px;">
                 <h3 style="color: #d35400; margin-top: 0;">👥 Cadastro de Pessoas e Acessos</h3>
                 <div style="background: white; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
@@ -388,44 +459,25 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table style="background: white;">
-                        <thead><tr><th>Nome</th><th>CPF</th><th>Perfil</th><th>Status de Acesso</th><th>Ações</th></tr></thead>
-                        <tbody id="tabelaUsuarios"></tbody>
-                    </table>
+                    <table style="background: white;"><thead><tr><th>Nome</th><th>CPF</th><th>Perfil</th><th>Status de Acesso</th><th>Ações</th></tr></thead><tbody id="tabelaUsuarios"></tbody></table>
                 </div>
             </div>
-
-            <!-- NOVO: Tabela de Logs de Atividades -->
             <div class="admin-area" style="margin-bottom: 30px; background: #e8ebef; border-color: #d1d8e0;">
                 <h3 style="color: #2c3e50; margin-top: 0;">📋 Registros de Atividades (Auditoria)</h3>
-                <p style="font-size: 13px; margin-top: -10px; margin-bottom: 15px;">Monitoramento silencioso de todas as ações de criação, edição e exclusão feitas pelos usuários.</p>
+                <p style="font-size: 13px; margin-top: -10px; margin-bottom: 15px;">Monitoramento silencioso de ações feitas pelos usuários.</p>
                 <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
-                    <table style="background: white; width: 100%;">
-                        <thead style="position: sticky; top: 0; background: #faf9f7; z-index: 1;">
-                            <tr><th>Data/Hora</th><th>Usuário</th><th>Módulo</th><th>Detalhes da Ação</th></tr>
-                        </thead>
-                        <tbody id="tabelaLogs"></tbody>
-                    </table>
+                    <table style="background: white; width: 100%;"><thead style="position: sticky; top: 0; background: #faf9f7; z-index: 1;"><tr><th>Data/Hora</th><th>Usuário</th><th>Módulo</th><th>Detalhes da Ação</th></tr></thead><tbody id="tabelaLogs"></tbody></table>
                 </div>
             </div>
-
             <div class="config-grid">
-                <div style="background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
-                    <h3 style="margin-top: 0;">📁 Categorias Financeiras</h3>
-                    <div style="display:flex; gap:10px; margin-bottom: 15px;"><input type="text" id="novaCatInput" placeholder="Nova categoria..."><button class="btn-acao-topo" style="background:#4a3022;" onclick="addConfig('cat')">Adicionar</button></div>
-                    <ul class="lista-itens" id="listaCatConfig"></ul>
-                </div>
-                <div style="background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;">
-                    <h3 style="margin-top: 0;">🏦 Contas Bancárias / Caixas</h3>
-                    <div style="display:flex; gap:10px; margin-bottom: 15px;"><input type="text" id="novaContaInput" placeholder="Nova conta..."><button class="btn-acao-topo" style="background:#4a3022;" onclick="addConfig('conta')">Adicionar</button></div>
-                    <ul class="lista-itens" id="listaContasConfig"></ul>
-                </div>
+                <div style="background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;"><h3 style="margin-top: 0;">📁 Categorias Financeiras</h3><div style="display:flex; gap:10px; margin-bottom: 15px;"><input type="text" id="novaCatInput" placeholder="Nova categoria..."><button class="btn-acao-topo" style="background:#4a3022;" onclick="addConfig('cat')">Adicionar</button></div><ul class="lista-itens" id="listaCatConfig"></ul></div>
+                <div style="background: #faf9f7; padding: 20px; border-radius: 8px; border: 1px solid #e8e3dc;"><h3 style="margin-top: 0;">🏦 Contas Bancárias / Caixas</h3><div style="display:flex; gap:10px; margin-bottom: 15px;"><input type="text" id="novaContaInput" placeholder="Nova conta..."><button class="btn-acao-topo" style="background:#4a3022;" onclick="addConfig('conta')">Adicionar</button></div><ul class="lista-itens" id="listaContasConfig"></ul></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modais (Histórico e Impressão) Omitidos neste trecho para economizar espaço visual, MAS ESTÃO PRESERVADOS ABAIXO -->
+<!-- Modais (Histórico e Impressão) -->
 <div id="modalHistorico" class="modal-overlay">
     <div class="modal-box" style="max-width: 550px;">
         <h3 style="color: #4a3022; margin-top: 0; display: flex; justify-content: space-between; align-items: center;">📝 Histórico do Cliente<button onclick="document.getElementById('modalHistorico').style.display='none'" style="background:none; border:none; font-size:18px; cursor:pointer;">❌</button></h3>
@@ -458,18 +510,16 @@
     const firebaseConfig = { apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI", authDomain: "onca-prosa-erp.firebaseapp.com", projectId: "onca-prosa-erp", storageBucket: "onca-prosa-erp.firebasestorage.app", messagingSenderId: "1096171294924", appId: "1:1096171294924:web:9362f03a99a6d31139b269" };
     firebase.initializeApp(firebaseConfig); const db = firebase.firestore(); const auth = firebase.auth(); const appSecundario = firebase.initializeApp(firebaseConfig, "AppSecundario");
 
-    let lancamentos = [], produtos = [], clientes = [], fornecedores = [], historicoClientes = [], usuariosLista = [], vendas = [];
+    let lancamentos = [], produtos = [], produtosFinais = [], clientes = [], fornecedores = [], historicoClientes = [], usuariosLista = [], vendas = [];
     let contasLista = ["Caixa Principal", "Banco Inter", "Mercado Pago"]; let statusLista = ["A Vencer", "Efetuada"]; let categorias = ["Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Aluguel", "Salários", "Internet", "Sistema", "Contador", "Outras Despesas Fixas"];
-    let userAutenticado = null; let perfilUsuario = 'Vendedor'; let carrinhoAtual = []; 
+    
+    let userAutenticado = null; let perfilUsuario = 'Vendedor'; 
+    let carrinhoAtual = []; // Carrinho do Comercial
+    let fichaAtual = []; // Carrinho da Ficha Técnica (Insumos)
 
-    // ---- SISTEMA DE LOGS (AUDITORIA) ----
-    function registrarLog(acao, detalhes) {
-        if(!userAutenticado) return;
-        let nomeLog = document.getElementById('lblUsuario').innerText || "Usuário Desconhecido";
-        db.collection("logs").add({ dataHora: new Date().toISOString(), usuario: nomeLog, acao: acao, detalhes: detalhes }).catch(e => console.error("Erro no log", e));
-    }
+    function registrarLog(acao, detalhes) { if(!userAutenticado) return; let nomeLog = document.getElementById('lblUsuario').innerText || "Usuário Desconhecido"; db.collection("logs").add({ dataHora: new Date().toISOString(), usuario: nomeLog, acao: acao, detalhes: detalhes }).catch(e => console.error(e)); }
 
-    db.collection("usuarios").limit(1).get().then(snap => { if(snap.empty) { document.getElementById('btnRegistrarPrimeiro').style.display = 'block'; document.getElementById('loginMsg').innerText = "Banco de dados zerado. Crie o Administrador Mestre."; document.getElementById('loginMsg').style.color = "#27ae60"; } }).catch(err => console.log("Aguardando regras do Firestore."));
+    db.collection("usuarios").limit(1).get().then(snap => { if(snap.empty) { document.getElementById('btnRegistrarPrimeiro').style.display = 'block'; document.getElementById('loginMsg').innerText = "Banco de dados zerado. Crie o Administrador Mestre."; document.getElementById('loginMsg').style.color = "#27ae60"; } });
 
     auth.onAuthStateChanged(user => {
         if (user) {
@@ -498,39 +548,32 @@
 
     function mudarAba(abaId) {
         document.querySelectorAll('.aba-conteudo').forEach(el => el.style.display = 'none'); document.querySelectorAll('.aba-btn').forEach(el => el.classList.remove('aba-ativa'));
-        let isFlex = ['financeiro', 'estoque', 'clientes', 'fornecedores', 'comercial'].includes(abaId);
+        let isFlex = ['financeiro', 'estoque', 'produtosFinais', 'clientes', 'fornecedores', 'comercial'].includes(abaId);
         document.getElementById('aba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).style.display = (isFlex && window.innerWidth > 900) ? 'flex' : 'block';
         document.getElementById('btnAba' + abaId.charAt(0).toUpperCase() + abaId.slice(1)).classList.add('aba-ativa');
-        if(abaId === 'dashboard') gerarDRE(); if(abaId === 'financeiro') atualizarTelaFinanceiro(); if(abaId === 'estoque') renderizarEstoque(); if(abaId === 'clientes') renderizarClientes(); if(abaId === 'fornecedores') renderizarFornecedores(); if(abaId === 'comercial') renderizarComercial();
+        
+        if(abaId === 'dashboard') gerarDRE(); if(abaId === 'financeiro') atualizarTelaFinanceiro(); if(abaId === 'estoque') renderizarEstoque(); 
+        if(abaId === 'produtosFinais') renderizarProdutosFinais(); if(abaId === 'clientes') renderizarClientes(); if(abaId === 'fornecedores') renderizarFornecedores(); if(abaId === 'comercial') renderizarComercial();
     }
 
     function iniciarOuvintesDeDados() {
         db.collection("config").doc("listas").onSnapshot(doc => { if (doc.exists) { let d = doc.data(); if(d.categorias) categorias = d.categorias; if(d.contasLista) contasLista = d.contasLista; } carregarListas(); });
         db.collection("lancamentos").onSnapshot(snap => { lancamentos = []; snap.forEach(doc => lancamentos.push(doc.data())); if(document.getElementById('abaFinanceiro').style.display !== 'none') atualizarTelaFinanceiro(); if(document.getElementById('abaDashboard').style.display !== 'none') gerarDRE(); });
-        db.collection("produtos").onSnapshot(snap => { produtos = []; snap.forEach(doc => produtos.push(doc.data())); carregarSelectsComercial(); if(document.getElementById('abaEstoque').style.display !== 'none') renderizarEstoque(); });
+        
+        // ESTOQUE (Insumos)
+        db.collection("produtos").onSnapshot(snap => { produtos = []; snap.forEach(doc => produtos.push(doc.data())); carregarInsumosFichaTecnica(); if(document.getElementById('abaEstoque').style.display !== 'none') renderizarEstoque(); });
+        
+        // PRODUTOS FINAIS (Ficha Técnica)
+        db.collection("produtos_finais").onSnapshot(snap => { produtosFinais = []; snap.forEach(doc => produtosFinais.push(doc.data())); carregarSelectsComercial(); if(document.getElementById('abaProdutosFinais').style.display !== 'none') renderizarProdutosFinais(); });
+
         db.collection("clientes").onSnapshot(snap => { clientes = []; snap.forEach(doc => clientes.push(doc.data())); carregarSelectsComercial(); if(document.getElementById('abaClientes').style.display !== 'none') renderizarClientes(); });
         db.collection("historico_clientes").onSnapshot(snap => { historicoClientes = []; snap.forEach(doc => historicoClientes.push(doc.data())); if(document.getElementById('modalHistorico').style.display === 'flex') { renderizarHistoricoModal(document.getElementById('histClienteId').value); } });
         db.collection("fornecedores").onSnapshot(snap => { fornecedores = []; snap.forEach(doc => fornecedores.push(doc.data())); carregarFornecedoresSelect(); if(document.getElementById('abaFornecedores').style.display !== 'none') renderizarFornecedores(); });
         db.collection("vendas").onSnapshot(snap => { vendas = []; snap.forEach(doc => vendas.push(doc.data())); if(document.getElementById('abaComercial').style.display !== 'none') renderizarComercial(); });
 
         if(perfilUsuario === 'Administrador') {
-            db.collection("usuarios").onSnapshot(snap => {
-                usuariosLista = []; let html = "";
-                snap.forEach(doc => {
-                    let u = doc.data(); u.id = doc.id; usuariosLista.push(u);
-                    html += `<tr><td><strong>${u.nome}</strong></td><td>${u.cpf}</td><td><select onchange="alterarUser('${u.id}', 'perfil', this.value)"><option value="Vendedor" ${u.perfil==='Vendedor'?'selected':''}>Vendedor</option><option value="Financeiro" ${u.perfil==='Financeiro'?'selected':''}>Financeiro</option><option value="Administrador" ${u.perfil==='Administrador'?'selected':''}>Administrador</option></select></td><td><select onchange="alterarUser('${u.id}', 'status', this.value)"><option value="Ativo" ${u.status==='Ativo'?'selected':''}>Ativo</option><option value="Suspenso" ${u.status==='Suspenso'?'selected':''}>Suspenso</option></select></td><td><button class="btn-acao" style="color:red;" onclick="excluirUser('${u.id}')">🗑️</button></td></tr>`;
-                }); document.getElementById('tabelaUsuarios').innerHTML = html;
-            });
-            
-            // Ouvinte da nova tabela de LOGS
-            db.collection("logs").orderBy("dataHora", "desc").limit(80).onSnapshot(snap => {
-                let htmlLogs = "";
-                snap.forEach(doc => {
-                    let l = doc.data(); let dataFormatada = new Date(l.dataHora).toLocaleString('pt-BR');
-                    htmlLogs += `<tr><td style="font-size:12px; white-space:nowrap; color:#666;">${dataFormatada}</td><td><strong>${l.usuario}</strong></td><td><span class="badge" style="background:#34495e;">${l.acao}</span></td><td style="font-size:13px;">${l.detalhes}</td></tr>`;
-                });
-                document.getElementById('tabelaLogs').innerHTML = htmlLogs || '<tr><td colspan="4" style="text-align:center;">Nenhum registro encontrado.</td></tr>';
-            });
+            db.collection("usuarios").onSnapshot(snap => { usuariosLista = []; let html = ""; snap.forEach(doc => { let u = doc.data(); u.id = doc.id; usuariosLista.push(u); html += `<tr><td><strong>${u.nome}</strong></td><td>${u.cpf}</td><td><select onchange="alterarUser('${u.id}', 'perfil', this.value)"><option value="Vendedor" ${u.perfil==='Vendedor'?'selected':''}>Vendedor</option><option value="Financeiro" ${u.perfil==='Financeiro'?'selected':''}>Financeiro</option><option value="Administrador" ${u.perfil==='Administrador'?'selected':''}>Administrador</option></select></td><td><select onchange="alterarUser('${u.id}', 'status', this.value)"><option value="Ativo" ${u.status==='Ativo'?'selected':''}>Ativo</option><option value="Suspenso" ${u.status==='Suspenso'?'selected':''}>Suspenso</option></select></td><td><button class="btn-acao" style="color:red;" onclick="excluirUser('${u.id}')">🗑️</button></td></tr>`; }); document.getElementById('tabelaUsuarios').innerHTML = html; });
+            db.collection("logs").orderBy("dataHora", "desc").limit(80).onSnapshot(snap => { let htmlLogs = ""; snap.forEach(doc => { let l = doc.data(); let dataFormatada = new Date(l.dataHora).toLocaleString('pt-BR'); htmlLogs += `<tr><td style="font-size:12px; white-space:nowrap; color:#666;">${dataFormatada}</td><td><strong>${l.usuario}</strong></td><td><span class="badge" style="background:#34495e;">${l.acao}</span></td><td style="font-size:13px;">${l.detalhes}</td></tr>`; }); document.getElementById('tabelaLogs').innerHTML = htmlLogs || '<tr><td colspan="4" style="text-align:center;">Nenhum registro encontrado.</td></tr>'; });
         }
     }
 
@@ -538,97 +581,208 @@
     function formatarDinheiro(v) { return Number(v || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}); }
     function formatarDataSimples(d) { return d ? d.split('-').reverse().join('/') : ""; }
 
-    // --- COMERCIAL ---
-    function carregarSelectsComercial() { let htmlCli = '<option value="">Selecione um cliente...</option>'; clientes.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(c => htmlCli += `<option value="${c.id}">${c.nome}</option>`); document.getElementById("vendaCliente").innerHTML = htmlCli; let htmlProd = '<option value="">Selecione um produto...</option>'; produtos.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(p => htmlProd += `<option value="${p.id}">${p.nome} (R$ ${p.venda.toFixed(2)}) - Estoque: ${p.qtd}</option>`); document.getElementById("vendaProduto").innerHTML = htmlProd; }
-    function adicionarItemCarrinho() { let prodId = document.getElementById("vendaProduto").value; let qtd = parseInt(document.getElementById("vendaQtd").value); if(!prodId || isNaN(qtd) || qtd <= 0) return alert("Selecione um produto e quantidade válida."); let p = produtos.find(x => x.id === prodId); if(p) { carrinhoAtual.push({ prodId: p.id, nome: p.nome, preco: p.venda, qtd: qtd, total: p.venda * qtd }); atualizarTotaisCarrinho(); } }
+    // ==========================================
+    // FICHA TÉCNICA (PRODUTOS FINAIS)
+    // ==========================================
+    function carregarInsumosFichaTecnica() {
+        let html = '<option value="">Selecione a matéria-prima...</option>';
+        produtos.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(p => html += `<option value="${p.id}">${p.nome} (Custo base: R$ ${p.custo.toFixed(2)})</option>`);
+        document.getElementById("selInsumoFicha").innerHTML = html;
+    }
+
+    function adicionarInsumoFicha() {
+        let insumoId = document.getElementById("selInsumoFicha").value;
+        let qtd = parseFloat(document.getElementById("qtdInsumoFicha").value);
+        if(!insumoId || isNaN(qtd) || qtd <= 0) return alert("Selecione um insumo e quantidade válida.");
+        
+        let insumo = produtos.find(x => x.id === insumoId);
+        if(insumo) {
+            fichaAtual.push({ insumoId: insumo.id, nome: insumo.nome, custoUnit: insumo.custo, qtd: qtd, custoTotal: insumo.custo * qtd });
+            atualizarTotaisFicha();
+        }
+    }
+
+    function removerInsumoFicha(index) {
+        fichaAtual.splice(index, 1);
+        atualizarTotaisFicha();
+    }
+
+    function atualizarTotaisFicha() {
+        const tb = document.getElementById("tbFichaTecnica");
+        tb.innerHTML = "";
+        let custoTotalBase = 0;
+        
+        fichaAtual.forEach((item, i) => {
+            custoTotalBase += item.custoTotal;
+            let tr = document.createElement("tr");
+            tr.innerHTML = `<td>${item.nome}</td><td>${item.qtd}</td><td>${formatarDinheiro(item.custoTotal)}</td><td><button class="btn-acao" style="color:red; font-size:12px; padding:0;" onclick="removerInsumoFicha(${i})">🗑️</button></td>`;
+            tb.appendChild(tr);
+        });
+
+        document.getElementById("prodFinalCusto").value = custoTotalBase.toFixed(2);
+        
+        let margem = parseFloat(document.getElementById("prodFinalMargem").value) || 0;
+        let precoVenda = custoTotalBase + (custoTotalBase * (margem / 100));
+        
+        document.getElementById("prodFinalPreco").innerText = formatarDinheiro(precoVenda);
+    }
+
+    function limparFormProdutoFinal() {
+        document.getElementById("prodFinalId").value = ""; document.getElementById("prodFinalNome").value = ""; document.getElementById("prodFinalCat").value = "";
+        document.getElementById("selInsumoFicha").value = ""; document.getElementById("qtdInsumoFicha").value = "1"; document.getElementById("prodFinalMargem").value = "100";
+        fichaAtual = []; atualizarTotaisFicha();
+        document.getElementById("tituloCadProdutoFinal").innerText = "🛍️ Novo Produto Final"; document.getElementById("btnSalvarProdFinal").innerText = "Salvar Produto Final";
+    }
+
+    function salvarProdutoFinal() {
+        let idEdit = document.getElementById("prodFinalId").value;
+        let nome = document.getElementById("prodFinalNome").value.trim();
+        let cat = document.getElementById("prodFinalCat").value.trim() || "Geral";
+        let margem = parseFloat(document.getElementById("prodFinalMargem").value) || 0;
+        let custo = parseFloat(document.getElementById("prodFinalCusto").value) || 0;
+        let preco = custo + (custo * (margem / 100));
+
+        if(!nome || fichaAtual.length === 0) return alert("Preencha o nome do produto e adicione pelo menos um insumo à ficha técnica.");
+
+        let pf = { nome: nome, cat: cat, receita: fichaAtual, custo: custo, margem: margem, precoVenda: preco };
+
+        if(idEdit) {
+            pf.id = idEdit; db.collection("produtos_finais").doc(idEdit).update(pf); registrarLog("CATÁLOGO", `Editou ficha técnica: ${nome}`);
+        } else {
+            pf.id = Date.now().toString(); db.collection("produtos_finais").doc(pf.id).set(pf); registrarLog("CATÁLOGO", `Criou ficha técnica: ${nome}`);
+        }
+        limparFormProdutoFinal();
+    }
+
+    function renderizarProdutosFinais() {
+        const tbody = document.getElementById("tbProdutosFinais"); tbody.innerHTML = "";
+        let busca = document.getElementById("fBuscaProdFinal").value.toLowerCase();
+        let filtrados = produtosFinais.filter(p => p.nome.toLowerCase().includes(busca));
+        
+        filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(p => {
+            let tr = document.createElement("tr");
+            tr.innerHTML = `<td><strong>${p.nome}</strong></td><td>${p.cat}</td><td style="color:#e74c3c; font-weight:bold;">${formatarDinheiro(p.custo)}</td><td>${p.margem}%</td><td style="color:#27ae60; font-weight:bold; font-size:14px;">${formatarDinheiro(p.precoVenda)}</td><td style="text-align:center;"><button class="btn-acao" onclick="editarProdutoFinal('${p.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerProdutoFinal('${p.id}')">🗑️</button></td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function editarProdutoFinal(id) {
+        let p = produtosFinais.find(x => x.id === id); if(!p) return;
+        document.getElementById("prodFinalId").value = p.id; document.getElementById("prodFinalNome").value = p.nome; document.getElementById("prodFinalCat").value = p.cat; document.getElementById("prodFinalMargem").value = p.margem;
+        fichaAtual = [...p.receita]; // Copia a receita
+        atualizarTotaisFicha();
+        document.getElementById("tituloCadProdutoFinal").innerText = "✏️ Editando Produto Final"; document.getElementById("btnSalvarProdFinal").innerText = "Salvar Alterações";
+    }
+
+    function removerProdutoFinal(id) { if(confirm("Tem certeza que deseja excluir este Produto Final?")) { registrarLog("CATÁLOGO", `Excluiu produto final ID: ${id}`); db.collection("produtos_finais").doc(id).delete(); } }
+
+    // ==========================================
+    // COMERCIAL E VENDAS
+    // ==========================================
+    function carregarSelectsComercial() { 
+        let htmlCli = '<option value="">Selecione um cliente...</option>'; clientes.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(c => htmlCli += `<option value="${c.id}">${c.nome}</option>`); document.getElementById("vendaCliente").innerHTML = htmlCli; 
+        
+        // AGORA PUXA DE PRODUTOS FINAIS
+        let htmlProd = '<option value="">Selecione um produto final...</option>'; 
+        produtosFinais.sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(p => htmlProd += `<option value="${p.id}">${p.nome} (Venda: R$ ${p.precoVenda.toFixed(2)})</option>`); 
+        document.getElementById("vendaProduto").innerHTML = htmlProd; 
+    }
+    
+    function adicionarItemCarrinho() { 
+        let prodId = document.getElementById("vendaProduto").value; let qtd = parseInt(document.getElementById("vendaQtd").value); 
+        if(!prodId || isNaN(qtd) || qtd <= 0) return alert("Selecione um produto e quantidade válida."); 
+        let p = produtosFinais.find(x => x.id === prodId); // Acha em produtos finais
+        if(p) { carrinhoAtual.push({ prodId: p.id, nome: p.nome, preco: p.precoVenda, qtd: qtd, total: p.precoVenda * qtd }); atualizarTotaisCarrinho(); } 
+    }
     function removerItemCarrinho(index) { carrinhoAtual.splice(index, 1); atualizarTotaisCarrinho(); }
     function atualizarTotaisCarrinho() { const tb = document.getElementById("tbCarrinho"); tb.innerHTML = ""; let subtotal = 0; carrinhoAtual.forEach((item, i) => { subtotal += item.total; let tr = document.createElement("tr"); tr.innerHTML = `<td>${item.nome}</td><td>${item.qtd}</td><td>${formatarDinheiro(item.total)}</td><td><button class="btn-acao" style="color:red; font-size:12px; padding:0;" onclick="removerItemCarrinho(${i})">🗑️</button></td>`; tb.appendChild(tr); }); let desc = parseFloat(document.getElementById("vendaDesconto").value) || 0; let totalFinal = subtotal - desc; if(totalFinal < 0) totalFinal = 0; document.getElementById("vendaTotalGeral").innerText = formatarDinheiro(totalFinal); }
     function limparCarrinho() { carrinhoAtual = []; document.getElementById("vendaCliente").value = ""; document.getElementById("vendaProduto").value = ""; document.getElementById("vendaQtd").value = "1"; document.getElementById("vendaDesconto").value = "0"; atualizarTotaisCarrinho(); }
+    
     function salvarOrcamento() {
         if(carrinhoAtual.length === 0) return alert("O carrinho está vazio."); let cliId = document.getElementById("vendaCliente").value; if(!cliId) return alert("Selecione o Cliente.");
         let cliente = clientes.find(x => x.id === cliId); let subtotal = carrinhoAtual.reduce((acc, item) => acc + item.total, 0); let desc = parseFloat(document.getElementById("vendaDesconto").value) || 0;
         let vendaObj = { id: Date.now().toString(), clienteId: cliId, clienteNome: cliente.nome, clienteTel: cliente.tel, dataCriacao: new Date().toISOString().substring(0,10), itens: carrinhoAtual, subtotal: subtotal, desconto: desc, totalGeral: subtotal - desc, status: "Orçamento" };
-        db.collection("vendas").doc(vendaObj.id).set(vendaObj).then(() => { 
-            registrarLog("COMERCIAL", `Gerou orçamento para ${cliente.nome} | Total: ${formatarDinheiro(vendaObj.totalGeral)}`);
-            alert("Orçamento salvo com sucesso!"); limparCarrinho(); 
-        });
+        db.collection("vendas").doc(vendaObj.id).set(vendaObj).then(() => { registrarLog("COMERCIAL", `Gerou orçamento para ${cliente.nome} | Total: ${formatarDinheiro(vendaObj.totalGeral)}`); alert("Orçamento salvo com sucesso!"); limparCarrinho(); });
     }
+    
     function renderizarComercial() {
         const tbody = document.getElementById("tbComercial"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaVenda").value.toLowerCase(); let status = document.getElementById("fStatusVenda").value; let mes = document.getElementById("fMesVenda").value;
         let qtdOrc = 0, qtdProd = 0, qtdPronto = 0, qtdEnt = 0;
         let filtrados = vendas.filter(v => { if(v.status === "Orçamento") qtdOrc++; if(v.status === "Em Produção") qtdProd++; if(v.status === "Pronto") qtdPronto++; if(v.status === "Entregue") qtdEnt++; let matchBusca = v.clienteNome.toLowerCase().includes(busca); let matchStatus = status === "Todos" || v.status === status; let matchMes = v.dataCriacao.startsWith(mes); return matchBusca && matchStatus && matchMes; });
         filtrados.sort((a,b) => b.dataCriacao.localeCompare(a.dataCriacao)).forEach(v => {
             let tr = document.createElement("tr"); let corBadge = v.status === "Orçamento" ? "badge-orcamento" : (v.status === "Em Produção" ? "badge-producao" : (v.status === "Pronto" ? "badge-pronto" : "badge-entregue"));
-            let btnAvancar = ""; if(v.status === "Orçamento") btnAvancar = `<button class="btn-acao-topo" style="background:#f39c12; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Converter em Pedido</button>`; else if(v.status === "Em Produção") btnAvancar = `<button class="btn-acao-topo" style="background:#3498db; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Marcar como Pronto</button>`; else if(v.status === "Pronto") btnAvancar = `<button class="btn-acao-topo" style="background:#27ae60; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Marcar Entregue</button>`; else btnAvancar = `<span style="color:#27ae60; font-size:12px; font-weight:bold;">Finalizado</span>`;
+            let btnAvancar = ""; if(v.status === "Orçamento") btnAvancar = `<button class="btn-acao-topo" style="background:#f39c12; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Converter em Pedido (Baixa Estoque)</button>`; else if(v.status === "Em Produção") btnAvancar = `<button class="btn-acao-topo" style="background:#3498db; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Marcar como Pronto</button>`; else if(v.status === "Pronto") btnAvancar = `<button class="btn-acao-topo" style="background:#27ae60; margin:0 auto; padding:4px 8px; font-size:11px;" onclick="avancarStatusVenda('${v.id}')">➡️ Marcar Entregue</button>`; else btnAvancar = `<span style="color:#27ae60; font-size:12px; font-weight:bold;">Finalizado</span>`;
             tr.innerHTML = `<td>${formatarDataSimples(v.dataCriacao)}</td><td><strong>${v.clienteNome}</strong></td><td><strong style="color:#27ae60;">${formatarDinheiro(v.totalGeral)}</strong></td><td style="text-align:center;"><span class="badge ${corBadge}">${v.status}</span></td><td style="text-align:center; display:flex; flex-direction:column; gap:5px; align-items:center;">${btnAvancar}<div><button class="btn-acao" title="Imprimir" onclick="abrirModalImpressao('${v.id}')">🖨️</button><button class="btn-acao" style="color:red;" onclick="removerVenda('${v.id}')">🗑️</button></div></td>`; tbody.appendChild(tr);
         });
         document.getElementById("resComercialOrc").innerText = qtdOrc; document.getElementById("resComercialProd").innerText = qtdProd; document.getElementById("resComercialPronto").innerText = qtdPronto; document.getElementById("resComercialEnt").innerText = qtdEnt;
         let totalConvertidos = qtdProd + qtdPronto + qtdEnt; let totalGeral = qtdOrc + totalConvertidos; document.getElementById("resComercialTaxa").innerText = (totalGeral > 0 ? ((totalConvertidos / totalGeral) * 100).toFixed(0) : 0) + "%";
     }
+    
     function avancarStatusVenda(id) {
         let v = vendas.find(x => x.id === id); if(!v) return;
+        
         if(v.status === "Orçamento") {
-            if(confirm(`Converter em PEDIDO DE PRODUÇÃO?\nIsso dará BAIXA NO ESTOQUE dos itens.`)) {
+            if(confirm(`Converter este Orçamento em PEDIDO DE PRODUÇÃO?\n\nIsto analisará a FICHA TÉCNICA de cada produto e dará BAIXA AUTOMÁTICA de toda a matéria-prima (Insumos) necessária no seu Estoque.`)) {
                 let batch = db.batch();
-                v.itens.forEach(item => { let prodRef = db.collection("produtos").doc(item.prodId); let pAtual = produtos.find(x => x.id === item.prodId); if(pAtual) { batch.update(prodRef, { qtd: pAtual.qtd - item.qtd }); } });
+                let deducoes = {}; // Agrupa insumos iguais para não sobrepor updates no Firestore
+
+                v.itens.forEach(itemVenda => {
+                    let pFinal = produtosFinais.find(pf => pf.id === itemVenda.prodId);
+                    if(pFinal && pFinal.receita) {
+                        pFinal.receita.forEach(ingrediente => {
+                            let qtdDeduzir = ingrediente.qtd * itemVenda.qtd; // Qtd da receita * qtd vendida
+                            if(!deducoes[ingrediente.insumoId]) deducoes[ingrediente.insumoId] = 0;
+                            deducoes[ingrediente.insumoId] += qtdDeduzir;
+                        });
+                    }
+                });
+
+                // Aplica as deduções no estoque de insumos
+                Object.keys(deducoes).forEach(insumoId => {
+                    let pEstoque = produtos.find(x => x.id === insumoId);
+                    if(pEstoque) {
+                        let prodRef = db.collection("produtos").doc(insumoId);
+                        batch.update(prodRef, { qtd: pEstoque.qtd - deducoes[insumoId] });
+                    }
+                });
+
                 batch.update(db.collection("vendas").doc(v.id), { status: "Em Produção" });
-                batch.commit().then(() => { registrarLog("COMERCIAL", `Orçamento ${id.substring(id.length-4)} convertido para Em Produção.`); alert("Pedido gerado e Estoque atualizado!"); });
+                batch.commit().then(() => { registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} gerado. Insumos abatidos do estoque.`); alert("Pedido gerado e Matéria-prima deduzida do Estoque!"); });
             }
         } else if (v.status === "Em Produção") {
-            if(confirm("Marcar itens como Prontos?")) { db.collection("vendas").doc(id).update({status: "Pronto"}); registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} marcado como Pronto.`); }
+            if(confirm("Marcar pedido como Pronto?")) { db.collection("vendas").doc(id).update({status: "Pronto"}); registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} marcado como Pronto.`); }
         } else if (v.status === "Pronto") {
-            if(confirm("Confirmar Entrega?")) { db.collection("vendas").doc(id).update({status: "Entregue"}); registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} Entregue ao cliente.`); }
+            if(confirm("Confirmar Entrega ao cliente?")) { db.collection("vendas").doc(id).update({status: "Entregue"}); registrarLog("COMERCIAL", `Pedido ${id.substring(id.length-4)} Entregue ao cliente.`); }
         }
     }
-    function removerVenda(id) { if(confirm("Atenção: Excluir não devolve itens ao estoque. Deseja excluir?")) { registrarLog("COMERCIAL", `Excluiu orçamento/pedido ID: ${id}`); db.collection("vendas").doc(id).delete(); } }
-    function abrirModalImpressao(id) {
-        let v = vendas.find(x => x.id === id); if(!v) return; document.getElementById("printTipoDoc").innerText = v.status === "Orçamento" ? "ORÇAMENTO" : "PEDIDO"; document.getElementById("printId").innerText = v.id.substring(v.id.length - 6); document.getElementById("printData").innerText = formatarDataSimples(v.dataCriacao); document.getElementById("printCliNome").innerText = v.clienteNome; document.getElementById("printCliTel").innerText = v.clienteTel || "Não informado";
-        const tbody = document.getElementById("printTbItens"); tbody.innerHTML = ""; v.itens.forEach(item => { let tr = document.createElement("tr"); tr.innerHTML = `<td>${item.qtd}</td><td>${item.nome}</td><td>${formatarDinheiro(item.preco)}</td><td>${formatarDinheiro(item.total)}</td>`; tbody.appendChild(tr); });
-        document.getElementById("printSubtotal").innerText = formatarDinheiro(v.subtotal); document.getElementById("printDesconto").innerText = formatarDinheiro(v.desconto); document.getElementById("printTotalGeral").innerText = formatarDinheiro(v.totalGeral); document.getElementById("modalImpressao").style.display = "flex";
-    }
+    
+    function removerVenda(id) { if(confirm("Atenção: Excluir um pedido NÃO devolve os insumos ao estoque. Deseja excluir mesmo assim?")) { registrarLog("COMERCIAL", `Excluiu orçamento/pedido ID: ${id}`); db.collection("vendas").doc(id).delete(); } }
+    function abrirModalImpressao(id) { let v = vendas.find(x => x.id === id); if(!v) return; document.getElementById("printTipoDoc").innerText = v.status === "Orçamento" ? "ORÇAMENTO" : "PEDIDO"; document.getElementById("printId").innerText = v.id.substring(v.id.length - 6); document.getElementById("printData").innerText = formatarDataSimples(v.dataCriacao); document.getElementById("printCliNome").innerText = v.clienteNome; document.getElementById("printCliTel").innerText = v.clienteTel || "Não informado"; const tbody = document.getElementById("printTbItens"); tbody.innerHTML = ""; v.itens.forEach(item => { let tr = document.createElement("tr"); tr.innerHTML = `<td>${item.qtd}</td><td>${item.nome}</td><td>${formatarDinheiro(item.preco)}</td><td>${formatarDinheiro(item.total)}</td>`; tbody.appendChild(tr); }); document.getElementById("printSubtotal").innerText = formatarDinheiro(v.subtotal); document.getElementById("printDesconto").innerText = formatarDinheiro(v.desconto); document.getElementById("printTotalGeral").innerText = formatarDinheiro(v.totalGeral); document.getElementById("modalImpressao").style.display = "flex"; }
     function gerarPDFOrcamento() { const elemento = document.getElementById('areaImpressaoA4'); let nomeDoc = document.getElementById("printTipoDoc").innerText; let idDoc = document.getElementById("printId").innerText; html2pdf().set({ margin: 10, filename: `${nomeDoc}_OncaProsa_${idDoc}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(elemento).save(); }
 
-    // --- DEMAIS FUNÇÕES (C/ AUDITORIA INJETADA) ---
-    function adicionarLancamento() {
-        let idEdit = document.getElementById("editId").value; let l = { desc: document.getElementById("cadDesc").value, categoria: document.getElementById("cadCat").value, conta: document.getElementById("cadConta").value, valor: parseFloat(document.getElementById("cadValor").value), data: document.getElementById("cadData").value, tipo: document.getElementById("cadTipo").value, status: document.getElementById("cadStatus").value };
-        if(!l.desc || !l.data || isNaN(l.valor)) return alert("Preencha corretamente.");
-        if(idEdit) { l.id = idEdit; db.collection("lancamentos").doc(idEdit).update(l); registrarLog("FINANCEIRO", `Editou: ${l.desc} (R$ ${l.valor})`); } else { l.id = Date.now().toString(); db.collection("lancamentos").doc(l.id).set(l); registrarLog("FINANCEIRO", `Cadastrou: ${l.desc} (R$ ${l.valor})`); }
-        limparFormulario();
-    }
+    // --- DEMAIS FUNÇÕES (FINANCEIRO, ESTOQUE, FORNECEDORES) ---
+    function adicionarLancamento() { let idEdit = document.getElementById("editId").value; let l = { desc: document.getElementById("cadDesc").value, categoria: document.getElementById("cadCat").value, conta: document.getElementById("cadConta").value, valor: parseFloat(document.getElementById("cadValor").value), data: document.getElementById("cadData").value, tipo: document.getElementById("cadTipo").value, status: document.getElementById("cadStatus").value }; if(!l.desc || !l.data || isNaN(l.valor)) return alert("Preencha corretamente."); if(idEdit) { l.id = idEdit; db.collection("lancamentos").doc(idEdit).update(l); registrarLog("FINANCEIRO", `Editou: ${l.desc} (R$ ${l.valor})`); } else { l.id = Date.now().toString(); db.collection("lancamentos").doc(l.id).set(l); registrarLog("FINANCEIRO", `Cadastrou: ${l.desc} (R$ ${l.valor})`); } limparFormulario(); }
     function removerLanc(id) { if(confirm("Tem certeza?")) { registrarLog("FINANCEIRO", `Excluiu lançamento ID: ${id}`); db.collection("lancamentos").doc(id.toString()).delete(); } }
     
-    function adicionarProduto() {
-        let id = document.getElementById("prodId").value; let p = { nome: document.getElementById("prodNome").value.trim(), cat: document.getElementById("prodCat").value.trim() || "Geral", fornecedor: document.getElementById("prodFornecedor").value, marca: document.getElementById("prodMarca").value.trim(), custo: parseFloat(document.getElementById("prodCusto").value) || 0, venda: parseFloat(document.getElementById("prodVenda").value) || 0, qtd: parseFloat(document.getElementById("prodQtd").value) || 0, min: parseFloat(document.getElementById("prodMin").value) || 0 };
-        if(!p.nome) return alert("Preencha o nome.");
-        if(id) { db.collection("produtos").doc(id).update(p); registrarLog("ESTOQUE", `Editou produto: ${p.nome}`); } else { p.id = Date.now().toString(); db.collection("produtos").doc(p.id).set(p); registrarLog("ESTOQUE", `Cadastrou produto: ${p.nome}`); }
-        limparFormProduto();
-    }
-    function removerProduto(id) { if(confirm("Excluir produto?")) { registrarLog("ESTOQUE", `Excluiu produto ID: ${id}`); db.collection("produtos").doc(id).delete(); } }
+    // (Matéria-prima)
+    function adicionarProduto() { let id = document.getElementById("prodId").value; let p = { nome: document.getElementById("prodNome").value.trim(), cat: document.getElementById("prodCat").value.trim() || "Geral", fornecedor: document.getElementById("prodFornecedor").value, marca: document.getElementById("prodMarca").value.trim(), custo: parseFloat(document.getElementById("prodCusto").value) || 0, venda: parseFloat(document.getElementById("prodVenda").value) || 0, qtd: parseFloat(document.getElementById("prodQtd").value) || 0, min: parseFloat(document.getElementById("prodMin").value) || 0 }; if(!p.nome) return alert("Preencha o nome."); if(id) { db.collection("produtos").doc(id).update(p); registrarLog("ESTOQUE", `Editou insumo: ${p.nome}`); } else { p.id = Date.now().toString(); db.collection("produtos").doc(p.id).set(p); registrarLog("ESTOQUE", `Cadastrou insumo: ${p.nome}`); } limparFormProduto(); }
+    function removerProduto(id) { if(confirm("Excluir insumo?")) { registrarLog("ESTOQUE", `Excluiu insumo ID: ${id}`); db.collection("produtos").doc(id).delete(); } }
+    function renderizarEstoque() { const tbody = document.getElementById("tbEstoque"); tbody.innerHTML = ""; let busca = document.getElementById("fBuscaProd").value.toLowerCase(); let filtro = document.getElementById("fStatusProd").value; let filtrados = produtos.filter(p => p.nome.toLowerCase().includes(busca) && (filtro === "Todos" || p.qtd <= p.min)); filtrados.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(p => { let isBaixo = p.qtd <= p.min; let tr = document.createElement("tr"); if(isBaixo) tr.style.backgroundColor = '#fff3cd'; tr.innerHTML = `<td><strong>${p.nome}</strong></td><td>${p.marca||'-'}</td><td>${p.fornecedor||'-'}</td><td>R$ ${p.custo.toFixed(2)}</td><td style="color:${isBaixo?'#e74c3c':'#27ae60'}; font-weight:bold; text-align:center;">${isBaixo?'⚠️ ':''}${p.qtd}</td><td style="text-align:center;"><button class="btn-acao" onclick="editarProduto('${p.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerProduto('${p.id}')">🗑️</button></td>`; tbody.appendChild(tr); }); }
+    function editarProduto(id) { let p = produtos.find(x => x.id === id); if(!p) return; document.getElementById("prodId").value = p.id; document.getElementById("prodNome").value = p.nome; document.getElementById("prodCat").value = p.cat; document.getElementById("prodFornecedor").value = p.fornecedor || ""; document.getElementById("prodMarca").value = p.marca || ""; document.getElementById("prodCusto").value = p.custo; document.getElementById("prodVenda").value = p.venda; document.getElementById("prodQtd").value = p.qtd; document.getElementById("prodMin").value = p.min; document.getElementById("tituloCadProduto").innerText = "✏️ Editando Insumo"; document.getElementById("btnSalvarProd").innerText = "Salvar Alterações"; }
+    function limparFormProduto() { document.querySelectorAll('#abaEstoque input').forEach(i => i.value = ''); document.getElementById("prodFornecedor").value = ''; document.getElementById("tituloCadProduto").innerText = "📦 Novo Insumo/MP"; document.getElementById("btnSalvarProd").innerText = "Salvar Insumo"; }
 
-    function adicionarCliente() {
-        let id = document.getElementById("cliId").value; let c = { nome: document.getElementById("cliNome").value.trim(), tel: document.getElementById("cliTel").value.trim(), email: document.getElementById("cliEmail").value.trim(), end: document.getElementById("cliEnd").value.trim(), promo: document.getElementById("cliPromo").checked };
-        if(!c.nome) return alert("Preencha o nome do cliente.");
-        if(id) { db.collection("clientes").doc(id).update(c); registrarLog("CLIENTES", `Editou cliente: ${c.nome}`); } else { c.id = Date.now().toString(); db.collection("clientes").doc(c.id).set(c); registrarLog("CLIENTES", `Cadastrou cliente: ${c.nome}`); }
-        limparFormCliente();
-    }
+    function adicionarCliente() { let id = document.getElementById("cliId").value; let c = { nome: document.getElementById("cliNome").value.trim(), tel: document.getElementById("cliTel").value.trim(), email: document.getElementById("cliEmail").value.trim(), end: document.getElementById("cliEnd").value.trim(), promo: document.getElementById("cliPromo").checked }; if(!c.nome) return alert("Preencha o nome do cliente."); if(id) { db.collection("clientes").doc(id).update(c); registrarLog("CLIENTES", `Editou cliente: ${c.nome}`); } else { c.id = Date.now().toString(); db.collection("clientes").doc(c.id).set(c); registrarLog("CLIENTES", `Cadastrou cliente: ${c.nome}`); } limparFormCliente(); }
     function removerCliente(id) { if(confirm("Excluir cliente?")) { registrarLog("CLIENTES", `Excluiu cliente ID: ${id}`); db.collection("clientes").doc(id).delete(); } }
-
-    function adicionarFornecedor() {
-        let id = document.getElementById("fornId").value; let f = { nome: document.getElementById("fornNome").value.trim(), contato: document.getElementById("fornContato").value.trim(), notaProd: parseInt(document.getElementById("fornNotaProd").value) || 5, notaEnt: parseInt(document.getElementById("fornNotaEnt").value) || 5, obs: document.getElementById("fornObs").value.trim() };
-        if(!f.nome) return alert("Preencha o nome.");
-        if(id) { db.collection("fornecedores").doc(id).update(f); registrarLog("FORNECEDORES", `Editou fornecedor: ${f.nome}`); } else { f.id = Date.now().toString(); db.collection("fornecedores").doc(f.id).set(f); registrarLog("FORNECEDORES", `Cadastrou fornecedor: ${f.nome}`); }
-        limparFormFornecedor();
-    }
+    function adicionarFornecedor() { let id = document.getElementById("fornId").value; let f = { nome: document.getElementById("fornNome").value.trim(), contato: document.getElementById("fornContato").value.trim(), notaProd: parseInt(document.getElementById("fornNotaProd").value) || 5, notaEnt: parseInt(document.getElementById("fornNotaEnt").value) || 5, obs: document.getElementById("fornObs").value.trim() }; if(!f.nome) return alert("Preencha o nome."); if(id) { db.collection("fornecedores").doc(id).update(f); registrarLog("FORNECEDORES", `Editou fornecedor: ${f.nome}`); } else { f.id = Date.now().toString(); db.collection("fornecedores").doc(f.id).set(f); registrarLog("FORNECEDORES", `Cadastrou fornecedor: ${f.nome}`); } limparFormFornecedor(); }
     function removerFornecedor(id) { if(confirm("Excluir fornecedor?")) { registrarLog("FORNECEDORES", `Excluiu fornecedor ID: ${id}`); db.collection("fornecedores").doc(id).delete(); } }
 
-    // Funções auxiliares mantidas intactas
     function atualizarTelaFinanceiro() { const tbody = document.getElementById("corpoTabela"); tbody.innerHTML = ""; let fBusca = document.getElementById("fBusca").value.toLowerCase(); let fMes = document.getElementById("fMes").value; let fTipo = document.getElementById("fTipo").value; let fConta = document.getElementById("fConta").value; let filtrados = lancamentos.filter(l => l.desc.toLowerCase().includes(fBusca) && l.data.startsWith(fMes) && (fTipo==="Todos" || l.tipo===fTipo) && (fConta==="Todas" || l.conta===fConta)).sort((a,b)=>a.data.localeCompare(b.data)); filtrados.forEach(l => { let tr = document.createElement("tr"); tr.innerHTML = `<td>${formatarData(l.data)}</td><td><strong>${l.desc}</strong><br><small>🏦 ${l.conta || 'Geral'}</small></td><td>${l.categoria}</td><td style="color:${l.tipo==='Débito'?'#e74c3c':'#27ae60'}; font-weight:bold;">R$ ${l.valor.toFixed(2)}</td><td>${l.tipo}</td><td><select onchange="mudarStatusLanc('${l.id}', this.value)" style="padding:4px; font-size:12px; border-radius:4px;"><option value="A Vencer" ${l.status==='A Vencer'?'selected':''}>A Vencer</option><option value="Efetuada" ${l.status==='Efetuada'?'selected':''}>Efetuada</option></select></td><td class="fin-req" style="text-align:center;"><button class="btn-acao" onclick="editarLanc('${l.id}')">✏️</button><button class="btn-acao" style="color:red;" onclick="removerLanc('${l.id}')">🗑️</button></td>`; tbody.appendChild(tr); }); }
     function mudarStatusLanc(id, novoStatus) { db.collection("lancamentos").doc(id).update({status: novoStatus}); registrarLog("FINANCEIRO", `Mudou status do lançamento ${id} para ${novoStatus}`); }
     function editarLanc(id) { let l = lancamentos.find(x => x.id === id); if(!l) return; document.getElementById("editId").value = l.id; document.getElementById("cadDesc").value = l.desc; document.getElementById("cadCat").value = l.categoria; document.getElementById("cadConta").value = l.conta || contasLista[0]; document.getElementById("cadValor").value = l.valor; document.getElementById("cadData").value = l.data; document.getElementById("cadTipo").value = l.tipo; document.getElementById("cadStatus").value = l.status; document.getElementById("tituloCadastro").innerText = "✏️ Editar Lançamento"; document.querySelector("#painelCadastro .btn").innerText = "Salvar Alterações"; }
     function limparFormulario() { document.getElementById("editId").value = ""; document.getElementById("cadDesc").value = ""; document.getElementById("cadValor").value = ""; document.getElementById("cadData").value = ""; document.getElementById("tituloCadastro").innerText = "💸 Novo Lançamento"; document.querySelector("#painelCadastro .btn").innerText = "Registrar"; }
     function gerarDRE() { let m = document.getElementById("dreMes").value; let rec = 0, dev = 0, cVar = 0, cFix = 0; let tEnt = 0, tSai = 0; let lancMes = lancamentos.filter(l => l.data.startsWith(m)); lancMes.forEach(l => { if(l.tipo === "Crédito") tEnt += l.valor; else if(l.tipo === "Débito") tSai += l.valor; if(l.status.toLowerCase().includes("efetuada")) { if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor; else if(l.categoria.includes("Devolu")) dev += l.valor; else if(["Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção"].includes(l.categoria)) cVar += l.valor; else cFix += l.valor; } }); document.getElementById("resDashEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; document.getElementById("resDashSaidas").innerText = `R$ ${tSai.toFixed(2)}`; document.getElementById("resDashSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`; document.getElementById("resDashSaldo").style.color = (tEnt-tSai) >= 0 ? "#4a3022" : "#e74c3c"; let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix; document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; document.getElementById("dreMargemCont").innerText = `R$ ${mC.toFixed(2)}`; document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`; if (lucro > 0) { let capGiro = lucro * 0.30; let reserva = lucro * 0.20; let manu = lucro * 0.10; let reinv = lucro * 0.10; let cresc = lucro * 0.10; let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucro - totDed; let valSocios = saldo * 0.50; let valCaixa = saldo * 0.50; document.getElementById("dstGiro").innerText = `R$ ${capGiro.toFixed(2)}`; document.getElementById("dstReserva").innerText = `R$ ${reserva.toFixed(2)}`; document.getElementById("dstManu").innerText = `R$ ${manu.toFixed(2)}`; document.getElementById("dstReinv").innerText = `R$ ${reinv.toFixed(2)}`; document.getElementById("dstCresc").innerText = `R$ ${cresc.toFixed(2)}`; document.getElementById("dstDeducao").innerText = `R$ ${totDed.toFixed(2)}`; document.getElementById("dstSaldo").innerText = `R$ ${saldo.toFixed(2)}`; document.getElementById("dstSocios").innerText = `R$ ${valSocios.toFixed(2)}`; document.getElementById("dstCaixa").innerText = `R$ ${valCaixa.toFixed(2)}`; } else { ["dstGiro","dstReserva","dstManu","dstReinv","dstCresc","dstDeducao","dstSaldo","dstSocios","dstCaixa"].forEach(c => document.getElementById(c).innerText = "R$ 0.00"); } }
     
-    // Gestão de Usuários, Configurações, Historico Clientes mantidas.
+    // Gestão e Admin
     function criarUsuarioEquipe() { const nome = document.getElementById('novoUserNome').value.trim(); let cpf = document.getElementById('novoUserCpf').value.replace(/\D/g, ''); const s = document.getElementById('novoUserSenha').value; const p = document.getElementById('novoUserPerfil').value; if(!nome || cpf.length !== 11 || s.length < 6) return alert("Preencha o Nome, CPF válido (11 números) e Senha (min 6 caracteres)."); const emailFake = cpf + "@oncaprosa.local"; appSecundario.auth().createUserWithEmailAndPassword(emailFake, s).then(cred => { db.collection("usuarios").doc(cred.user.uid).set({ nome: nome, cpf: cpf, perfil: p, status: "Ativo" }); appSecundario.auth().signOut(); alert(`Usuário ${nome} criado com sucesso!`); document.getElementById('novoUserNome').value = ""; document.getElementById('novoUserCpf').value = ""; document.getElementById('novoUserSenha').value = ""; registrarLog("USUÁRIOS", `Criou novo usuário: ${nome}`); }).catch(err => alert("Erro ao criar usuário: " + err.message)); }
     function alterarUser(id, campo, valor) { let obj = {}; obj[campo] = valor; db.collection("usuarios").doc(id).update(obj); registrarLog("USUÁRIOS", `Alterou ${campo} do usuário ${id.substring(0,5)} para ${valor}`); }
     function excluirUser(id) { if(confirm("Tem certeza que deseja excluir este acesso?")) { db.collection("usuarios").doc(id).delete(); registrarLog("USUÁRIOS", `Excluiu acesso ID: ${id}`); } }
