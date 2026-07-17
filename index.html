@@ -11,9 +11,10 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #fcf8f2; color: #333; padding: 0; margin: 0; }
         #telaLogin { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fcf8f2; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; padding: 20px; box-sizing: border-box; }
-        .titulo-empresa { color: #4a3022; text-align: center; margin-bottom: 30px; line-height: 1.3; }
-        .titulo-empresa .menor { font-size: 20px; font-weight: normal; color: #c8827a; letter-spacing: 2px; text-transform: uppercase; }
-        .titulo-empresa .maior { font-size: 45px; font-family: 'Georgia', serif; font-weight: bold; color: #4a3022; }
+        .titulo-empresa { color: #4a3022; text-align: center; margin-bottom: 25px; line-height: 1.3; display: flex; flex-direction: column; align-items: center; }
+        .titulo-empresa img { width: 220px; border-radius: 50%; box-shadow: 0 8px 25px rgba(74,48,34,0.15); margin-bottom: 15px; border: 4px solid white; }
+        .titulo-empresa .menor { font-size: 18px; font-weight: bold; color: #c8827a; letter-spacing: 3px; text-transform: uppercase; }
+        
         .login-box { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 10px 30px rgba(74, 48, 34, 0.1); width: 100%; max-width: 380px; text-align: center; box-sizing: border-box; border-top: 5px solid #c8827a; }
         .login-box h2 { color: #4a3022; margin-top: 0; font-size: 22px; }
         .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e1e5eb; border-radius: 6px; box-sizing: border-box; font-size: 15px; background: #faf9f7; }
@@ -22,32 +23,38 @@
         .btn-secundario { background: #4a3022 !important; }
         .btn-secundario:hover { background: #352218 !important; }
         #loginMsg { color: #e74c3c; font-size: 14px; margin-bottom: 10px; min-height: 15px; font-weight: bold; }
+        
         .header-top { background: #352218; color: #fcf8f2; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-wrap: wrap; gap: 10px; }
         .navbar { background-color: #4a3022; padding: 15px 20px; display: flex; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap; }
         .aba-btn { background: none; border: none; color: #e8dcc4; font-size: 14px; font-weight: bold; cursor: pointer; padding: 8px 12px; border-radius: 6px; transition: 0.3s; flex: 1; min-width: 120px; text-align: center; }
         .aba-btn:hover { color: white; background-color: #634331; }
         .aba-ativa { color: white; background-color: #c8827a; }
         .aba-ativa:hover { background-color: #b26e67; }
+        
         .container-principal { padding: 20px; max-width: 1650px; margin: 0 auto; box-sizing: border-box; }
         .layout-flex { display: flex; gap: 20px; align-items: flex-start; }
         .painel-cadastro { width: 25%; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 20px; box-sizing: border-box; }
         .painel-conteudo { width: 75%; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; min-width: 0; }
         .painel-branco { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); box-sizing: border-box; overflow: hidden; width: 100%; }
+        
         h2, h3 { color: #4a3022; margin: 0 0 20px 0; }
         .form-group { margin-bottom: 12px; width: 100%; }
         .form-row { display: flex; gap: 10px; width: 100%; }
         label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; color: #666; }
         input, select { width: 100%; padding: 8px; border: 1px solid #ccd1d9; border-radius: 4px; box-sizing: border-box; font-size: 14px; background: #faf9f7; }
+        
         .btn { display: block; width: 100%; background-color: #c8827a; color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
         .btn:hover { background-color: #b26e67; }
         .btn-editando { background-color: #f39c12; }
         .btn-limpar { background-color: #98947c; }
         .btn-acao-topo { background: #98947c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.3s; }
         .btn-acao-topo:hover { background: #7c7965; }
+        
         .resumo-container { display: flex; gap: 20px; flex-wrap: wrap; width: 100%; margin-bottom: 20px; }
         .card { flex: 1; min-width: 200px; background: white; padding: 15px; border-radius: 8px; text-align: center; border-bottom: 4px solid #ddd; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .card h4 { margin: 0; font-size: 14px; color: #7f8c8d; }
         .card p { margin: 8px 0 0 0; font-size: 24px; font-weight: bold; }
+        
         .filtros-area { background: #faf9f7; padding: 15px; border-radius: 8px; border: 1px solid #e8e3dc; margin-bottom: 15px; box-sizing: border-box; }
         .filtros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; align-items: end; }
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 20px; }
@@ -79,9 +86,8 @@
 
 <div id="telaLogin">
     <div class="titulo-empresa">
+        <img src="Logo-oncaprosa.jpeg" alt="Logo Onça Prosa">
         <div class="menor">ERP Gerencial</div>
-        <div class="maior">Onça Prosa</div>
-        <div class="slogan">• FEITO COM CARINHO •</div>
     </div>
     <div class="login-box">
         <h2>🔒 Acesso Restrito</h2>
@@ -95,7 +101,10 @@
 
 <div id="appLogado" style="display: none;">
     <div class="header-top">
-        <span>👤 Usuário: <b id="lblUsuario"></b> (<span id="lblPerfil"></span>)</span>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="Logo-oncaprosa.jpeg" alt="Logo Onça Prosa" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #e8dcc4; background: white;">
+            <span>👤 Usuário: <b id="lblUsuario"></b> (<span id="lblPerfil"></span>)</span>
+        </div>
         <div style="display: flex; align-items: center; gap: 15px;">
             <span style="background: #4a3022; color: #e8dcc4; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">ERP Cloud</span>
             <button onclick="sair()" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold; text-decoration:underline;">Sair</button>
@@ -107,7 +116,6 @@
         <button id="btnAbaDashboard" class="aba-btn aba-ativa" onclick="mudarAba('dashboard')">📊 Dashboard</button>
         <button id="btnAbaFinanceiro" class="aba-btn" onclick="mudarAba('financeiro')">💸 Financeiro</button>
         <button id="btnAbaEstoque" class="aba-btn" onclick="mudarAba('estoque')">📦 Estoque</button>
-        <!-- Aba Gestão é exclusiva para Administradores -->
         <button id="btnAbaGestao" class="aba-btn admin-req" style="display:none;" onclick="mudarAba('gestao')">⚙️ Gestão</button>
     </div>
 
@@ -374,7 +382,6 @@
         document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = 'none');
         if (perfilUsuario === 'Administrador') {
             document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = '');
-            // Se for mobile, o display default de blocos flex pode quebrar ao exibir, então reajustamos:
             if(window.innerWidth > 900) {
                 document.getElementById('abaFinanceiro').style.display = document.getElementById('abaFinanceiro').classList.contains('aba-ativa') ? 'flex' : 'none';
             }
@@ -382,7 +389,6 @@
             document.querySelectorAll('.fin-req').forEach(el => el.style.display = '');
         }
         
-        // Esconde o botão de Gestão do Navbar se não for admin
         if(perfilUsuario !== 'Administrador') {
             document.getElementById('btnAbaGestao').style.display = 'none';
         } else {
@@ -636,15 +642,12 @@
         let rec = 0, dev = 0, cVar = 0, cFix = 0;
         let tEnt = 0, tSai = 0;
 
-        // Filtra os lançamentos do mês selecionado
         let lancMes = lancamentos.filter(l => l.data.startsWith(m));
 
         lancMes.forEach(l => {
-            // Conta Entradas e Saídas para os Cards Superiores (independente de estar pago ou não)
             if(l.tipo === "Crédito") tEnt += l.valor;
             else if(l.tipo === "Débito") tSai += l.valor;
 
-            // Calcula o DRE (apenas o que foi efetivamente pago/recebido)
             if(l.status.toLowerCase().includes("efetuada")) {
                 if(l.categoria.includes("Venda") || l.categoria.includes("Serviço")) rec += l.valor;
                 else if(l.categoria.includes("Devolu")) dev += l.valor;
@@ -653,13 +656,11 @@
             }
         });
 
-        // Atualiza Cards do Topo
         document.getElementById("resDashEntradas").innerText = `R$ ${tEnt.toFixed(2)}`; 
         document.getElementById("resDashSaidas").innerText = `R$ ${tSai.toFixed(2)}`; 
         document.getElementById("resDashSaldo").innerText = `R$ ${(tEnt-tSai).toFixed(2)}`;
         document.getElementById("resDashSaldo").style.color = (tEnt-tSai) >= 0 ? "#4a3022" : "#e74c3c";
 
-        // Atualiza DRE
         let recL = rec - dev, mC = recL - cVar, lucro = mC - cFix;
         document.getElementById("dreReceita").innerText = `R$ ${rec.toFixed(2)}`; 
         document.getElementById("dreCustosVar").innerText = `R$ ${cVar.toFixed(2)}`; 
@@ -667,7 +668,6 @@
         document.getElementById("dreDespFixa").innerText = `R$ ${cFix.toFixed(2)}`; 
         document.getElementById("dreLucro").innerText = `R$ ${lucro.toFixed(2)}`;
 
-        // Atualiza Rateio (Regra da Onça)
         if (lucro > 0) {
             let capGiro = lucro * 0.30; let reserva = lucro * 0.20; let manu = lucro * 0.10; let reinv = lucro * 0.10; let cresc = lucro * 0.10;
             let totDed = capGiro + reserva + manu + reinv + cresc; let saldo = lucro - totDed; 
