@@ -58,7 +58,6 @@
         .filtros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; align-items: end; }
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 20px; }
         
-        /* CORREÇÃO DO ENCAVALAMENTO */
         table { width: 100%; border-collapse: collapse; }
         .table-responsive table { min-width: 800px; } 
         
@@ -312,7 +311,7 @@
                         <input type="text" id="prodFinalCusto" readonly style="background:#eef2f5; font-weight:bold; color:#e74c3c;">
                     </div>
                     <div class="form-group" style="flex: 1;">
-                        <label>Margem de Lucro (%):</label>
+                        <label>Markup (%):</label>
                         <input type="number" id="prodFinalMargem" value="100" oninput="atualizarTotaisFicha()">
                     </div>
                 </div>
@@ -338,7 +337,7 @@
                     </div>
                     <div class="table-responsive">
                         <table>
-                            <thead><tr><th>Produto Final</th><th>Categoria</th><th>Custo Base (R$)</th><th>Margem (%)</th><th>Preço de Venda (R$)</th><th style="text-align: center;">Ações</th></tr></thead>
+                            <thead><tr><th>Produto Final</th><th>Categoria</th><th>Custo Base (R$)</th><th>Markup (%)</th><th>Preço de Venda (R$)</th><th style="text-align: center;">Ações</th></tr></thead>
                             <tbody id="tbProdutosFinais"></tbody>
                         </table>
                     </div>
@@ -498,7 +497,6 @@
 </div>
 
 <script>
-    // --- 1. CONFIGURAÇÃO E INICIALIZAÇÃO BLINDADA ---
     const firebaseConfig = { 
         apiKey: "AIzaSyAWwxnVd15T0xHz7913IHpDpRJIwWQJAqI", 
         authDomain: "onca-prosa-erp.firebaseapp.com", 
@@ -508,7 +506,6 @@
         appId: "1:1096171294924:web:9362f03a99a6d31139b269" 
     };
     
-    // Evita o erro de "App already exists" quando a página recarrega sozinha
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
@@ -522,70 +519,42 @@
         appSecundario = firebase.initializeApp(firebaseConfig, "AppSecundario");
     }
 
-    // --- 2. VARIÁVEIS GLOBAIS ---
     let lancamentos = [], produtos = [], produtosFinais = [], clientes = [], fornecedores = [], historicoClientes = [], usuariosLista = [], vendas = [];
     let contasLista = ["Caixa Principal", "Banco Inter", "Mercado Pago"]; 
     let statusLista = ["A Vencer", "Efetuada"]; 
     let categorias = ["Vendas de Produtos", "Receita de Serviços", "Devoluções/Cancelamentos", "Impostos de Venda", "Taxa de Cartão", "Comissões", "Mercadorias", "Insumos de Produção", "Aluguel", "Salários", "Internet", "Sistema", "Contador", "Outras Despesas Fixas"];
     
-    let userAutenticado = null; 
-    let perfilUsuario = 'Vendedor'; 
-    let carrinhoAtual = []; 
-    let fichaAtual = [];
+    let userAutenticado = null; let perfilUsuario = 'Vendedor'; 
+    let carrinhoAtual = []; let fichaAtual = [];
 
-    // --- 3. SISTEMA DE LOGS ---
-    function registrarLog(acao, detalhes) { 
-        if(!userAutenticado) return; 
-        let nomeLog = document.getElementById('lblUsuario').innerText || "Usuário Desconhecido"; 
-        db.collection("logs").add({ dataHora: new Date().toISOString(), usuario: nomeLog, acao: acao, detalhes: detalhes }).catch(e => console.error(e)); 
-    }
+    function registrarLog(acao, detalhes) { if(!userAutenticado) return; let nomeLog = document.getElementById('lblUsuario').innerText || "Usuário Desconhecido"; db.collection("logs").add({ dataHora: new Date().toISOString(), usuario: nomeLog, acao: acao, detalhes: detalhes }).catch(e => console.error(e)); }
 
-    db.collection("usuarios").limit(1).get().then(snap => { 
-        if(snap.empty) { 
-            document.getElementById('btnRegistrarPrimeiro').style.display = 'block'; 
-            document.getElementById('loginMsg').innerText = "Banco de dados zerado. Crie o Administrador Mestre."; 
-            document.getElementById('loginMsg').style.color = "#27ae60"; 
-        } 
-    });
+    db.collection("usuarios").limit(1).get().then(snap => { if(snap.empty) { document.getElementById('btnRegistrarPrimeiro').style.display = 'block'; document.getElementById('loginMsg').innerText = "Banco de dados zerado. Crie o Administrador Mestre."; document.getElementById('loginMsg').style.color = "#27ae60"; } });
 
     auth.onAuthStateChanged(user => {
         if (user) {
-            document.getElementById('telaLogin').style.display = 'none'; 
-            document.getElementById('appLogado').style.display = 'block'; 
-            userAutenticado = user;
-            
+            document.getElementById('telaLogin').style.display = 'none'; document.getElementById('appLogado').style.display = 'block'; userAutenticado = user;
             db.collection("usuarios").doc(user.uid).onSnapshot(doc => {
                 if (doc.exists) {
-                    let d = doc.data(); 
-                    if(d.status === "Suspenso") { 
-                        alert("Sua conta foi suspensa pelo Administrador."); 
-                        auth.signOut(); 
-                        return; 
-                    }
-                    perfilUsuario = d.perfil; 
-                    document.getElementById('lblUsuario').innerText = d.nome || "Usuário"; 
-                    document.getElementById('lblPerfil').innerText = perfilUsuario;
-                    document.getElementById("fMes").value = new Date().toISOString().substring(0,7); 
-                    document.getElementById("dreMes").value = new Date().toISOString().substring(0,7); 
-                    document.getElementById("fMesVenda").value = new Date().toISOString().substring(0,7);
-                    
-                    aplicarPermissoes(); 
-                    carregarListas(); 
-                    iniciarOuvintesDeDados();
+                    let d = doc.data(); if(d.status === "Suspenso") { alert("Conta suspensa."); auth.signOut(); return; }
+                    perfilUsuario = d.perfil; document.getElementById('lblUsuario').innerText = d.nome || "Usuário"; document.getElementById('lblPerfil').innerText = perfilUsuario;
+                    document.getElementById("fMes").value = new Date().toISOString().substring(0,7); document.getElementById("dreMes").value = new Date().toISOString().substring(0,7); document.getElementById("fMesVenda").value = new Date().toISOString().substring(0,7);
+                    aplicarPermissoes(); carregarListas(); iniciarOuvintesDeDados();
                 }
             });
-        } else { 
-            document.getElementById('telaLogin').style.display = 'flex'; 
-            document.getElementById('appLogado').style.display = 'none'; 
-            userAutenticado = null; 
-        }
+        } else { document.getElementById('telaLogin').style.display = 'flex'; document.getElementById('appLogado').style.display = 'none'; userAutenticado = null; }
     });
 
-    // --- 4. FUNÇÃO DE LOGIN COM DIAGNÓSTICO ---
+    function aplicarPermissoes() {
+        document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = 'none');
+        if (perfilUsuario === 'Administrador') { document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = ''); } 
+        else if (perfilUsuario === 'Financeiro') { document.querySelectorAll('.fin-req').forEach(el => el.style.display = ''); }
+        document.getElementById('btnAbaGestao').style.display = perfilUsuario !== 'Administrador' ? 'none' : 'block';
+    }
+
     function entrar() { 
         let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, ''); 
         const s = document.getElementById('senhaAuth').value; 
-        
         if(!cpf || !s) return alert("Preencha CPF e Senha"); 
         
         document.getElementById('loginMsg').innerText = "Autenticando..."; 
@@ -594,24 +563,14 @@
         auth.signInWithEmailAndPassword(cpf + "@oncaprosa.local", s)
             .catch(err => { 
                 console.error("Erro Firebase:", err.code, err.message); 
-                
                 let msg = "Erro no acesso. CPF ou Senha incorretos.";
-                
                 if(err.code === 'auth/user-not-found') msg = "Usuário não encontrado. O CPF está certo?";
                 if(err.code === 'auth/wrong-password') msg = "Senha incorreta.";
                 if(err.code === 'auth/network-request-failed') msg = "Sem conexão com a internet.";
                 if(err.code === 'auth/too-many-requests') msg = "Muitas tentativas. Aguarde um minuto.";
-                
                 document.getElementById('loginMsg').innerText = msg; 
                 document.getElementById('loginMsg').style.color = "#e74c3c"; 
             }); 
-    }
-
-    function aplicarPermissoes() {
-        document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = 'none');
-        if (perfilUsuario === 'Administrador') { document.querySelectorAll('.admin-req, .fin-req').forEach(el => el.style.display = ''); } 
-        else if (perfilUsuario === 'Financeiro') { document.querySelectorAll('.fin-req').forEach(el => el.style.display = ''); }
-        document.getElementById('btnAbaGestao').style.display = perfilUsuario !== 'Administrador' ? 'none' : 'block';
     }
 
     function registrarPrimeiroAdmin() { let cpf = document.getElementById('cpfAuth').value.replace(/\D/g, ''); const s = document.getElementById('senhaAuth').value; if(cpf.length !== 11 || s.length < 6) return alert("CPF inválido ou senha curta."); auth.createUserWithEmailAndPassword(cpf + "@oncaprosa.local", s).then(cred => { db.collection("usuarios").doc(cred.user.uid).set({ cpf: cpf, perfil: "Administrador", status: "Ativo", nome: "Administrador Mestre" }); alert("Administrador criado!"); }).catch(err => alert("Erro: " + err.message)); }
